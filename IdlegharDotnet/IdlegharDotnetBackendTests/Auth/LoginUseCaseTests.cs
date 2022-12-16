@@ -7,7 +7,7 @@ namespace IdlegharDotnetBackendTests;
 public class LoginUseCaseTests
 {
     IUsersProvider usersProvider = new MockUsersProvider();
-    ICryptoProvider hashProvider = new CryptoProvider();
+    ICryptoProvider cryptoProvider = new CryptoProvider();
 
     [SetUp]
     public void Setup()
@@ -25,7 +25,7 @@ public class LoginUseCaseTests
             Email = "email@email.com",
             Id = Guid.NewGuid().ToString(),
             Username = username,
-            Password = hashProvider.HashPassword(plainPassword)
+            Password = cryptoProvider.HashPassword(plainPassword)
         });
 
         var input = new LoginUseCaseInput()
@@ -38,5 +38,6 @@ public class LoginUseCaseTests
         var result = await useCase.Handle(input);
 
         Assert.IsInstanceOf(typeof(LoginUseCaseOutput), result);
+
     }
 }
