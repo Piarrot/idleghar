@@ -14,16 +14,16 @@ public class LoginUseCase
         CryptoProvider = cryptoProvider;
     }
 
-    public async Task<LoginUseCaseOutput> Handle(LoginUseCaseInput input)
+    public async Task<LoginUseCaseResponse> Handle(LoginUseCaseRequest input)
     {
-        var user = await UsersProvider.FindUserByEmail(input.EmailOrUsername) ?? await UsersProvider.FindUserByUsername(input.EmailOrUsername);
+        var user = await UsersProvider.FindByEmail(input.EmailOrUsername) ?? await UsersProvider.FindByUsername(input.EmailOrUsername);
         if (user == null || !CryptoProvider.DoesPasswordMatches(user.Password, input.Password))
         {
             throw new WrongCredentialsException();
         }
 
         var token = AuthProvider.GenerateToken(user);
-        return new LoginUseCaseOutput()
+        return new LoginUseCaseResponse()
         {
             Token = token,
         };

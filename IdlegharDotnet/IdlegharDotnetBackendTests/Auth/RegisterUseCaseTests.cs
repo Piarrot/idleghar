@@ -19,7 +19,7 @@ public class RegisterUseCaseTests
     [Test]
     public async Task RegistersAUserAndHashesThePassword()
     {
-        var testInput = new RegisterUseCaseInput()
+        var testInput = new RegisterUseCaseRequest()
         {
             Email = "email@email.com",
             Password = "user1234",
@@ -29,15 +29,19 @@ public class RegisterUseCaseTests
         var useCase = new RegisterUseCase(usersProvider, hashProvider, emailsProvider);
 
         await useCase.Handle(testInput);
-        var user = await this.usersProvider.FindUserByEmail(testInput.Email);
+        var user = await this.usersProvider.FindByEmail(testInput.Email);
         Assert.NotNull(user);
         if (user == null) //Just so the compiler can infer that in the next line, user is not null
             return;
         Assert.IsTrue(hashProvider.DoesPasswordMatches(user.Password, testInput.Password));
+        Assert.IsFalse(user.EmailValidated);
 
+
+        var codeSent = emailsProvider.GetEmailsSentTo(testInput.Email)[0]?.Context?["code"];
         Assert.AreEqual(emailsProvider.CountEmailsSentTo(testInput.Email), 1);
-        Assert.IsNotNull(emailsProvider.GetEmailsSentTo(testInput.Email)[0]?.Context?["code"]);
+        Assert.IsNotNull(codeSent);
         Assert.IsNotNull(emailsProvider.GetEmailsSentTo(testInput.Email)[0]?.Context?["username"]);
+        Assert.AreEqual(codeSent, user.EmailValidationCode);
     }
 
     [Test]
@@ -51,7 +55,7 @@ public class RegisterUseCaseTests
             Username = "CoolUser69"
         });
 
-        var testInput = new RegisterUseCaseInput()
+        var testInput = new RegisterUseCaseRequest()
         {
             Email = "emailAlreadyRegistered@email.com",
             Password = "user1234",

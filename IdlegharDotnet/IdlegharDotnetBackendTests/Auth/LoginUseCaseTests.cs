@@ -29,7 +29,7 @@ public class LoginUseCaseTests
             Password = cryptoProvider.HashPassword(plainPassword)
         });
 
-        var input = new LoginUseCaseInput()
+        var input = new LoginUseCaseRequest()
         {
             EmailOrUsername = username,
             Password = plainPassword
@@ -38,7 +38,7 @@ public class LoginUseCaseTests
         var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
         var result = await useCase.Handle(input);
 
-        Assert.IsInstanceOf(typeof(LoginUseCaseOutput), result);
+        Assert.IsInstanceOf(typeof(LoginUseCaseResponse), result);
         Assert.AreEqual(email, authProvider.ParseTokenEmail(result.Token));
     }
 
@@ -48,7 +48,7 @@ public class LoginUseCaseTests
         var plainPassword = "user1234";
         var username = "CoolUser69";
 
-        var input = new LoginUseCaseInput()
+        var input = new LoginUseCaseRequest()
         {
             EmailOrUsername = username,
             Password = plainPassword
@@ -76,7 +76,7 @@ public class LoginUseCaseTests
             Password = cryptoProvider.HashPassword(plainPassword)
         });
 
-        var input = new LoginUseCaseInput()
+        var input = new LoginUseCaseRequest()
         {
             EmailOrUsername = username,
             Password = "aWrongPassword"

@@ -1,6 +1,6 @@
 namespace IdlegharDotnetShared;
 
-public class LoginUseCaseOutput
+public class LoginUseCaseResponse
 {
     public string Token { get; set; }
 }

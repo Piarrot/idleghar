@@ -15,21 +15,25 @@ public class RegisterUseCase
         EmailsProvider = emailsProvider;
     }
 
-    public async Task Handle(RegisterUseCaseInput input)
+    public async Task<RegisterUseCaseResponse> Handle(RegisterUseCaseRequest req)
     {
-        var existingUser = await this.UsersProvider.FindUserByEmail(input.Email);
+        var existingUser = await this.UsersProvider.FindByEmail(req.Email);
 
         if (existingUser != null)
         {
             throw new EmailInUseException();
         }
 
+        var code = CryptoProvider.GetRandomNumberDigits(6);
+
         User newUser = new User()
         {
             Id = Guid.NewGuid().ToString(),
-            Email = input.Email,
-            Username = input.Username,
-            Password = CryptoProvider.HashPassword(input.Password),
+            Email = req.Email,
+            Username = req.Username,
+            Password = CryptoProvider.HashPassword(req.Password),
+            EmailValidated = false,
+            EmailValidationCode = code
         };
 
         await this.UsersProvider.Save(newUser);
@@ -40,8 +44,15 @@ public class RegisterUseCase
             Context = new Dictionary<string, string>
             {
                 ["username"] = newUser.Username,
-                ["code"] = CryptoProvider.GetRandomNumberDigits(6)
+                ["code"] = code
             }
         });
+
+        return new RegisterUseCaseResponse()
+        {
+            Username = newUser.Username,
+            Email = newUser.Email,
+            Id = newUser.Id
+        };
     }
 }

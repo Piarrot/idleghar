@@ -1,6 +1,6 @@
 namespace IdlegharDotnetShared;
 
-public class RegisterUseCaseOutput
+public class RegisterUseCaseResponse
 {
     public string Id { get; set; }
     public string Username { get; set; }

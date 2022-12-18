@@ -1,6 +1,6 @@
 namespace IdlegharDotnetShared;
 
-public class RegisterUseCaseInput
+public class RegisterUseCaseRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }
