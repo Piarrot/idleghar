@@ -1,6 +1,5 @@
 namespace IdlegharDotnetBackendTests;
 
-using System.Text.RegularExpressions;
 using IdlegharDotnetBackend;
 
 public class JWTProviderTests
@@ -9,7 +8,7 @@ public class JWTProviderTests
     public void GivenAUserShouldCreateAValidToken()
     {
         var email = "cool_guy_69@email.com";
-        var provider = new JWTProvider("los gatitos son lo mejor12352152");
+        var provider = new JWTProvider("los gatitos son lo mejor");
         var token = provider.GenerateToken(new User { Email = email, Username = "CoolGuy69" });
         Assert.IsNotNull(token);
         var parsedEmail = provider.ParseTokenEmail(token);

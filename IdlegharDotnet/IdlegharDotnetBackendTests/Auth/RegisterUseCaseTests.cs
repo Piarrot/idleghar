@@ -47,7 +47,8 @@ public class RegisterUseCaseTests
         {
             Email = "emailAlreadyRegistered@email.com",
             Password = this.hashProvider.HashPassword("user1234"),
-            Id = Guid.NewGuid().ToString()
+            Id = Guid.NewGuid().ToString(),
+            Username = "CoolUser69"
         });
 
         var testInput = new RegisterUseCaseInput()

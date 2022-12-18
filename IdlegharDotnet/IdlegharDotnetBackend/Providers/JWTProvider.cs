@@ -13,10 +13,6 @@ public class JWTProvider : IAuthProvider
     public JWTProvider(string secretKey, int expireMinutes = 10080)
     {
         SecretKey = secretKey;
-        if (secretKey.Length < (32))
-        {
-            throw new ArgumentException($"The key must have at least {32} characters");
-        }
         ExpireMinutes = expireMinutes;
     }
 
@@ -30,7 +26,7 @@ public class JWTProvider : IAuthProvider
         };
 
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        SecurityToken token = jwtSecurityTokenHandler.CreateJwtSecurityToken(securityTokenDescriptor);
+        SecurityToken token = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
         return jwtSecurityTokenHandler.WriteToken(token);
     }
 
@@ -41,9 +37,9 @@ public class JWTProvider : IAuthProvider
             return null;
         }
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        SecurityToken validatedToken;
         try
         {
+            SecurityToken validatedToken;
             var principal = jwtSecurityTokenHandler.ValidateToken(token, GetTokenValidationParameters(), out validatedToken);
             var emailClaim = principal.FindFirst(claim => claim.Type == ClaimTypes.Email);
             if (emailClaim == null) return null;
@@ -57,8 +53,9 @@ public class JWTProvider : IAuthProvider
 
     private SecurityKey GetSymmetricSecurityKey()
     {
-        byte[] symmetricKey = Convert.FromBase64String(SecretKey);
-        return new SymmetricSecurityKey(symmetricKey);
+        byte[] bytes = new byte[SecretKey.Length * sizeof(char)];
+        Buffer.BlockCopy(SecretKey.ToCharArray(), 0, bytes, 0, bytes.Length);
+        return new SymmetricSecurityKey(bytes);
     }
 
     private TokenValidationParameters GetTokenValidationParameters()
