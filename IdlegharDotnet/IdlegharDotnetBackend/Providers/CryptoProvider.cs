@@ -1,6 +1,8 @@
-using System.Security.Cryptography;
-
 namespace IdlegharDotnetBackend;
+
+using System.Security.Cryptography;
+using IdlegharDotnetDomain;
+
 public class CryptoProvider : ICryptoProvider
 {
     public bool DoesPasswordMatches(string hashedPassword, string plainPassword)

@@ -2,6 +2,7 @@ namespace IdlegharDotnetBackend;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using IdlegharDotnetDomain;
 using Microsoft.IdentityModel.Tokens;
 
 public class JWTProvider : IAuthProvider
