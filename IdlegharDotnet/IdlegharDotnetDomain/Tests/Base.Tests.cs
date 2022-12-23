@@ -1,4 +1,6 @@
+using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetDomain.Tests.Factories;
 using IdlegharDotnetDomain.Tests.MockProviders;
 using NUnit.Framework;
 
@@ -6,16 +8,45 @@ namespace IdlegharDotnetDomain.Tests
 {
     public class BaseTests
     {
-        protected IUsersProvider usersProvider = new MockUsersProvider();
-        protected ICryptoProvider cryptoProvider = new MockCryptoProvider();
-        protected IAuthProvider authProvider = new MockAuthProvider();
-        protected MockEmailsProvider emailsProvider = new MockEmailsProvider();
+        protected IUsersProvider UsersProvider = new MockUsersProvider();
+        protected ICryptoProvider CryptoProvider = new MockCryptoProvider();
+        protected IAuthProvider AuthProvider = new MockAuthProvider();
+        protected MockEmailsProvider EmailsProvider = new MockEmailsProvider();
 
         [SetUp]
         public void Setup()
         {
-            usersProvider = new MockUsersProvider();
-            emailsProvider = new MockEmailsProvider();
+            UsersProvider = new MockUsersProvider();
+            EmailsProvider = new MockEmailsProvider();
+        }
+
+        protected async Task<User> CreateAndStoreUser(UserFactoryOptions? opts = null)
+        {
+            if (opts == null)
+            {
+                opts = new UserFactoryOptions();
+            }
+
+            var user = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = opts.Email,
+                EmailValidated = opts.EmailValidated,
+                Username = opts.Username,
+                Password = CryptoProvider.HashPassword(opts.Password),
+                Character = opts.Character
+            };
+            await UsersProvider.Save(user);
+            return user;
+        }
+
+        protected Character CreateCharacter()
+        {
+            return new Character
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "CoolCharacter"
+            };
         }
     }
 }

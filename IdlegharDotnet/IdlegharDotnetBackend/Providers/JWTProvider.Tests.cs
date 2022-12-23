@@ -1,5 +1,5 @@
 using IdlegharDotnetBackend.Providers;
-using IdlegharDotnetDomain;
+using IdlegharDotnetDomain.Entities;
 using NUnit.Framework;
 
 namespace IdlegharDotnetBackend.Tests.Providers

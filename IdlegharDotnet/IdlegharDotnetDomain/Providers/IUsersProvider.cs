@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Entities;
+
 namespace IdlegharDotnetDomain.Providers
 {
     public interface IUsersProvider

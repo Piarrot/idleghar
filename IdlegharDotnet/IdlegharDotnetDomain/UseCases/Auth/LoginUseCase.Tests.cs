@@ -1,3 +1,4 @@
+using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.UseCases.Auth;
 using IdlegharDotnetShared.Auth;
@@ -14,12 +15,12 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
             var username = "CoolUser69";
             var email = "email@email.com";
 
-            await this.usersProvider.Save(new User
+            await this.UsersProvider.Save(new User
             {
                 Email = email,
                 Id = Guid.NewGuid().ToString(),
                 Username = username,
-                Password = cryptoProvider.HashPassword(plainPassword)
+                Password = CryptoProvider.HashPassword(plainPassword)
             });
 
             var input = new LoginUseCaseRequest()
@@ -28,11 +29,11 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Password = plainPassword
             };
 
-            var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
+            var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             var result = await useCase.Handle(input);
 
             Assert.IsInstanceOf(typeof(LoginUseCaseResponse), result);
-            Assert.AreEqual(email, authProvider.ParseTokenEmail(result.Token));
+            Assert.AreEqual(email, AuthProvider.ParseTokenEmail(result.Token));
         }
 
         [Test]
@@ -47,7 +48,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Password = plainPassword
             };
 
-            var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
+            var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
             {
                 await useCase.Handle(input);
@@ -61,12 +62,12 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
             var username = "CoolUser69";
             var email = "email@email.com";
 
-            await this.usersProvider.Save(new User
+            await this.UsersProvider.Save(new User
             {
                 Email = email,
                 Id = Guid.NewGuid().ToString(),
                 Username = username,
-                Password = cryptoProvider.HashPassword(plainPassword)
+                Password = CryptoProvider.HashPassword(plainPassword)
             });
 
             var input = new LoginUseCaseRequest()
@@ -75,7 +76,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Password = "aWrongPassword"
             };
 
-            var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
+            var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
             {
                 await useCase.Handle(input);

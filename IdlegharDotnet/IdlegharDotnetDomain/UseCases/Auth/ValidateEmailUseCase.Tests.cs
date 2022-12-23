@@ -10,7 +10,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         public async Task GivenCorrectValidationCodeShouldValidateEmail()
         {
             var email = "email@email.com";
-            var registerUseCase = new RegisterUseCase(usersProvider, cryptoProvider, emailsProvider);
+            var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
             var result = await registerUseCase.Handle(new RegisterUseCaseRequest
             {
                 Email = email,
@@ -18,17 +18,17 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Username = "CoolUser69"
             });
 
-            var mails = emailsProvider.GetEmailsSentTo(email);
+            var mails = EmailsProvider.GetEmailsSentTo(email);
             var sentCode = mails[0].Context["code"];
 
-            var validateUseCase = new ValidateEmailUseCase(usersProvider);
+            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
             await validateUseCase.Handle(new ValidateEmailUseCaseRequest
             {
                 Id = result.Id,
                 Code = sentCode
             });
 
-            var user = await usersProvider.FindById(result.Id);
+            var user = await UsersProvider.FindById(result.Id);
 
             Assert.IsTrue(user.EmailValidated);
             Assert.AreEqual(null, user.EmailValidationCode);
@@ -38,7 +38,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         public async Task GivenIncorrectValidationCodeShouldFailToValidateEmail()
         {
             var email = "email@email.com";
-            var registerUseCase = new RegisterUseCase(usersProvider, cryptoProvider, emailsProvider);
+            var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
             var result = await registerUseCase.Handle(new RegisterUseCaseRequest
             {
                 Email = email,
@@ -46,7 +46,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Username = "CoolUser69"
             });
 
-            var validateUseCase = new ValidateEmailUseCase(usersProvider);
+            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
 
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {
@@ -57,7 +57,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 });
             });
 
-            var user = await usersProvider.FindById(result.Id);
+            var user = await UsersProvider.FindById(result.Id);
             Assert.IsFalse(user.EmailValidated);
         }
 
@@ -65,7 +65,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         public async Task GivenIncorrectUserIdShouldFailToValidateEmail()
         {
             var email = "email@email.com";
-            var registerUseCase = new RegisterUseCase(usersProvider, cryptoProvider, emailsProvider);
+            var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
             var result = await registerUseCase.Handle(new RegisterUseCaseRequest
             {
                 Email = email,
@@ -73,7 +73,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Username = "CoolUser69"
             });
 
-            var validateUseCase = new ValidateEmailUseCase(usersProvider);
+            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
 
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {
