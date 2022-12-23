@@ -40,12 +40,12 @@ namespace IdlegharDotnetDomain.Tests
             return user;
         }
 
-        protected Character CreateCharacter()
+        protected Character CreateCharacter(string? name = null)
         {
             return new Character
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "CoolCharacter"
+                Name = name ?? "CoolCharacter"
             };
         }
     }

@@ -1,5 +1,4 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Character;
 
@@ -18,7 +17,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters
         {
             if (authRequest.CurrentUser.Character != null)
             {
-                throw new MoreThanOneCharacterException();
+                throw new InvalidOperationException(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER);
             }
 
             var newCharacter = new Character

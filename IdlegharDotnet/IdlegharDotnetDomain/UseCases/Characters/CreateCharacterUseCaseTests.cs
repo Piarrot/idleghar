@@ -49,7 +49,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Characters
             };
             var useCase = new CreateCharacterUseCase(UsersProvider);
 
-            Assert.ThrowsAsync<MoreThanOneCharacterException>(async () =>
+            var e = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>
                 {
@@ -57,6 +57,8 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Characters
                     Request = request
                 });
             });
+
+            Assert.AreEqual(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER, e?.Message);
         }
     }
 }
