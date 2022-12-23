@@ -1,4 +1,4 @@
-namespace IdlegharDotnetShared.Character
+namespace IdlegharDotnetShared.Characters
 {
     public class CreateCharacterUseCaseRequest
     {

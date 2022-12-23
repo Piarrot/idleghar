@@ -1,6 +1,6 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetShared.Character;
+using IdlegharDotnetShared.Characters;
 
 namespace IdlegharDotnetDomain.UseCases.Characters
 {

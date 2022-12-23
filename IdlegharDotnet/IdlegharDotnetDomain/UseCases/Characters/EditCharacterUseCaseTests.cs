@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Tests.Factories;
 using IdlegharDotnetDomain.UseCases;
 using IdlegharDotnetDomain.UseCases.Characters;
-using IdlegharDotnetShared.Character;
+using IdlegharDotnetShared.Characters;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Tests.UseCases.Characters
