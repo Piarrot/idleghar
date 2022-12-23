@@ -1,4 +1,5 @@
-using IdlegharDotnetShared;
+using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetShared.Auth;
 
 namespace IdlegharDotnetDomain;
 

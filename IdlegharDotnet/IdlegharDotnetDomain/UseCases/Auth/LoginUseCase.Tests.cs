@@ -1,83 +1,85 @@
-using IdlegharDotnetDomain;
-using IdlegharDotnetShared;
+using IdlegharDotnetDomain.Exceptions;
+using IdlegharDotnetDomain.UseCases.Auth;
+using IdlegharDotnetShared.Auth;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomainTests;
-
-public class LoginUseCaseTests : BaseTests
+namespace IdlegharDotnetDomain.Tests.UseCases.Auth
 {
-    [Test]
-    public async Task GivenCorrectCredentialsLogsInCorrectly()
+    public class LoginUseCaseTests : BaseTests
     {
-        var plainPassword = "user1234";
-        var username = "CoolUser69";
-        var email = "email@email.com";
-
-        await this.usersProvider.Save(new User
+        [Test]
+        public async Task GivenCorrectCredentialsLogsInCorrectly()
         {
-            Email = email,
-            Id = Guid.NewGuid().ToString(),
-            Username = username,
-            Password = cryptoProvider.HashPassword(plainPassword)
-        });
+            var plainPassword = "user1234";
+            var username = "CoolUser69";
+            var email = "email@email.com";
 
-        var input = new LoginUseCaseRequest()
+            await this.usersProvider.Save(new User
+            {
+                Email = email,
+                Id = Guid.NewGuid().ToString(),
+                Username = username,
+                Password = cryptoProvider.HashPassword(plainPassword)
+            });
+
+            var input = new LoginUseCaseRequest()
+            {
+                EmailOrUsername = username,
+                Password = plainPassword
+            };
+
+            var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
+            var result = await useCase.Handle(input);
+
+            Assert.IsInstanceOf(typeof(LoginUseCaseResponse), result);
+            Assert.AreEqual(email, authProvider.ParseTokenEmail(result.Token));
+        }
+
+        [Test]
+        public void GivenWrongUsernameFailsToLogin()
         {
-            EmailOrUsername = username,
-            Password = plainPassword
-        };
+            var plainPassword = "user1234";
+            var username = "CoolUser69";
 
-        var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
-        var result = await useCase.Handle(input);
+            var input = new LoginUseCaseRequest()
+            {
+                EmailOrUsername = username,
+                Password = plainPassword
+            };
 
-        Assert.IsInstanceOf(typeof(LoginUseCaseResponse), result);
-        Assert.AreEqual(email, authProvider.ParseTokenEmail(result.Token));
-    }
+            var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
+            Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
+            {
+                await useCase.Handle(input);
+            });
+        }
 
-    [Test]
-    public void GivenWrongUsernameFailsToLogin()
-    {
-        var plainPassword = "user1234";
-        var username = "CoolUser69";
-
-        var input = new LoginUseCaseRequest()
+        [Test]
+        public async Task GivenWrongPasswordFailsToLogin()
         {
-            EmailOrUsername = username,
-            Password = plainPassword
-        };
+            var plainPassword = "user1234";
+            var username = "CoolUser69";
+            var email = "email@email.com";
 
-        var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
-        Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
-        {
-            await useCase.Handle(input);
-        });
-    }
+            await this.usersProvider.Save(new User
+            {
+                Email = email,
+                Id = Guid.NewGuid().ToString(),
+                Username = username,
+                Password = cryptoProvider.HashPassword(plainPassword)
+            });
 
-    [Test]
-    public async Task GivenWrongPasswordFailsToLogin()
-    {
-        var plainPassword = "user1234";
-        var username = "CoolUser69";
-        var email = "email@email.com";
+            var input = new LoginUseCaseRequest()
+            {
+                EmailOrUsername = username,
+                Password = "aWrongPassword"
+            };
 
-        await this.usersProvider.Save(new User
-        {
-            Email = email,
-            Id = Guid.NewGuid().ToString(),
-            Username = username,
-            Password = cryptoProvider.HashPassword(plainPassword)
-        });
-
-        var input = new LoginUseCaseRequest()
-        {
-            EmailOrUsername = username,
-            Password = "aWrongPassword"
-        };
-
-        var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
-        Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
-        {
-            await useCase.Handle(input);
-        });
+            var useCase = new LoginUseCase(authProvider, usersProvider, cryptoProvider);
+            Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
+            {
+                await useCase.Handle(input);
+            });
+        }
     }
 }

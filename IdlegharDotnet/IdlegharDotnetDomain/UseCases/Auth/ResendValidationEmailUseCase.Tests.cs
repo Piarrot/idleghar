@@ -1,0 +1,86 @@
+using IdlegharDotnetDomain.Exceptions;
+using IdlegharDotnetDomain.UseCases.Auth;
+using IdlegharDotnetShared.Auth;
+using NUnit.Framework;
+
+namespace IdlegharDotnetDomain.Tests.UseCases.Auth
+{
+    public class ResendValidationEmailTests : BaseTests
+    {
+        const string email = "email@email.com";
+
+        [Test]
+        public async Task GivenAnEmailItShouldResendAValidationEmail()
+        {
+
+            var result = await new RegisterUseCase(usersProvider, cryptoProvider, emailsProvider).Handle(new RegisterUseCaseRequest
+            {
+                Email = email,
+                Password = "user1234",
+                Username = "cooluser"
+            });
+
+            await new ResendValidationEmailUseCase(usersProvider, emailsProvider, cryptoProvider).Handle(new ResendValidationUseCaseRequest
+            {
+                Email = email
+            });
+
+            var sentEmails = emailsProvider.GetEmailsSentTo(email);
+            Assert.AreEqual(2, sentEmails.Count);
+
+            var firstEmail = sentEmails[0];
+            var secondEmail = sentEmails[1];
+
+            Assert.NotNull(secondEmail.Context["code"]);
+            Assert.AreNotEqual(firstEmail.Context["code"], secondEmail.Context["code"]);
+        }
+
+        [Test]
+        public async Task GivenAnIncorrectEmailItShouldFail()
+        {
+            var result = await new RegisterUseCase(usersProvider, cryptoProvider, emailsProvider).Handle(new RegisterUseCaseRequest
+            {
+                Email = email,
+                Password = "user1234",
+                Username = "cooluser"
+            });
+
+            Assert.ThrowsAsync<InvalidEmailException>(async () =>
+            {
+                await new ResendValidationEmailUseCase(usersProvider, emailsProvider, cryptoProvider).Handle(new ResendValidationUseCaseRequest
+                {
+                    Email = "something.else@email.com"
+                });
+            });
+
+            var sentEmails = emailsProvider.GetEmailsSentTo(email);
+            Assert.AreEqual(1, sentEmails.Count);
+        }
+
+        [Test]
+        public async Task GivenAnEmailAlreadyValidatedItShouldFail()
+        {
+            var result = await new RegisterUseCase(usersProvider, cryptoProvider, emailsProvider).Handle(new RegisterUseCaseRequest
+            {
+                Email = email,
+                Password = "user1234",
+                Username = "cooluser"
+            });
+
+            var user = await usersProvider.FindById(result.Id);
+            user.EmailValidated = true;
+            await usersProvider.Save(user);
+
+            Assert.ThrowsAsync<InvalidEmailException>(async () =>
+            {
+                await new ResendValidationEmailUseCase(usersProvider, emailsProvider, cryptoProvider).Handle(new ResendValidationUseCaseRequest
+                {
+                    Email = email
+                });
+            });
+
+            var sentEmails = emailsProvider.GetEmailsSentTo(email);
+            Assert.AreEqual(1, sentEmails.Count);
+        }
+    }
+}

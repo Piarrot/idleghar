@@ -1,8 +1,9 @@
-namespace IdlegharDotnetShared;
-
-public class RegisterUseCaseResponse
+namespace IdlegharDotnetShared.Auth
 {
-    public string Id { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
+    public class RegisterUseCaseResponse
+    {
+        public string Id { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+    }
 }

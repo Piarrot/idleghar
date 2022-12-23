@@ -1,7 +1,9 @@
-namespace IdlegharDotnetShared;
-public class LoginUseCaseRequest
+namespace IdlegharDotnetShared.Auth
 {
-    public string EmailOrUsername { get; set; }
-    public string Password { get; set; }
+    public class LoginUseCaseRequest
+    {
+        public string EmailOrUsername { get; set; }
+        public string Password { get; set; }
 
+    }
 }

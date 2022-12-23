@@ -6,5 +6,5 @@ public class User
     public string Password { get; set; }
     public string Username { get; set; }
     public bool EmailValidated { get; set; }
-    public string EmailValidationCode { get; set; }
+    public string? EmailValidationCode { get; set; }
 }

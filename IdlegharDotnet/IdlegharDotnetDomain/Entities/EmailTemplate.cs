@@ -1,28 +1,30 @@
 using System.Text.RegularExpressions;
 
-namespace IdlegharDotnetDomain;
-public class EmailTemplate
+namespace IdlegharDotnetDomain.Entities
 {
-    public string Name { get; set; } = "";
-    public string Subject { get; set; } = "";
-    public string Message { get; set; } = "";
-
-    public string RenderMessage(Dictionary<string, string>? context = null)
+    public class EmailTemplate
     {
-        string result = this.Message;
+        public string Name { get; set; } = "";
+        public string Subject { get; set; } = "";
+        public string Message { get; set; } = "";
 
-        if (context == null)
+        public string RenderMessage(Dictionary<string, string>? context = null)
         {
+            string result = this.Message;
+
+            if (context == null)
+            {
+                return result;
+            }
+
+            var properties = context.Keys;
+            foreach (var propKey in properties)
+            {
+                string propValue = context[propKey]?.ToString() ?? "";
+                result = Regex.Replace(result, $"{{{propKey}}}", propValue);
+            }
+
             return result;
         }
-
-        var properties = context.Keys;
-        foreach (var propKey in properties)
-        {
-            string propValue = context[propKey]?.ToString() ?? "";
-            result = Regex.Replace(result, $"{{{propKey}}}", propValue);
-        }
-
-        return result;
     }
 }

@@ -1,6 +1,7 @@
-namespace IdlegharDotnetDomain;
-
-public static class EmailTemplateNames
+namespace IdlegharDotnetDomain.Constants
 {
-    public static readonly string VALIDATION_CODE = "VALIDATION_CODE";
+    public static class EmailTemplateNames
+    {
+        public static readonly string VALIDATION_CODE = "VALIDATION_CODE";
+    }
 }

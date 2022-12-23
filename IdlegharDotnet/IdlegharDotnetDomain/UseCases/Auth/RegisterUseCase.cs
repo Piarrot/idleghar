@@ -1,58 +1,63 @@
-using IdlegharDotnetShared;
+using IdlegharDotnetDomain.Constants;
+using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Exceptions;
+using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetShared.Auth;
 
-namespace IdlegharDotnetDomain;
-
-public class RegisterUseCase
+namespace IdlegharDotnetDomain.UseCases.Auth
 {
-    private IUsersProvider UsersProvider;
-    private ICryptoProvider CryptoProvider;
-    private IEmailsProvider EmailsProvider;
-
-    public RegisterUseCase(IUsersProvider usersProvider, ICryptoProvider cryptoProvider, IEmailsProvider emailsProvider)
+    public class RegisterUseCase
     {
-        UsersProvider = usersProvider;
-        CryptoProvider = cryptoProvider;
-        EmailsProvider = emailsProvider;
-    }
+        private IUsersProvider UsersProvider;
+        private ICryptoProvider CryptoProvider;
+        private IEmailsProvider EmailsProvider;
 
-    public async Task<RegisterUseCaseResponse> Handle(RegisterUseCaseRequest req)
-    {
-        var existingUser = await this.UsersProvider.FindByEmail(req.Email);
-
-        if (existingUser != null)
+        public RegisterUseCase(IUsersProvider usersProvider, ICryptoProvider cryptoProvider, IEmailsProvider emailsProvider)
         {
-            throw new EmailInUseException();
+            UsersProvider = usersProvider;
+            CryptoProvider = cryptoProvider;
+            EmailsProvider = emailsProvider;
         }
 
-        var code = CryptoProvider.GetRandomNumberDigits(6);
-
-        User newUser = new User()
+        public async Task<RegisterUseCaseResponse> Handle(RegisterUseCaseRequest req)
         {
-            Id = Guid.NewGuid().ToString(),
-            Email = req.Email,
-            Username = req.Username,
-            Password = CryptoProvider.HashPassword(req.Password),
-            EmailValidated = false,
-            EmailValidationCode = code
-        };
+            var existingUser = await UsersProvider.FindByEmail(req.Email);
 
-        await this.UsersProvider.Save(newUser);
-        await this.EmailsProvider.sendEmail(new SendEmailRequest
-        {
-            To = newUser.Email,
-            Template = await this.EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
-            Context = new Dictionary<string, string>
+            if (existingUser != null)
             {
-                ["username"] = newUser.Username,
-                ["code"] = code
+                throw new EmailInUseException();
             }
-        });
 
-        return new RegisterUseCaseResponse()
-        {
-            Username = newUser.Username,
-            Email = newUser.Email,
-            Id = newUser.Id
-        };
+            var code = CryptoProvider.GetRandomNumberDigits(6);
+
+            User newUser = new User()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = req.Email,
+                Username = req.Username,
+                Password = CryptoProvider.HashPassword(req.Password),
+                EmailValidated = false,
+                EmailValidationCode = code
+            };
+
+            await UsersProvider.Save(newUser);
+            await EmailsProvider.sendEmail(new SendEmailRequest
+            {
+                To = newUser.Email,
+                Template = await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
+                Context = new Dictionary<string, string>
+                {
+                    ["username"] = newUser.Username,
+                    ["code"] = code
+                }
+            });
+
+            return new RegisterUseCaseResponse()
+            {
+                Username = newUser.Username,
+                Email = newUser.Email,
+                Id = newUser.Id
+            };
+        }
     }
 }

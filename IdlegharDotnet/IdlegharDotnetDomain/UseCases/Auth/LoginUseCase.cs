@@ -1,31 +1,35 @@
-using IdlegharDotnetShared;
+using IdlegharDotnetDomain.Exceptions;
+using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetShared.Auth;
 
-namespace IdlegharDotnetDomain;
-public class LoginUseCase
+namespace IdlegharDotnetDomain.UseCases.Auth
 {
-    private IAuthProvider AuthProvider { get; set; }
-    private IUsersProvider UsersProvider { get; set; }
-    private ICryptoProvider CryptoProvider { get; set; }
-
-    public LoginUseCase(IAuthProvider authProvider, IUsersProvider usersProvider, ICryptoProvider cryptoProvider)
+    public class LoginUseCase
     {
-        AuthProvider = authProvider;
-        UsersProvider = usersProvider;
-        CryptoProvider = cryptoProvider;
-    }
+        private IAuthProvider AuthProvider { get; set; }
+        private IUsersProvider UsersProvider { get; set; }
+        private ICryptoProvider CryptoProvider { get; set; }
 
-    public async Task<LoginUseCaseResponse> Handle(LoginUseCaseRequest input)
-    {
-        var user = await UsersProvider.FindByEmail(input.EmailOrUsername) ?? await UsersProvider.FindByUsername(input.EmailOrUsername);
-        if (user == null || !CryptoProvider.DoesPasswordMatches(user.Password, input.Password))
+        public LoginUseCase(IAuthProvider authProvider, IUsersProvider usersProvider, ICryptoProvider cryptoProvider)
         {
-            throw new WrongCredentialsException();
+            AuthProvider = authProvider;
+            UsersProvider = usersProvider;
+            CryptoProvider = cryptoProvider;
         }
 
-        var token = AuthProvider.GenerateToken(user);
-        return new LoginUseCaseResponse()
+        public async Task<LoginUseCaseResponse> Handle(LoginUseCaseRequest input)
         {
-            Token = token,
-        };
+            var user = await UsersProvider.FindByEmail(input.EmailOrUsername) ?? await UsersProvider.FindByUsername(input.EmailOrUsername);
+            if (user == null || !CryptoProvider.DoesPasswordMatches(user.Password, input.Password))
+            {
+                throw new WrongCredentialsException();
+            }
+
+            var token = AuthProvider.GenerateToken(user);
+            return new LoginUseCaseResponse()
+            {
+                Token = token,
+            };
+        }
     }
 }

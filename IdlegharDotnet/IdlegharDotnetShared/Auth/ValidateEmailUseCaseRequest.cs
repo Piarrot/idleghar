@@ -1,7 +1,8 @@
-namespace IdlegharDotnetShared;
-
-public class ValidateEmailUseCaseRequest
+namespace IdlegharDotnetShared.Auth
 {
-    public string Id { get; set; }
-    public string Code { get; set; }
+    public class ValidateEmailUseCaseRequest
+    {
+        public string Id { get; set; }
+        public string Code { get; set; }
+    }
 }

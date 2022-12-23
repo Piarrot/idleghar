@@ -1,7 +1,9 @@
-namespace IdlegharDotnetDomain;
-public interface ICryptoProvider
+namespace IdlegharDotnetDomain.Providers
 {
-    string HashPassword(string plainPassword);
-    bool DoesPasswordMatches(string hash, string plainPassword);
-    string GetRandomNumberDigits(int digitCount);
+    public interface ICryptoProvider
+    {
+        string HashPassword(string plainPassword);
+        bool DoesPasswordMatches(string hash, string plainPassword);
+        string GetRandomNumberDigits(int digitCount);
+    }
 }

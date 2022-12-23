@@ -1,6 +1,6 @@
 namespace IdlegharDotnetDomain.Exceptions
 {
-    public class EmailInUseException : Exception
+    public class InvalidEmailException : Exception
     {
 
     }

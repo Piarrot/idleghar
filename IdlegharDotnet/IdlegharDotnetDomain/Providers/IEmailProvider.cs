@@ -1,14 +1,10 @@
-namespace IdlegharDotnetDomain;
+using IdlegharDotnetDomain.Entities;
 
-public class SendEmailRequest
+namespace IdlegharDotnetDomain.Providers
 {
-    public string To;
-    public EmailTemplate Template;
-    public Dictionary<string, string>? Context;
-}
-
-public interface IEmailsProvider
-{
-    Task<EmailTemplate> GetTemplate(string templateName);
-    Task sendEmail(SendEmailRequest req);
+    public interface IEmailsProvider
+    {
+        Task<EmailTemplate> GetTemplate(string templateName);
+        Task sendEmail(SendEmailRequest req);
+    }
 }

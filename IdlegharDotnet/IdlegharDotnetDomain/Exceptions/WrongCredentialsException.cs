@@ -1,6 +1,7 @@
-namespace IdlegharDotnetDomain;
-
-public class WrongCredentialsException : Exception
+namespace IdlegharDotnetDomain.Exceptions
 {
+    public class WrongCredentialsException : Exception
+    {
 
+    }
 }

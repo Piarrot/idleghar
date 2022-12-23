@@ -1,17 +1,21 @@
-using IdlegharDotnetDomain;
+using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetDomain.Tests.MockProviders;
 using NUnit.Framework;
-namespace IdlegharDotnetDomainTests;
 
-public class BaseTests
+namespace IdlegharDotnetDomain.Tests
 {
-    protected IUsersProvider usersProvider = new MockUsersProvider();
-    protected ICryptoProvider cryptoProvider = new MockCryptoProvider();
-    protected IAuthProvider authProvider = new MockAuthProvider();
-    protected MockEmailsProvider emailsProvider = new MockEmailsProvider();
-
-    [SetUp]
-    public void Setup()
+    public class BaseTests
     {
-        this.usersProvider = new MockUsersProvider();
+        protected IUsersProvider usersProvider = new MockUsersProvider();
+        protected ICryptoProvider cryptoProvider = new MockCryptoProvider();
+        protected IAuthProvider authProvider = new MockAuthProvider();
+        protected MockEmailsProvider emailsProvider = new MockEmailsProvider();
+
+        [SetUp]
+        public void Setup()
+        {
+            usersProvider = new MockUsersProvider();
+            emailsProvider = new MockEmailsProvider();
+        }
     }
 }
