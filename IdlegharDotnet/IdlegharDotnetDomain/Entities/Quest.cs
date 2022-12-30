@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Providers;
+
 namespace IdlegharDotnetDomain.Entities
 {
     public class Quest
@@ -5,5 +7,6 @@ namespace IdlegharDotnetDomain.Entities
         public string Id { get; set; }
         public string Name { get; set; }
         public string Difficulty { get; set; }
+        public string BatchId { get; set; }
     }
 }

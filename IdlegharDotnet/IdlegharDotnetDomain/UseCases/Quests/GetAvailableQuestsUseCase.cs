@@ -21,16 +21,18 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             var currentBatch = await QuestsProvider.GetCurrentQuestBatch();
             if (IsValidQuestBatch(currentBatch))
             {
-                return currentBatch.Quests;
+                return currentBatch!.Quests;
             }
             var quests = new List<Quest>();
-            quests.AddRange(CreateQuestsOfDifficulty(Constants.Difficulties.EASY, RandomnessProvider.GetRandomInt(1, 3)));
-            quests.AddRange(CreateQuestsOfDifficulty(Constants.Difficulties.NORMAL, RandomnessProvider.GetRandomInt(2, 4)));
-            quests.AddRange(CreateQuestsOfDifficulty(Constants.Difficulties.HARD, RandomnessProvider.GetRandomInt(1, 3)));
-            quests.AddRange(CreateQuestsOfDifficulty(Constants.Difficulties.LEGENDARY, 1));
+            var batchId = Guid.NewGuid().ToString();
+            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.EASY, RandomnessProvider.GetRandomInt(1, 3)));
+            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.NORMAL, RandomnessProvider.GetRandomInt(2, 4)));
+            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.HARD, RandomnessProvider.GetRandomInt(1, 3)));
+            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.LEGENDARY, 1));
 
             await QuestsProvider.UpdateQuestBatch(new QuestBatch
             {
+                Id = batchId,
                 CreatedAt = TimeProvider.GetCurrentTime(),
                 Quests = quests
             });
@@ -50,7 +52,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             return true;
         }
 
-        private List<Quest> CreateQuestsOfDifficulty(string difficulty, int questCount)
+        private List<Quest> CreateQuestsOfDifficulty(string batchId, string difficulty, int questCount)
         {
             var quests = new List<Quest>(questCount);
             for (int i = 0; i < questCount; i++)
@@ -58,7 +60,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests
                 quests.Add(new Quest()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Difficulty = difficulty
+                    Difficulty = difficulty,
+                    BatchId = batchId
                 });
             }
             return quests;
