@@ -1,7 +1,4 @@
 namespace IdlegharDotnetShared.Auth
 {
-    public class ResendValidationUseCaseRequest
-    {
-        public string Email { get; set; }
-    }
+    public record class ResendValidationUseCaseRequest(string Email);
 }

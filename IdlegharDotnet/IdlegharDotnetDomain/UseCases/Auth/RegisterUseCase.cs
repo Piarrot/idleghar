@@ -52,12 +52,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
                 }
             });
 
-            return new RegisterUseCaseResponse()
-            {
-                Username = newUser.Username,
-                Email = newUser.Email,
-                Id = newUser.Id
-            };
+            return new RegisterUseCaseResponse(newUser.Id, newUser.Email, newUser.Username);
         }
     }
 }

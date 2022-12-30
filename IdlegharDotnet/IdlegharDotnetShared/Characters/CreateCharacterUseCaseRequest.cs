@@ -1,7 +1,4 @@
 namespace IdlegharDotnetShared.Characters
 {
-    public class CreateCharacterUseCaseRequest
-    {
-        public string Name { get; set; }
-    }
+    public record class CreateCharacterUseCaseRequest(string Name);
 }

@@ -11,12 +11,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         [Test]
         public async Task RegistersAUserAndHashesThePassword()
         {
-            var testInput = new RegisterUseCaseRequest()
-            {
-                Email = "email@email.com",
-                Password = "user1234",
-                Username = "CoolUser69"
-            };
+            var testInput = new RegisterUseCaseRequest("email@email.com", "user1234", "CoolUser69");
 
             var useCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
 
@@ -47,12 +42,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Username = "CoolUser69"
             });
 
-            var testInput = new RegisterUseCaseRequest()
-            {
-                Email = "emailAlreadyRegistered@email.com",
-                Password = "user1234",
-                Username = "CoolUser69"
-            };
+            var testInput = new RegisterUseCaseRequest("emailAlreadyRegistered@email.com", "user1234", "CoolUser69");
 
             var useCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
 

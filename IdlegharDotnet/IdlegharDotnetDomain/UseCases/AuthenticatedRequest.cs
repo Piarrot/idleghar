@@ -2,10 +2,5 @@ using IdlegharDotnetDomain.Entities;
 
 namespace IdlegharDotnetDomain.UseCases
 {
-    public class AuthenticatedRequest<RequestType>
-    {
-        public User CurrentUser { get; set; }
-
-        public RequestType Request { get; set; }
-    }
+    public record class AuthenticatedRequest<RequestType>(User CurrentUser, RequestType Request);
 }

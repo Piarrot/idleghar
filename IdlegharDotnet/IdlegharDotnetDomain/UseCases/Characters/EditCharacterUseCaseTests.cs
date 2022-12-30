@@ -18,16 +18,9 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Characters
 
             var useCase = new EditCharacterUseCase(UsersProvider);
 
-            var request = new EditCharacterUseCaseRequest
-            {
-                Name = "Nice Guy"
-            };
+            var request = new EditCharacterUseCaseRequest("Nice Guy");
 
-            var character = await useCase.Handle(new AuthenticatedRequest<EditCharacterUseCaseRequest>
-            {
-                CurrentUser = user,
-                Request = request
-            });
+            var character = await useCase.Handle(new AuthenticatedRequest<EditCharacterUseCaseRequest>(user, request));
 
             Assert.AreEqual(request.Name, character.Name);
         }
@@ -39,21 +32,14 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Characters
 
             var useCase = new EditCharacterUseCase(UsersProvider);
 
-            var request = new EditCharacterUseCaseRequest
-            {
-                Name = "Nice Guy"
-            };
+            var request = new EditCharacterUseCaseRequest("Nice Guy");
 
             var e = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await useCase.Handle(new AuthenticatedRequest<EditCharacterUseCaseRequest>
-                {
-                    CurrentUser = user,
-                    Request = request
-                });
+                await useCase.Handle(new AuthenticatedRequest<EditCharacterUseCaseRequest>(user, request));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.EDIT_CHARACTER_NOT_CREATED, e?.Message);
+            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_CREATED, e?.Message);
 
         }
     }

@@ -26,10 +26,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             }
 
             var token = AuthProvider.GenerateToken(user);
-            return new LoginUseCaseResponse()
-            {
-                Token = token,
-            };
+            return new LoginUseCaseResponse(token);
         }
     }
 }

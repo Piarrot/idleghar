@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace IdlegharDotnetShared.Characters
 {
-    public class EditCharacterUseCaseRequest
-    {
-        public string Name { get; set; }
-    }
+    public record class EditCharacterUseCaseRequest(string Name);
 }

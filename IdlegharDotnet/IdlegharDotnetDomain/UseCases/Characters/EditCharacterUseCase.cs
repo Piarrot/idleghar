@@ -19,7 +19,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 
             if (character == null)
             {
-                throw new InvalidOperationException(Constants.ErrorMessages.EDIT_CHARACTER_NOT_CREATED);
+                throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_CREATED);
             }
 
             character.Name = authenticatedRequest.Request.Name;

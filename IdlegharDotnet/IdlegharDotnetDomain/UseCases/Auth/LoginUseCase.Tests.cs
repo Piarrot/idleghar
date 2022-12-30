@@ -23,11 +23,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Password = CryptoProvider.HashPassword(plainPassword)
             });
 
-            var input = new LoginUseCaseRequest()
-            {
-                EmailOrUsername = username,
-                Password = plainPassword
-            };
+            var input = new LoginUseCaseRequest(username, plainPassword);
 
             var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             var result = await useCase.Handle(input);
@@ -42,11 +38,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
             var plainPassword = "user1234";
             var username = "CoolUser69";
 
-            var input = new LoginUseCaseRequest()
-            {
-                EmailOrUsername = username,
-                Password = plainPassword
-            };
+            var input = new LoginUseCaseRequest(username, plainPassword);
 
             var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
@@ -70,11 +62,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
                 Password = CryptoProvider.HashPassword(plainPassword)
             });
 
-            var input = new LoginUseCaseRequest()
-            {
-                EmailOrUsername = username,
-                Password = "aWrongPassword"
-            };
+            var input = new LoginUseCaseRequest(username, "wrongPassword");
 
             var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>

@@ -16,24 +16,17 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Characters
             var user = await this.CreateAndStoreUser();
             var useCase = new CreateCharacterUseCase(UsersProvider);
 
-            var request = new CreateCharacterUseCaseRequest
-            {
-                Name = "CoolCharacter"
-            };
+            var request = new CreateCharacterUseCaseRequest("Cool Character");
 
-            var character = await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>
-            {
-                CurrentUser = user,
-                Request = request
-            });
+            var character = await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>(user, request));
 
             Assert.NotNull(character);
             Assert.AreEqual(request.Name, character.Name);
 
             var updatedUser = await UsersProvider.FindById(user.Id);
 
-            Assert.NotNull(updatedUser?.Character);
-            Assert.AreEqual(updatedUser?.Character?.Id, character.Id);
+            Assert.NotNull(updatedUser!.Character);
+            Assert.AreEqual(updatedUser!.Character!.Id, character.Id);
         }
 
         [Test]
@@ -43,19 +36,12 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Characters
             {
                 Character = CreateCharacter()
             });
-            var request = new CreateCharacterUseCaseRequest
-            {
-                Name = "CoolCharacter"
-            };
+            var request = new CreateCharacterUseCaseRequest("Cool Character");
             var useCase = new CreateCharacterUseCase(UsersProvider);
 
             var e = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>
-                {
-                    CurrentUser = user,
-                    Request = request
-                });
+                await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>(user, request));
             });
 
             Assert.AreEqual(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER, e?.Message);

@@ -13,17 +13,13 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         public async Task GivenAnEmailItShouldResendAValidationEmail()
         {
 
-            var result = await new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider).Handle(new RegisterUseCaseRequest
-            {
-                Email = email,
-                Password = "user1234",
-                Username = "cooluser"
-            });
+            var result = await new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider).Handle(
+                new RegisterUseCaseRequest(email, "user1234", "cooluser")
+            );
 
-            await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(new ResendValidationUseCaseRequest
-            {
-                Email = email
-            });
+            await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(
+                new ResendValidationUseCaseRequest(email)
+            );
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
             Assert.AreEqual(2, sentEmails.Count);
@@ -31,26 +27,22 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
             var firstEmail = sentEmails[0];
             var secondEmail = sentEmails[1];
 
-            Assert.NotNull(secondEmail.Context["code"]);
-            Assert.AreNotEqual(firstEmail.Context["code"], secondEmail.Context["code"]);
+            Assert.NotNull(secondEmail.Context!["code"]);
+            Assert.AreNotEqual(firstEmail.Context!["code"], secondEmail.Context["code"]);
         }
 
         [Test]
         public async Task GivenAnIncorrectEmailItShouldFail()
         {
-            var result = await new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider).Handle(new RegisterUseCaseRequest
-            {
-                Email = email,
-                Password = "user1234",
-                Username = "cooluser"
-            });
+            var result = await new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider).Handle(
+                new RegisterUseCaseRequest(email, "user1234", "cooluser")
+            );
 
             Assert.ThrowsAsync<InvalidEmailException>(async () =>
             {
-                await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(new ResendValidationUseCaseRequest
-                {
-                    Email = "something.else@email.com"
-                });
+                await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(
+                    new ResendValidationUseCaseRequest("something.else@email.com")
+                );
             });
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
@@ -60,23 +52,19 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         [Test]
         public async Task GivenAnEmailAlreadyValidatedItShouldFail()
         {
-            var result = await new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider).Handle(new RegisterUseCaseRequest
-            {
-                Email = email,
-                Password = "user1234",
-                Username = "cooluser"
-            });
+            var result = await new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider).Handle(
+                new RegisterUseCaseRequest(email, "user1234", "cooluser")
+            );
 
             var user = await UsersProvider.FindById(result.Id);
-            user.EmailValidated = true;
+            user!.EmailValidated = true;
             await UsersProvider.Save(user);
 
             Assert.ThrowsAsync<InvalidEmailException>(async () =>
             {
-                await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(new ResendValidationUseCaseRequest
-                {
-                    Email = email
-                });
+                await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(
+                    new ResendValidationUseCaseRequest(email)
+                );
             });
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);

@@ -11,26 +11,17 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         {
             var email = "email@email.com";
             var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
-            var result = await registerUseCase.Handle(new RegisterUseCaseRequest
-            {
-                Email = email,
-                Password = "user1234",
-                Username = "CoolUser69"
-            });
+            var result = await registerUseCase.Handle(new RegisterUseCaseRequest(email, "user1234", "CoolUser69"));
 
             var mails = EmailsProvider.GetEmailsSentTo(email);
-            var sentCode = mails[0].Context["code"];
+            var sentCode = mails[0].Context!["code"];
 
             var validateUseCase = new ValidateEmailUseCase(UsersProvider);
-            await validateUseCase.Handle(new ValidateEmailUseCaseRequest
-            {
-                Id = result.Id,
-                Code = sentCode
-            });
+            await validateUseCase.Handle(new ValidateEmailUseCaseRequest(result.Id, sentCode));
 
             var user = await UsersProvider.FindById(result.Id);
 
-            Assert.IsTrue(user.EmailValidated);
+            Assert.IsTrue(user!.EmailValidated);
             Assert.AreEqual(null, user.EmailValidationCode);
         }
 
@@ -39,26 +30,17 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         {
             var email = "email@email.com";
             var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
-            var result = await registerUseCase.Handle(new RegisterUseCaseRequest
-            {
-                Email = email,
-                Password = "user1234",
-                Username = "CoolUser69"
-            });
+            var result = await registerUseCase.Handle(new RegisterUseCaseRequest(email, "user1234", "CoolUser69"));
 
             var validateUseCase = new ValidateEmailUseCase(UsersProvider);
 
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await validateUseCase.Handle(new ValidateEmailUseCaseRequest
-                {
-                    Id = result.Id,
-                    Code = "banana"
-                });
+                await validateUseCase.Handle(new ValidateEmailUseCaseRequest(result.Id, "banana"));
             });
 
             var user = await UsersProvider.FindById(result.Id);
-            Assert.IsFalse(user.EmailValidated);
+            Assert.IsFalse(user!.EmailValidated);
         }
 
         [Test]
@@ -66,22 +48,13 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Auth
         {
             var email = "email@email.com";
             var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
-            var result = await registerUseCase.Handle(new RegisterUseCaseRequest
-            {
-                Email = email,
-                Password = "user1234",
-                Username = "CoolUser69"
-            });
+            var result = await registerUseCase.Handle(new RegisterUseCaseRequest(email, "user1234", "CoolUser69"));
 
             var validateUseCase = new ValidateEmailUseCase(UsersProvider);
 
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await validateUseCase.Handle(new ValidateEmailUseCaseRequest
-                {
-                    Id = "any-id",
-                    Code = "any-code"
-                });
+                await validateUseCase.Handle(new ValidateEmailUseCaseRequest("any-id", "any-code"));
             });
         }
     }
