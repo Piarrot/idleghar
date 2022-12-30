@@ -1,5 +1,3 @@
-using IdlegharDotnetDomain.Providers;
-
 namespace IdlegharDotnetDomain.Entities
 {
     public class Quest
