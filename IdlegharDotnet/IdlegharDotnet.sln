@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdlegharDotnetBackend", "IdlegharDotnetBackend\IdlegharDotnetBackend.csproj", "{C4D29DFE-5ACD-40C8-8ACE-2224F8B4319A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdlegharDotnetBackendTests", "IdlegharDotnetBackendTests\IdlegharDotnetBackendTests.csproj", "{69B85D2F-7534-49EE-A4C7-70EA4E2D32CA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdlegharDotnetShared", "IdlegharDotnetShared\IdlegharDotnetShared.csproj", "{698D0FCC-EA5A-4709-B7AB-DEF29CD184E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdlegharDotnetDomain", "IdlegharDotnetDomain\IdlegharDotnetDomain.csproj", "{56A4B37D-770F-4996-B65A-3702CDAA9D47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +30,9 @@ Global
 		{698D0FCC-EA5A-4709-B7AB-DEF29CD184E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{698D0FCC-EA5A-4709-B7AB-DEF29CD184E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{698D0FCC-EA5A-4709-B7AB-DEF29CD184E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56A4B37D-770F-4996-B65A-3702CDAA9D47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56A4B37D-770F-4996-B65A-3702CDAA9D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56A4B37D-770F-4996-B65A-3702CDAA9D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56A4B37D-770F-4996-B65A-3702CDAA9D47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
