@@ -1,5 +1,7 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetDomain.Transformers;
+using IdlegharDotnetShared.Quests;
 
 namespace IdlegharDotnetDomain.UseCases.Quests
 {
@@ -16,12 +18,12 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             TimeProvider = timeProvider;
         }
 
-        public async Task<List<Quest>> Handle()
+        public async Task<List<QuestDTO>> Handle(AuthenticatedRequest req)
         {
             var currentBatch = await QuestsProvider.GetCurrentQuestBatch();
             if (IsValidQuestBatch(currentBatch))
             {
-                return currentBatch!.Quests;
+                return QuestTransformer.Transform(currentBatch!.Quests);
             }
             var quests = new List<Quest>();
             var batchId = Guid.NewGuid().ToString();
@@ -37,7 +39,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
                 Quests = quests
             });
 
-            return quests;
+            return QuestTransformer.Transform(quests);
         }
 
         private bool IsValidQuestBatch(QuestBatch? currentBatch)
@@ -57,14 +59,25 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             var quests = new List<Quest>(questCount);
             for (int i = 0; i < questCount; i++)
             {
-                quests.Add(new Quest()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Difficulty = difficulty,
-                    BatchId = batchId
-                });
+                quests.Add(CreateQuestOfDifficulty(batchId, difficulty));
             }
             return quests;
+        }
+
+        private Quest CreateQuestOfDifficulty(string batchId, string difficulty)
+        {
+            var quest = new Quest()
+            {
+                Difficulty = difficulty,
+                BatchId = batchId
+            };
+
+            for (int i = 0; i < Constants.Quests.EncountersPerQuest; i++)
+            {
+                quest.Encounters.Add(new Encounter());
+            }
+
+            return quest;
         }
     }
 }

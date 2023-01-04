@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace IdlegharDotnetDomain.Entities
 {
-    public class EmailTemplate
+    public class EmailTemplate : Entity
     {
         public string Name { get; set; } = "";
         public string Subject { get; set; } = "";

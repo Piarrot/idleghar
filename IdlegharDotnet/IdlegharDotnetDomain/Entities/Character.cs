@@ -1,9 +1,16 @@
 namespace IdlegharDotnetDomain.Entities
 {
-    public class Character
+    public class Character : Entity
     {
-        public string Id { get; internal set; }
         public string Name { get; set; }
-        public Quest CurrentQuest { get; set; }
+        public Quest? CurrentQuest { get; set; }
+        public Encounter? CurrentEncounter { get; set; }
+        public bool IsQuesting
+        {
+            get
+            {
+                return CurrentQuest != null && CurrentEncounter != null;
+            }
+        }
     }
 }
