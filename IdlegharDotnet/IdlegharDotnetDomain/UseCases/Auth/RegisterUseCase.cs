@@ -32,7 +32,6 @@ namespace IdlegharDotnetDomain.UseCases.Auth
 
             User newUser = new User()
             {
-                Id = Guid.NewGuid().ToString(),
                 Email = req.Email,
                 Username = req.Username,
                 Password = CryptoProvider.HashPassword(req.Password),

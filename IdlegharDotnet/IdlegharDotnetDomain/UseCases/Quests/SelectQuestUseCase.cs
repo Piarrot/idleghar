@@ -25,12 +25,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 
             var quest = await QuestsProvider.FindById(authRequest.Request.QuestId);
 
-            if (quest == null)
-            {
-                throw new InvalidOperationException(Constants.ErrorMessages.INVALID_QUEST);
-            }
-
-            if (!QuestsProvider.IsBatchCurrent(quest.BatchId, TimeProvider))
+            if (quest == null || !QuestsProvider.IsBatchCurrent(quest!.BatchId!, TimeProvider))
             {
                 throw new InvalidOperationException(Constants.ErrorMessages.INVALID_QUEST);
             }

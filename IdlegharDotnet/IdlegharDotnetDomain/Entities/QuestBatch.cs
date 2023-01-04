@@ -2,9 +2,8 @@ using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Entities
 {
-    public class QuestBatch
+    public class QuestBatch : Entity
     {
-        public string Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<Quest> Quests { get; set; }
 

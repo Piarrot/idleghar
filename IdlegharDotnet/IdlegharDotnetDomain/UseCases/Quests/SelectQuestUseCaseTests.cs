@@ -11,9 +11,8 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
         [Test]
         public async Task GivenAValidUserAndAValidQuestShouldStartQuest()
         {
-            User user = await CreateAndStoreUser(new Factories.UserFactoryOptions { Character = CreateCharacter() });
-
-            var quests = await new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider).Handle();
+            var user = await CreateAndStoreUserAndCharacter();
+            var quests = await GetAvailableQuests(user);
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
@@ -25,9 +24,8 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
         [Test]
         public async Task GivenAnInvalidUserItShouldFail()
         {
-            User user = await CreateAndStoreUser();
-
-            var quests = await new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider).Handle();
+            var user = await CreateAndStoreUser();
+            var quests = await GetAvailableQuests(user);
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -44,9 +42,8 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
         [Test]
         public async Task GivenAnInvalidQuestItShouldFail()
         {
-            User user = await CreateAndStoreUser(new Factories.UserFactoryOptions { Character = CreateCharacter() });
-
-            var quests = await new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider).Handle();
+            var user = await CreateAndStoreUserAndCharacter();
+            var quests = await GetAvailableQuests(user);
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -63,9 +60,8 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
         [Test]
         public async Task GivenAnOldQuestItShouldFail()
         {
-            User user = await CreateAndStoreUser(new Factories.UserFactoryOptions { Character = CreateCharacter() });
-
-            var quests = await new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider).Handle();
+            User user = await CreateAndStoreUserAndCharacter();
+            var quests = await GetAvailableQuests(user);
 
             TimeProvider.MoveTimeInTicks(Constants.TimeDefinitions.QuestsRegenerationTimeInTicks);
 

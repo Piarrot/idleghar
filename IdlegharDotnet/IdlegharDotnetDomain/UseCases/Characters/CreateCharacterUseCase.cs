@@ -22,7 +22,6 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 
             var newCharacter = new Character
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = authRequest.Request.Name
             };
 
