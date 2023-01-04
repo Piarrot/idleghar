@@ -18,7 +18,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
             await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
 
             var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.NotNull(updatedUser!.Character!.CurrentQuest);
+            Assert.IsTrue(updatedUser!.Character!.IsQuesting);
         }
 
         [Test]
@@ -34,9 +34,6 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
             });
 
             Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_CREATED, ex!.Message);
-
-            var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsNull(updatedUser!.Character);
         }
 
         [Test]
@@ -54,7 +51,7 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
             Assert.AreEqual(Constants.ErrorMessages.INVALID_QUEST, ex!.Message);
 
             var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsNull(updatedUser!.Character!.CurrentQuest);
+            Assert.IsFalse(updatedUser!.Character!.IsQuesting);
         }
 
         [Test]
@@ -74,7 +71,27 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
             Assert.AreEqual(Constants.ErrorMessages.INVALID_QUEST, ex!.Message);
 
             var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsNull(updatedUser!.Character!.CurrentQuest);
+            Assert.IsFalse(updatedUser!.Character!.IsQuesting);
+        }
+
+        [Test]
+        public async Task GivenACharacterAlreadyQuestingShouldFail()
+        {
+            User user = await CreateAndStoreUserAndCharacterWithQuest();
+            var quests = await GetAvailableQuests(user);
+            Quest quest = user.Character!.CurrentQuest!;
+
+            var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
+            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
+            });
+
+            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING, ex!.Message);
+
+            var updatedUser = await UsersProvider.FindById(user.Id);
+            Assert.IsTrue(updatedUser!.Character!.IsQuesting);
+            Assert.AreEqual(quest, updatedUser!.Character!.CurrentQuest);
         }
     }
 }

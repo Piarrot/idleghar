@@ -7,26 +7,15 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
 {
     public class GetCurrentEncounterUseCaseTests : BaseTests
     {
+
         [Test]
-        public async Task GivenAValidUserItShouldReturnTheCurrentEncounterOfTheirCharacter()
+        public async Task GivenAValidUserAndACharacterWithCurrentEncounterShouldReturnCorrectEncounter()
         {
             var user = await CreateAndStoreUserAndCharacterWithQuest();
-            var useCase = new GetCurrentEncounterUseCase(UsersProvider);
-            var result = await useCase.Handle(new AuthenticatedRequest(user));
-            Assert.AreEqual(typeof(Encounter), result.GetType());
-
-            var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.AreEqual(result, updatedUser!.Character!.CurrentEncounter);
-        }
-
-        [Test]
-        public async Task GivenAValidUserAndACharacterWithCurrentEncounterShouldReturnCorrectQuest()
-        {
-            var user = await CreateAndStoreUserAndCharacterWithQuestAndEncounter();
-            var encounter = user.Character!.CurrentEncounter;
+            Encounter encounter = user.Character!.CurrentEncounter!;
 
             var useCase = new GetCurrentEncounterUseCase(UsersProvider);
-            var result = await useCase.Handle(new AuthenticatedRequest(user));
+            Encounter result = useCase.Handle(new AuthenticatedRequest(user));
 
             Assert.AreEqual(result, encounter);
         }
@@ -37,12 +26,12 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
             var user = await CreateAndStoreUser();
 
             var useCase = new GetCurrentEncounterUseCase(UsersProvider);
-            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            var ex = Assert.Throws<InvalidOperationException>(() =>
             {
-                await useCase.Handle(new AuthenticatedRequest(user));
+                useCase.Handle(new AuthenticatedRequest(user));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_CREATED, ex.Message);
+            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_CREATED, ex!.Message);
         }
 
         [Test]
@@ -51,12 +40,12 @@ namespace IdlegharDotnetDomain.Tests.UseCases.Quests
             var user = await CreateAndStoreUserAndCharacter();
 
             var useCase = new GetCurrentEncounterUseCase(UsersProvider);
-            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            var ex = Assert.Throws<InvalidOperationException>(() =>
             {
-                await useCase.Handle(new AuthenticatedRequest(user));
+                useCase.Handle(new AuthenticatedRequest(user));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_QUESTING, ex.Message);
+            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_QUESTING, ex!.Message);
         }
     }
 }

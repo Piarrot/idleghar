@@ -9,5 +9,13 @@ namespace IdlegharDotnetDomain.Entities
         public bool EmailValidated { get; set; }
         public string? EmailValidationCode { get; set; }
         public Character? Character { get; set; }
+
+        public bool HasCharacter
+        {
+            get
+            {
+                return Character != null;
+            }
+        }
     }
 }

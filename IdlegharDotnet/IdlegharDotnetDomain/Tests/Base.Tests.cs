@@ -75,15 +75,6 @@ namespace IdlegharDotnetDomain.Tests
             var user = await CreateAndStoreUserAndCharacter();
             var quests = await GetAvailableQuests(user);
             user.Character!.CurrentQuest = quests[0];
-            await UsersProvider.Save(user);
-
-            return user;
-        }
-        protected async Task<User> CreateAndStoreUserAndCharacterWithQuestAndEncounter()
-        {
-            var user = await CreateAndStoreUserAndCharacter();
-            var quests = await GetAvailableQuests(user);
-            user.Character!.CurrentQuest = quests[0];
             user.Character.CurrentEncounter = quests[0].Encounters[0];
             await UsersProvider.Save(user);
 

@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetDomain.Utils;
 using IdlegharDotnetShared.Quests;
 
 namespace IdlegharDotnetDomain.UseCases.Quests
@@ -18,10 +19,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 
         public async Task Handle(AuthenticatedRequest<SelectQuestUseCaseRequest> authRequest)
         {
-            if (authRequest.CurrentUser.Character == null)
-            {
-                throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_CREATED);
-            }
+            Assertions.UserHasCharacter(authRequest.CurrentUser);
+            Assertions.CharacterIsNotQuesting(authRequest.CurrentUser.Character!);
 
             var quest = await QuestsProvider.FindById(authRequest.Request.QuestId);
 
@@ -31,6 +30,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             }
 
             authRequest.CurrentUser.Character!.CurrentQuest = quest;
+            authRequest.CurrentUser.Character.CurrentEncounter = quest.Encounters[0];
             await UsersProvider.Save(authRequest.CurrentUser);
         }
     }
