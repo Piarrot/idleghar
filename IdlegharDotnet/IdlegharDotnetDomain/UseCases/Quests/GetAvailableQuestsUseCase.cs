@@ -18,7 +18,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             TimeProvider = timeProvider;
         }
 
-        public async Task<List<QuestDTO>> Handle(AuthenticatedRequest req)
+        public async Task<List<QuestViewModel>> Handle(AuthenticatedRequest req)
         {
             var currentBatch = await QuestsProvider.GetCurrentQuestBatch();
             if (IsValidQuestBatch(currentBatch))

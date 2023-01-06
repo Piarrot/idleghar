@@ -5,14 +5,14 @@ namespace IdlegharDotnetDomain.Transformers
 {
     public static class QuestTransformer
     {
-        public static QuestDTO Transform(Quest quest)
+        public static QuestViewModel Transform(Quest quest)
         {
-            return new QuestDTO(quest.Id, quest.Name!, quest.Difficulty!);
+            return new QuestViewModel(quest.Id, quest.Name!, quest.Difficulty!);
         }
 
-        public static List<QuestDTO> Transform(List<Quest> quests)
+        public static List<QuestViewModel> Transform(List<Quest> quests)
         {
-            return quests.ConvertAll<QuestDTO>((quest) =>
+            return quests.ConvertAll<QuestViewModel>((quest) =>
             {
                 return Transform(quest);
             });
