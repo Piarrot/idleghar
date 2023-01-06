@@ -5,11 +5,22 @@ namespace IdlegharDotnetDomain.Entities
         public string Name { get; set; }
         public Quest? CurrentQuest { get; set; }
         public Encounter? CurrentEncounter { get; set; }
-        public bool IsQuesting
+        public bool IsQuesting => CurrentQuest != null && CurrentEncounter != null;
+
+        public Encounter GetEncounterOrThrow()
         {
-            get
+            if (CurrentQuest == null || CurrentEncounter == null)
             {
-                return CurrentQuest != null && CurrentEncounter != null;
+                throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_QUESTING);
+            }
+            return CurrentEncounter;
+        }
+
+        public void ThrowIfNotQuesting()
+        {
+            if (CurrentQuest != null || CurrentEncounter != null)
+            {
+                throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING);
             }
         }
     }

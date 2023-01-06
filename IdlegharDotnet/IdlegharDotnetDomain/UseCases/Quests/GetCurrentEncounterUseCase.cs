@@ -1,7 +1,5 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetDomain.Utils;
-using IdlegharDotnetShared;
 
 namespace IdlegharDotnetDomain.UseCases.Quests
 {
@@ -16,10 +14,11 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 
         public Encounter Handle(AuthenticatedRequest req)
         {
-            Assertions.UserHasCharacter(req.CurrentUser);
-            Assertions.AssertCharacterIsQuesting(req.CurrentUser.Character!);
+            Character userCharacter = req.CurrentUser.GetCharacterOrThrow();
 
-            return req.CurrentUser.Character!.CurrentEncounter!;
+            Encounter currentEncounter = userCharacter.GetEncounterOrThrow();
+
+            return currentEncounter;
         }
     }
 }
