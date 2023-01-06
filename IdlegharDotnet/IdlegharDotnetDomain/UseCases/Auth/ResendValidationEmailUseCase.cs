@@ -4,7 +4,7 @@ using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Auth;
 
-namespace IdlegharDotnetDomain.Tests.UseCases.Auth
+namespace IdlegharDotnetDomain.UseCases.Auth
 {
     public class ResendValidationEmailUseCase
     {

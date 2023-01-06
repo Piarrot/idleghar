@@ -1,10 +1,9 @@
+using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetDomain.Tests.Factories;
-using IdlegharDotnetDomain.UseCases;
-using IdlegharDotnetDomain.UseCases.Characters;
 using IdlegharDotnetShared.Characters;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomain.Tests.UseCases.Characters
+namespace IdlegharDotnetDomain.UseCases.Characters.Tests
 {
     public class EditCharacterUseCaseTests : BaseTests
     {

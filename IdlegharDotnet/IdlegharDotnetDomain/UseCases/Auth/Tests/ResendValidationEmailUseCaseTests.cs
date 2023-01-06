@@ -1,9 +1,9 @@
 using IdlegharDotnetDomain.Exceptions;
-using IdlegharDotnetDomain.UseCases.Auth;
+using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Auth;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomain.Tests.UseCases.Auth
+namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 {
     public class ResendValidationEmailTests : BaseTests
     {

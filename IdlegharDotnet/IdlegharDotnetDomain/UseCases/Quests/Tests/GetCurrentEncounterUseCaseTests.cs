@@ -1,9 +1,8 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.UseCases;
-using IdlegharDotnetDomain.UseCases.Quests;
+using IdlegharDotnetDomain.Tests;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomain.Tests.UseCases.Quests
+namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 {
     public class GetCurrentEncounterUseCaseTests : BaseTests
     {

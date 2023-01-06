@@ -1,8 +1,7 @@
-using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Tests;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomainTests.Entities
+namespace IdlegharDotnetDomain.Entities.Tests
 {
     class EmailTemplateTests : BaseTests
     {

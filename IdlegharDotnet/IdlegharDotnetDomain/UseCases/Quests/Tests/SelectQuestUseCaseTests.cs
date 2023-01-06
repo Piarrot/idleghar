@@ -1,10 +1,9 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.UseCases;
-using IdlegharDotnetDomain.UseCases.Quests;
+using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Quests;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomain.Tests.UseCases.Quests
+namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 {
     public class SelectQuestUseCaseTests : BaseTests
     {
