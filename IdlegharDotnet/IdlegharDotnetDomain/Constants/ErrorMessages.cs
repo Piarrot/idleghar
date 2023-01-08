@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace IdlegharDotnetDomain.Constants
 {
     public static class ErrorMessages
@@ -7,5 +9,6 @@ namespace IdlegharDotnetDomain.Constants
         public static readonly string INVALID_QUEST = "Requested quest is invalid";
         public static readonly string CHARACTER_NOT_QUESTING = "Character is not questing";
         internal static readonly string CHARACTER_ALREADY_QUESTING = "Character is already questing";
+        internal static readonly string INVALID_ENCOUNTER_STATE = "Character is in an invalid encounter state";
     }
 }

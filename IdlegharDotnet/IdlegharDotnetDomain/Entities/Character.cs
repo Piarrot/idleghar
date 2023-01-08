@@ -4,24 +4,33 @@ namespace IdlegharDotnetDomain.Entities
     {
         public string Name { get; set; }
         public Quest? CurrentQuest { get; set; }
-        public Encounter? CurrentEncounter { get; set; }
-        public bool IsQuesting => CurrentQuest != null && CurrentEncounter != null;
+        public EncounterState? CurrentEncounterState { get; set; }
+        public bool IsQuesting => CurrentQuest != null && CurrentEncounterState != null;
+
+        public int HP { get; private set; } = 10;
+
+        public int Damage { get; private set; } = 1;
 
         public Encounter GetEncounterOrThrow()
         {
-            if (CurrentQuest == null || CurrentEncounter == null)
+            if (CurrentQuest == null || CurrentEncounterState == null)
             {
                 throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_QUESTING);
             }
-            return CurrentEncounter;
+            return CurrentEncounterState.Encounter;
         }
 
         public void ThrowIfNotQuesting()
         {
-            if (CurrentQuest != null || CurrentEncounter != null)
+            if (CurrentQuest != null || CurrentEncounterState != null)
             {
                 throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING);
             }
+        }
+
+        public void ReceiveDamage(int damage)
+        {
+            this.HP -= damage;
         }
     }
 }

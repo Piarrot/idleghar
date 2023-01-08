@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.Transformers;
 using IdlegharDotnetShared.Quests;
@@ -74,7 +75,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 
             for (int i = 0; i < Constants.Quests.EncountersPerQuest; i++)
             {
-                quest.Encounters.Add(new Encounter());
+                quest.Encounters.Add(new CombatEncounter());
             }
 
             return quest;

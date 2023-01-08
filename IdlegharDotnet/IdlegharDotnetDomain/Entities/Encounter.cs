@@ -1,7 +1,9 @@
 namespace IdlegharDotnetDomain.Entities
 {
-    public class Encounter : Entity
+    public abstract class Encounter : Entity
     {
+        public abstract EncounterState GetNewState();
 
+        public abstract bool ProcessTick(Character character);
     }
 }
