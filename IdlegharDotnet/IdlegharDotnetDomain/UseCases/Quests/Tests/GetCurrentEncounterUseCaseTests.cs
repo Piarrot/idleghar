@@ -11,7 +11,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         public async Task GivenAValidUserAndACharacterWithCurrentEncounterShouldReturnCorrectEncounter()
         {
             var user = await FakeUserFactory.CreateAndStoreUserAndCharacterWithQuest();
-            Encounter encounter = user.Character!.CurrentEncounterState.Encounter!;
+            Encounter encounter = user.Character!.GetEncounterOrThrow();
 
             var useCase = new GetCurrentEncounterUseCase(UsersProvider);
             Encounter result = useCase.Handle(new AuthenticatedRequest(user));

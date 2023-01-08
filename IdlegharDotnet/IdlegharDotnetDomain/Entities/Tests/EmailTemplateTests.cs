@@ -34,7 +34,7 @@ namespace IdlegharDotnetDomain.Entities.Tests
         }
 
         [Test]
-        public void GivenAContextWithEmptyValuesCanCorrectlyRenderAMessage()
+        public void GivenAMessageWithKeysNotPresentInContextItShouldFail()
         {
             var template = new EmailTemplate()
             {
@@ -43,8 +43,13 @@ namespace IdlegharDotnetDomain.Entities.Tests
                 Message = "This is a {someVariable} message"
             };
 
-            var context = new Dictionary<string, string> { ["someVariable"] = null };
-            Assert.AreEqual("This is a  message", template.RenderMessage(context));
+            var context = new Dictionary<string, string> { };
+
+            var ex = Assert.Throws<ArgumentException>(() =>
+            {
+                template.RenderMessage(context);
+            });
+            Assert.AreEqual("Missing key: someVariable from context", ex!.Message);
         }
     }
 }

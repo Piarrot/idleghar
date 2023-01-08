@@ -17,11 +17,20 @@ namespace IdlegharDotnetDomain.Entities
                 return result;
             }
 
-            var properties = context.Keys;
-            foreach (var propKey in properties)
+            string pattern = @"{(.*?)}";
+
+            var matches = Regex.Matches(this.Message, pattern);
+
+            foreach (Match match in matches)
             {
-                string propValue = context[propKey]?.ToString() ?? "";
-                result = Regex.Replace(result, $"{{{propKey}}}", propValue);
+                if (match.Success && match.Groups.Count > 0)
+                {
+                    string key = match.Groups[1].Value;
+                    string? propValue;
+                    var isPresent = context.TryGetValue(key, out propValue);
+                    if (!isPresent || propValue == null) throw new ArgumentException($"Missing key: {key} from context");
+                    result = Regex.Replace(result, match.Value, propValue);
+                }
             }
 
             return result;
