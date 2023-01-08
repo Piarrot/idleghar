@@ -9,7 +9,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenAUserItShouldListAvailableQuests()
         {
-            var user = await CreateAndStoreUserAndCharacter();
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
 
             var useCase = new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider);
             var quests = await useCase.Handle(new AuthenticatedRequest(user));
@@ -33,7 +33,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenManyConsecutiveRequestsShouldListTheSameAvailableQuests()
         {
-            var user = await CreateAndStoreUserAndCharacter();
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
             var useCase = new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider);
             var firstQuestsBatch = await useCase.Handle(new AuthenticatedRequest(user));
             var secondQuestsBatch = await useCase.Handle(new AuthenticatedRequest(user));
@@ -46,7 +46,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenEnoughTicksItShouldListNewQuests()
         {
-            var user = await CreateAndStoreUserAndCharacter();
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
 
             var useCase = new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider);
 
@@ -65,7 +65,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task CreatedQuestsShouldHaveEncounters()
         {
-            var user = await CreateAndStoreUserAndCharacter();
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
             var useCase = new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider);
 
             await useCase.Handle(new AuthenticatedRequest(user));

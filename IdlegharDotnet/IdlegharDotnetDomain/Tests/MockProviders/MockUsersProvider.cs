@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain;
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
 

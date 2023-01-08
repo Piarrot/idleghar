@@ -10,7 +10,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task GivenANameAndAValidUserShouldCreateACharacter()
         {
-            var user = await this.CreateAndStoreUser();
+            var user = await FakeUserFactory.CreateAndStoreUser();
             var useCase = new CreateCharacterUseCase(UsersProvider);
 
             var request = new CreateCharacterUseCaseRequest("Cool Character");
@@ -29,10 +29,8 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task GivenAUserWithACharacterShouldFailToCreateANewCharacter()
         {
-            var user = await this.CreateAndStoreUser(new UserFactoryOptions
-            {
-                Character = CreateCharacter()
-            });
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+
             var request = new CreateCharacterUseCaseRequest("Cool Character");
             var useCase = new CreateCharacterUseCase(UsersProvider);
 

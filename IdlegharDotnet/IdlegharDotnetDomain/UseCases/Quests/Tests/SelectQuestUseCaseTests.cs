@@ -10,8 +10,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenAValidUserAndAValidQuestShouldStartQuest()
         {
-            var user = await CreateAndStoreUserAndCharacter();
-            var quests = await GetAvailableQuests(user);
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+            var quests = await FakeQuestFactory.GetAvailableQuests(user);
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
@@ -23,8 +23,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenAnInvalidUserItShouldFail()
         {
-            var user = await CreateAndStoreUser();
-            var quests = await GetAvailableQuests(user);
+            var user = await FakeUserFactory.CreateAndStoreUser();
+            var quests = await FakeQuestFactory.GetAvailableQuests(user);
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -38,8 +38,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenAnInvalidQuestItShouldFail()
         {
-            var user = await CreateAndStoreUserAndCharacter();
-            var quests = await GetAvailableQuests(user);
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+            var quests = await FakeQuestFactory.GetAvailableQuests(user);
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -56,8 +56,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenAnOldQuestItShouldFail()
         {
-            User user = await CreateAndStoreUserAndCharacter();
-            var quests = await GetAvailableQuests(user);
+            User user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+            var quests = await FakeQuestFactory.GetAvailableQuests(user);
 
             TimeProvider.MoveTimeInTicks(Constants.TimeDefinitions.QuestsRegenerationTimeInTicks);
 
@@ -76,8 +76,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenACharacterAlreadyQuestingShouldFail()
         {
-            User user = await CreateAndStoreUserAndCharacterWithQuest();
-            var quests = await GetAvailableQuests(user);
+            User user = await FakeUserFactory.CreateAndStoreUserAndCharacterWithQuest();
+            var quests = await FakeQuestFactory.GetAvailableQuests(user);
             Quest quest = user.Character!.CurrentQuest!;
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);

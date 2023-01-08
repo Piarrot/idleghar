@@ -10,10 +10,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task GivenAUserAndAValidEditionRequestShouldEditTheCharacter()
         {
-            var user = await this.CreateAndStoreUser(new UserFactoryOptions
-            {
-                Character = CreateCharacter("Cool Guy")
-            });
+            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
 
             var useCase = new EditCharacterUseCase(UsersProvider);
 
@@ -27,7 +24,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task GivenAUserWithoutCharacterShouldFail()
         {
-            var user = await this.CreateAndStoreUser();
+            var user = await FakeUserFactory.CreateAndStoreUser();
 
             var useCase = new EditCharacterUseCase(UsersProvider);
 

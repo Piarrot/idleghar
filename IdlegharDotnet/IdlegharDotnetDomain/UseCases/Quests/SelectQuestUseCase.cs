@@ -28,8 +28,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests
                 throw new InvalidOperationException(Constants.ErrorMessages.INVALID_QUEST);
             }
 
-            currentCharacter!.CurrentQuest = quest;
-            currentCharacter.CurrentEncounter = quest.Encounters[0];
+            currentCharacter.CurrentQuest = quest;
+            currentCharacter.CurrentEncounterState = quest.Encounters[0].GetNewState();
             await UsersProvider.Save(authRequest.CurrentUser);
         }
     }

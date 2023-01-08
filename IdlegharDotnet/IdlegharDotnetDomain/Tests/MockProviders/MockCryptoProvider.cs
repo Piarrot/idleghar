@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain;
 using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Tests.MockProviders
