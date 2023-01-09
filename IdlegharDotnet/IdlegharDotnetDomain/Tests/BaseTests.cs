@@ -1,9 +1,6 @@
-using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.Tests.Factories;
 using IdlegharDotnetDomain.Tests.MockProviders;
-using IdlegharDotnetDomain.UseCases;
-using IdlegharDotnetDomain.UseCases.Quests;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Tests

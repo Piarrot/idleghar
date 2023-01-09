@@ -2,7 +2,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 {
     public class CombatEncounter : Encounter
     {
-        private List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
+        public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
 
         public override EncounterState GetNewState()
         {
@@ -17,15 +17,21 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 
             bool characterDefeated = false;
 
-            foreach (var creature in state.RemainingCreatures)
+            int damageLeftThisRound = character.Damage;
+
+            foreach (var creature in state.currentCreatures)
             {
-                character.ReceiveDamage(creature.Damage);
-                creature.ReceiveDamage(character.Damage);
-                if (creature.HP > 0)
+                var damageDealt = Math.Min(damageLeftThisRound, creature.HP);
+                creature.ReceiveDamage(damageDealt);
+                damageLeftThisRound -= damageDealt;
+                if (creature.HP <= 0)
                 {
-                    remainingCreatures.Add(creature);
+                    continue;
                 }
 
+                remainingCreatures.Add(creature);
+
+                character.ReceiveDamage(creature.Damage);
                 if (character.HP <= 0)
                 {
                     characterDefeated = true;
@@ -33,14 +39,10 @@ namespace IdlegharDotnetDomain.Entities.Encounters
                 }
             }
 
+            state.currentCreatures = remainingCreatures;
             if (characterDefeated == true || remainingCreatures.Count == 0) return true;
 
             return false;
-        }
-
-        public void SetEnemies(List<EnemyCreature> enemyCreatures)
-        {
-            this.EnemyCreatures = enemyCreatures;
         }
 
         public CombatEncounterState GetStateOrThrow(Character character)

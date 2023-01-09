@@ -2,7 +2,6 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 {
     public class EnemyCreature
     {
-
         public EnemyCreature(string name, string description, int hp, int damage)
         {
             this.Name = name;
@@ -19,6 +18,11 @@ namespace IdlegharDotnetDomain.Entities.Encounters
         public void ReceiveDamage(int damage)
         {
             this.HP -= damage;
+        }
+
+        internal EnemyCreature Clone()
+        {
+            return new EnemyCreature(Name, Description, HP, Damage);
         }
     }
 }

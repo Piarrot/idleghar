@@ -2,11 +2,14 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 {
     public class CombatEncounterState : EncounterState
     {
-        public List<EnemyCreature> RemainingCreatures;
+        public List<EnemyCreature> currentCreatures;
 
         public CombatEncounterState(Encounter encounter, List<EnemyCreature> startingCreatures) : base(encounter)
         {
-            RemainingCreatures = startingCreatures;
+            currentCreatures = startingCreatures.ConvertAll((creatureTemplate) =>
+            {
+                return creatureTemplate.Clone();
+            });
         }
     }
 }
