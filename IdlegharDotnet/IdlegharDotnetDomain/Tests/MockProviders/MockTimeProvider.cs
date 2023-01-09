@@ -4,29 +4,29 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
 {
     public class MockTimeProvider : ITimeProvider
     {
-        private int offsetMinutes = 0;
+        private int offsetInSeconds = 0;
 
         public DateTime GetCurrentTime()
         {
-            return DateTime.UtcNow.AddMinutes(offsetMinutes);
+            return DateTime.UtcNow.AddSeconds(offsetInSeconds);
         }
 
         public bool HaveTicksPassed(DateTime startDate, int ticks)
         {
             var now = GetCurrentTime();
-            var maxTimeSpan = TimeSpan.FromMinutes(TicksToMinutes(ticks));
+            var maxTimeSpan = TimeSpan.FromSeconds(TicksToSeconds(ticks));
             var currentTimeSpan = now - startDate;
             return currentTimeSpan >= maxTimeSpan;
         }
 
         public void MoveTimeInTicks(int ticks)
         {
-            offsetMinutes += TicksToMinutes(ticks);
+            offsetInSeconds += TicksToSeconds(ticks);
         }
 
-        private int TicksToMinutes(int ticks)
+        private int TicksToSeconds(int ticks)
         {
-            return Constants.TimeDefinitions.TickInMinutes * ticks;
+            return Constants.TimeDefinitions.TickInSeconds * ticks;
         }
     }
 }
