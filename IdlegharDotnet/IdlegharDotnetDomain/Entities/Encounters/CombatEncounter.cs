@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Entities.Encounters.Events;
+
 namespace IdlegharDotnetDomain.Entities.Encounters
 {
     public class CombatEncounter : Encounter
@@ -11,7 +13,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 
         public override bool ProcessTick(Character character)
         {
-            CombatEncounterState state = GetStateOrThrow(character);
+            var state = GetStateOrThrow<CombatEncounterState>(character);
 
             List<EnemyCreature> remainingCreatures = new List<EnemyCreature>();
 
@@ -21,36 +23,45 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 
             foreach (var creature in state.currentCreatures)
             {
-                var damageDealt = Math.Min(damageLeftThisRound, creature.HP);
-                creature.ReceiveDamage(damageDealt);
-                damageLeftThisRound -= damageDealt;
-                if (creature.HP <= 0)
+                var damageToDeal = Math.Min(damageLeftThisRound, creature.HP);
+                if (damageToDeal > 0)
                 {
-                    continue;
+                    creature.ReceiveDamage(damageToDeal);
+                    character.CurrentQuestEvents.Add(new HitEvent(character.Name, creature.Name, damageToDeal));
+                    damageLeftThisRound -= damageToDeal;
+                    if (creature.HP <= 0)
+                    {
+                        character.CurrentQuestEvents.Add(new CreatureDefeatedEvent(creature.Name));
+                        continue;
+                    }
                 }
 
                 remainingCreatures.Add(creature);
 
                 character.ReceiveDamage(creature.Damage);
+
+                character.CurrentQuestEvents.Add(new HitEvent(creature.Name, character.Name, creature.Damage));
                 if (character.HP <= 0)
                 {
                     characterDefeated = true;
+                    character.CurrentQuestEvents.Add(new PlayerCharacterDefeatedEvent(character.Name));
                     break;
                 }
             }
 
+
             state.currentCreatures = remainingCreatures;
-            if (characterDefeated == true || remainingCreatures.Count == 0) return true;
+            if (remainingCreatures.Count == 0)
+            {
+                character.CurrentQuestEvents.Add(new EnemiesDefeatedEvent(character.Name));
+                return true;
+            }
+
+            if (characterDefeated == true) return true;
 
             return false;
         }
 
-        public CombatEncounterState GetStateOrThrow(Character character)
-        {
-            CombatEncounterState? state = character.CurrentEncounterState as CombatEncounterState;
-            if (state == null)
-                throw new InvalidOperationException(Constants.ErrorMessages.INVALID_ENCOUNTER_STATE);
-            return state;
-        }
+
     }
 }

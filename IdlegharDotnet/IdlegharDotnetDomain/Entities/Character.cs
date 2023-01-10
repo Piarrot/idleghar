@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Entities.Encounters.Events;
+
 namespace IdlegharDotnetDomain.Entities
 {
     public class Character : Entity
@@ -10,6 +12,7 @@ namespace IdlegharDotnetDomain.Entities
         public int HP { get; private set; } = 10;
 
         public int Damage { get; private set; } = 1;
+        public List<EncounterEvent> CurrentQuestEvents { get; private set; } = new List<EncounterEvent>();
 
         public Encounter GetEncounterOrThrow()
         {
