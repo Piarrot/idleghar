@@ -21,13 +21,13 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
 
             var encounterEnded = encounter.ProcessTick(character);
 
-            Assert.IsFalse(encounterEnded);
-            Assert.AreEqual(9, character.HP);
+            Assert.That(encounterEnded, Is.False);
+            Assert.That(character.HP, Is.EqualTo(9));
 
             encounterEnded = encounter.ProcessTick(character);
-            Assert.IsTrue(encounterEnded);
-            Assert.AreEqual(9, character.HP);
-            Assert.AreEqual(0, ((CombatEncounterState)character.CurrentEncounterState!).currentCreatures.Count);
+            Assert.That(encounterEnded, Is.True);
+            Assert.That(character.HP, Is.EqualTo(9));
+            Assert.That(((CombatEncounterState)character.CurrentEncounterState!).currentCreatures.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -44,8 +44,8 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
 
             var encounterEnded = encounter.ProcessTick(character);
 
-            Assert.IsTrue(encounterEnded);
-            Assert.LessOrEqual(character.HP, 0);
+            Assert.That(encounterEnded, Is.True);
+            Assert.That(character.HP, Is.LessThanOrEqualTo(0));
         }
 
         [Test]
@@ -63,8 +63,8 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             encounter.ProcessTick(character);
             encounter.ProcessTick(character);
 
-            Assert.AreEqual(1, encounter.EnemyCreatures[0].HP);
-            Assert.AreEqual(1, encounter.EnemyCreatures[1].HP);
+            Assert.That(encounter.EnemyCreatures[0].HP, Is.EqualTo(1));
+            Assert.That(encounter.EnemyCreatures[1].HP, Is.EqualTo(1));
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemiesDefeatedEvent(character.Name)
             };
 
-            Assert.AreEqual(expectedEventList, character.CurrentQuestEvents);
+            Assert.That(character.CurrentQuestEvents, Is.EqualTo(expectedEventList));
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new PlayerCharacterDefeatedEvent(character.Name)
             };
 
-            Assert.AreEqual(expectedEventList, character.CurrentQuestEvents);
+            Assert.That(character.CurrentQuestEvents, Is.EqualTo(expectedEventList));
         }
     }
 }

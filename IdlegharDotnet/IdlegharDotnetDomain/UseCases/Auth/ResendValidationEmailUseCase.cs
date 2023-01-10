@@ -33,16 +33,15 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             user.EmailValidationCode = code;
 
             await UsersProvider.Save(user);
-            await EmailsProvider.sendEmail(new SendEmailRequest
-            {
-                To = user.Email,
-                Template = await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
-                Context = new Dictionary<string, string>
+            await EmailsProvider.sendEmail(new SendEmailRequest(
+                user.Email,
+                await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
+                new Dictionary<string, string>
                 {
                     ["username"] = user.Username,
                     ["code"] = code
                 }
-            });
+            ));
         }
     }
 }

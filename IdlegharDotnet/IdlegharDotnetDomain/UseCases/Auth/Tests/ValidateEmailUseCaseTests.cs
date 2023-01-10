@@ -21,8 +21,8 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var user = await UsersProvider.FindById(result.Id);
 
-            Assert.IsTrue(user!.EmailValidated);
-            Assert.AreEqual(null, user.EmailValidationCode);
+            Assert.That(user!.EmailValidated, Is.True);
+            Assert.That(user.EmailValidationCode, Is.Null);
         }
 
         [Test]
@@ -34,13 +34,14 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var validateUseCase = new ValidateEmailUseCase(UsersProvider);
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await validateUseCase.Handle(new ValidateEmailUseCaseRequest(result.Id, "banana"));
             });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_VALIDATION_CODE));
 
             var user = await UsersProvider.FindById(result.Id);
-            Assert.IsFalse(user!.EmailValidated);
+            Assert.That(user!.EmailValidated, Is.False);
         }
 
         [Test]
@@ -52,10 +53,25 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var validateUseCase = new ValidateEmailUseCase(UsersProvider);
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await validateUseCase.Handle(new ValidateEmailUseCaseRequest("any-id", "any-code"));
             });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_USER));
+        }
+
+        [Test]
+        public async Task GivenEmailAlreadyValidatedItShouldFail()
+        {
+            var user = await FakeUserFactory.CreateAndStoreUser();
+
+            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
+
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
+            {
+                await validateUseCase.Handle(new ValidateEmailUseCaseRequest(user.Id, "any-code"));
+            });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.EMAIL_ALREADY_VALIDATED));
         }
     }
 }

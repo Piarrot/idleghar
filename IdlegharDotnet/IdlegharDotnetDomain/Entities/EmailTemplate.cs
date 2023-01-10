@@ -12,11 +12,6 @@ namespace IdlegharDotnetDomain.Entities
         {
             string result = this.Message;
 
-            if (context == null)
-            {
-                return result;
-            }
-
             string pattern = @"{(.*?)}";
 
             var matches = Regex.Matches(this.Message, pattern);
@@ -27,8 +22,9 @@ namespace IdlegharDotnetDomain.Entities
                 {
                     string key = match.Groups[1].Value;
                     string? propValue;
+                    if (context == null) throw new ArgumentException($"Missing context when '{key}' is required");
                     var isPresent = context.TryGetValue(key, out propValue);
-                    if (!isPresent || propValue == null) throw new ArgumentException($"Missing key: {key} from context");
+                    if (!isPresent || propValue == null) throw new ArgumentException($"Missing required key '{key}' from context");
                     result = Regex.Replace(result, match.Value, propValue);
                 }
             }

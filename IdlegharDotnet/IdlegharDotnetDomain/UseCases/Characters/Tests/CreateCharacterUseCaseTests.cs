@@ -17,13 +17,13 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
 
             var character = await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>(user, request));
 
-            Assert.NotNull(character);
-            Assert.AreEqual(request.Name, character.Name);
+            Assert.That(character, Is.Not.Null);
+            Assert.That(character.Name, Is.EqualTo(request.Name));
 
             var updatedUser = await UsersProvider.FindById(user.Id);
 
-            Assert.NotNull(updatedUser!.Character);
-            Assert.AreEqual(updatedUser!.Character!.Id, character.Id);
+            Assert.That(updatedUser!.Character, Is.Not.Null);
+            Assert.That(character.Id, Is.EqualTo(updatedUser!.Character!.Id));
         }
 
         [Test]
@@ -38,8 +38,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
             {
                 await useCase.Handle(new AuthenticatedRequest<CreateCharacterUseCaseRequest>(user, request));
             });
-
-            Assert.AreEqual(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER, e?.Message);
+            Assert.That(e!.Message, Is.EqualTo(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER));
         }
     }
 }

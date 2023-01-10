@@ -15,19 +15,19 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var quests = await useCase.Handle(new AuthenticatedRequest(user));
 
             var easyQuestCount = quests.Count(quest => quest.Difficulty == Constants.Difficulties.EASY);
-            Assert.GreaterOrEqual(easyQuestCount, 1);
-            Assert.LessOrEqual(easyQuestCount, 3);
+            Assert.That(easyQuestCount, Is.GreaterThanOrEqualTo(1));
+            Assert.That(easyQuestCount, Is.LessThanOrEqualTo(3));
 
             var normalQuestCount = quests.Count(quest => quest.Difficulty == Constants.Difficulties.NORMAL);
-            Assert.GreaterOrEqual(normalQuestCount, 2);
-            Assert.LessOrEqual(normalQuestCount, 4);
+            Assert.That(normalQuestCount, Is.GreaterThanOrEqualTo(2));
+            Assert.That(normalQuestCount, Is.LessThanOrEqualTo(4));
 
             var hardQuestCount = quests.Count(quest => quest.Difficulty == Constants.Difficulties.HARD);
-            Assert.GreaterOrEqual(hardQuestCount, 1);
-            Assert.LessOrEqual(hardQuestCount, 3);
+            Assert.That(hardQuestCount, Is.GreaterThanOrEqualTo(1));
+            Assert.That(hardQuestCount, Is.LessThanOrEqualTo(3));
 
             var legendaryQuestCount = quests.Count(quest => quest.Difficulty == Constants.Difficulties.LEGENDARY);
-            Assert.AreEqual(1, legendaryQuestCount);
+            Assert.That(legendaryQuestCount, Is.EqualTo(1));
         }
 
         [Test]
@@ -38,9 +38,9 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var firstQuestsBatch = await useCase.Handle(new AuthenticatedRequest(user));
             var secondQuestsBatch = await useCase.Handle(new AuthenticatedRequest(user));
 
-            Assert.AreEqual(firstQuestsBatch.Count, secondQuestsBatch.Count);
-            Assert.AreEqual(firstQuestsBatch[0].Id, secondQuestsBatch[0].Id);
-            Assert.AreEqual(firstQuestsBatch[firstQuestsBatch.Count - 1].Id, secondQuestsBatch[firstQuestsBatch.Count - 1].Id);
+            Assert.That(secondQuestsBatch.Count, Is.EqualTo(firstQuestsBatch.Count));
+            Assert.That(secondQuestsBatch[0].Id, Is.EqualTo(firstQuestsBatch[0].Id));
+            Assert.That(secondQuestsBatch[firstQuestsBatch.Count - 1].Id, Is.EqualTo(firstQuestsBatch[firstQuestsBatch.Count - 1].Id));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             foreach (var q1 in firstQuestsBatch)
             {
-                Assert.IsTrue(secondQuestsBatch.All(q2 => q1.Id != q2.Id), "Quests should have been regenerated");
+                Assert.That(secondQuestsBatch.All(q2 => q1.Id != q2.Id), Is.True, "All quests should have been regenerated");
             }
         }
 
@@ -72,10 +72,10 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             var quests = (await QuestsProvider.GetCurrentQuestBatch())!.Quests;
 
-            Assert.IsTrue(quests.All((quest) =>
+            Assert.That(quests.All((quest) =>
             {
-                return quest.Encounters.Count > 0;
-            }));
+                return quest.Encounters.Count == Constants.Quests.EncountersPerQuest;
+            }), Is.True);
 
         }
     }

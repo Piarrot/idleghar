@@ -22,7 +22,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             var user = await UsersProvider.FindByEmail(input.EmailOrUsername) ?? await UsersProvider.FindByUsername(input.EmailOrUsername);
             if (user == null || !CryptoProvider.DoesPasswordMatches(user.Password, input.Password))
             {
-                throw new WrongCredentialsException();
+                throw new ArgumentException(Constants.ErrorMessages.INVALID_CREDENTIALS);
             }
 
             var token = AuthProvider.GenerateToken(user);

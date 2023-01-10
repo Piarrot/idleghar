@@ -17,7 +17,7 @@ namespace IdlegharDotnetDomain.Entities.Tests
 
             var context = new Dictionary<string, string> { ["someVariable"] = "rendered" };
 
-            Assert.AreEqual("This is a rendered message", template.RenderMessage(context));
+            Assert.That(template.RenderMessage(context), Is.EqualTo("This is a rendered message"));
         }
 
         [Test]
@@ -30,7 +30,11 @@ namespace IdlegharDotnetDomain.Entities.Tests
                 Message = "This is a {someVariable} message"
             };
 
-            Assert.AreEqual("This is a {someVariable} message", template.RenderMessage());
+            var ex = Assert.Throws<ArgumentException>(() =>
+            {
+                template.RenderMessage();
+            });
+            Assert.That(ex!.Message, Is.EqualTo("Missing context when 'someVariable' is required"));
         }
 
         [Test]
@@ -49,7 +53,7 @@ namespace IdlegharDotnetDomain.Entities.Tests
             {
                 template.RenderMessage(context);
             });
-            Assert.AreEqual("Missing key: someVariable from context", ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo("Missing required key 'someVariable' from context"));
         }
     }
 }

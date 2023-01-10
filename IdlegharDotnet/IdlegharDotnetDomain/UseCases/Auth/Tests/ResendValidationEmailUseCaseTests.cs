@@ -22,13 +22,13 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             );
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
-            Assert.AreEqual(2, sentEmails.Count);
+            Assert.That(sentEmails.Count, Is.EqualTo(2));
 
             var firstEmail = sentEmails[0];
             var secondEmail = sentEmails[1];
 
-            Assert.NotNull(secondEmail.Context!["code"]);
-            Assert.AreNotEqual(firstEmail.Context!["code"], secondEmail.Context["code"]);
+            Assert.That(secondEmail.Context!["code"], Is.Not.Null);
+            Assert.That(secondEmail.Context["code"], Is.Not.EqualTo(firstEmail.Context!["code"]));
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             });
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
-            Assert.AreEqual(1, sentEmails.Count);
+            Assert.That(sentEmails.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             });
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
-            Assert.AreEqual(1, sentEmails.Count);
+            Assert.That(sentEmails.Count, Is.EqualTo(1));
         }
     }
 }

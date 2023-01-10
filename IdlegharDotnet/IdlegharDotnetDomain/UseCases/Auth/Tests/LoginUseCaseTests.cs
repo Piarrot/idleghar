@@ -28,8 +28,8 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
             var result = await useCase.Handle(input);
 
-            Assert.IsInstanceOf(typeof(LoginUseCaseResponse), result);
-            Assert.AreEqual(email, AuthProvider.ParseTokenEmail(result.Token));
+            Assert.That(result, Is.InstanceOf<LoginUseCaseResponse>());
+            Assert.That(AuthProvider.ParseTokenEmail(result.Token), Is.EqualTo(email));
         }
 
         [Test]
@@ -41,10 +41,11 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             var input = new LoginUseCaseRequest(username, plainPassword);
 
             var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
-            Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(input);
             });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_CREDENTIALS));
         }
 
         [Test]
@@ -65,10 +66,11 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             var input = new LoginUseCaseRequest(username, "wrongPassword");
 
             var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
-            Assert.ThrowsAsync(typeof(WrongCredentialsException), async () =>
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(input);
             });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_CREDENTIALS));
         }
     }
 }

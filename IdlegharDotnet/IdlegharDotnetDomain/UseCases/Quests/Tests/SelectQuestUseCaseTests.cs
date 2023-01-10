@@ -32,7 +32,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_CREATED, ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_NOT_CREATED));
         }
 
         [Test]
@@ -47,10 +47,10 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest("wrongQuestId")));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.INVALID_QUEST, ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
             var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsFalse(updatedUser!.Character!.IsQuesting);
+            Assert.That(updatedUser!.Character!.IsQuesting, Is.False);
         }
 
         [Test]
@@ -67,10 +67,10 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.INVALID_QUEST, ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
             var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsFalse(updatedUser!.Character!.IsQuesting);
+            Assert.That(updatedUser!.Character!.IsQuesting, Is.False);
         }
 
         [Test]
@@ -86,11 +86,11 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
             });
 
-            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING, ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING));
 
             var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsTrue(updatedUser!.Character!.IsQuesting);
-            Assert.AreEqual(quest, updatedUser!.Character!.CurrentQuest);
+            Assert.That(updatedUser!.Character!.IsQuesting, Is.True);
+            Assert.That(updatedUser!.Character!.CurrentQuest, Is.EqualTo(quest));
         }
     }
 }

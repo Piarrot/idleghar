@@ -40,16 +40,15 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             };
 
             await UsersProvider.Save(newUser);
-            await EmailsProvider.sendEmail(new SendEmailRequest
-            {
-                To = newUser.Email,
-                Template = await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
-                Context = new Dictionary<string, string>
+            await EmailsProvider.sendEmail(new SendEmailRequest(
+                newUser.Email,
+                await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
+                new Dictionary<string, string>
                 {
                     ["username"] = newUser.Username,
                     ["code"] = code
                 }
-            });
+            ));
 
             return new RegisterUseCaseResponse(newUser.Id, newUser.Email, newUser.Username);
         }

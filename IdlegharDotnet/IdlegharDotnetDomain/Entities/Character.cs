@@ -4,7 +4,7 @@ namespace IdlegharDotnetDomain.Entities
 {
     public class Character : Entity
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = String.Empty;
         public Quest? CurrentQuest { get; set; }
         public EncounterState? CurrentEncounterState { get; set; }
         public bool IsQuesting => CurrentQuest != null && CurrentEncounterState != null;

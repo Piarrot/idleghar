@@ -16,7 +16,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var useCase = new GetCurrentEncounterUseCase(UsersProvider);
             Encounter result = useCase.Handle(new AuthenticatedRequest(user));
 
-            Assert.AreEqual(result, encounter);
+            Assert.That(result, Is.EqualTo(encounter));
         }
 
         [Test]
@@ -29,8 +29,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             {
                 useCase.Handle(new AuthenticatedRequest(user));
             });
-
-            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_CREATED, ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_NOT_CREATED));
         }
 
         [Test]
@@ -43,8 +42,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             {
                 useCase.Handle(new AuthenticatedRequest(user));
             });
-
-            Assert.AreEqual(Constants.ErrorMessages.CHARACTER_NOT_QUESTING, ex!.Message);
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_NOT_QUESTING));
         }
     }
 }
