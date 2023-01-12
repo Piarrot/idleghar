@@ -20,10 +20,10 @@ namespace IdlegharDotnetDomain.UseCases.Quests
         public async Task<QuestBatch> Handle()
         {
             var questBatch = new QuestBatch(TimeProvider);
-            questBatch.Quests.AddRange(QuestFactory.CreateQuestsOfDifficulty(questBatch.Id, Constants.Difficulties.EASY, RandomnessProvider.GetRandomInt(1, 3)));
-            questBatch.Quests.AddRange(QuestFactory.CreateQuestsOfDifficulty(questBatch.Id, Constants.Difficulties.NORMAL, RandomnessProvider.GetRandomInt(2, 4)));
-            questBatch.Quests.AddRange(QuestFactory.CreateQuestsOfDifficulty(questBatch.Id, Constants.Difficulties.HARD, RandomnessProvider.GetRandomInt(1, 3)));
-            questBatch.Quests.AddRange(QuestFactory.CreateQuestsOfDifficulty(questBatch.Id, Constants.Difficulties.LEGENDARY, 1));
+            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.EASY, RandomnessProvider.Resolve(Constants.Quests.EasyQuestCount)));
+            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.NORMAL, RandomnessProvider.Resolve(Constants.Quests.NormalQuestCount)));
+            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.HARD, RandomnessProvider.Resolve(Constants.Quests.HardQuestCount)));
+            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.LEGENDARY, RandomnessProvider.Resolve(Constants.Quests.LegendaryQuestCount)));
             await QuestsProvider.SaveQuestBatch(questBatch);
             return questBatch;
         }

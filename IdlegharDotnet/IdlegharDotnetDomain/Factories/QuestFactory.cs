@@ -5,17 +5,17 @@ namespace IdlegharDotnetDomain.Factories
 {
     public class QuestFactory
     {
-        public static List<Quest> CreateQuestsOfDifficulty(string batchId, string difficulty, int questCount)
+        public static List<Quest> CreateQuests(string batchId, string difficulty, int questCount)
         {
             var quests = new List<Quest>(questCount);
             for (int i = 0; i < questCount; i++)
             {
-                quests.Add(CreateQuestOfDifficulty(batchId, difficulty));
+                quests.Add(CreateQuest(batchId, difficulty));
             }
             return quests;
         }
 
-        public static Quest CreateQuestOfDifficulty(string batchId, string difficulty)
+        public static Quest CreateQuest(string batchId, string difficulty)
         {
             var quest = new Quest()
             {

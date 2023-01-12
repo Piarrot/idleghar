@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using IdlegharDotnetDomain.Entities.Random;
 
 namespace IdlegharDotnetDomain.Providers
 {
     public interface IRandomnessProvider
     {
         int GetRandomInt(int min, int max);
+
+        T Resolve<T>(RandomValue<T> range);
     }
 }

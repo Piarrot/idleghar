@@ -8,27 +8,22 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task CreatedQuestsShouldConformWithSpecification()
         {
-            // Specs: https://docs.google.com/document/d/1loOzBcBmZVcGhZWQc69hp5oNjqyMfc-GvOeIxjzq_9M/edit#heading=h.obgpyyfs06mo
-
             var useCase = new UpdateQuestBatch(RandomnessProvider, QuestsProvider, TimeProvider);
             await useCase.Handle();
 
             var updatedQuestBatch = await QuestsProvider.GetCurrentQuestBatch();
 
             var easyQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.EASY);
-            Assert.That(easyQuestCount, Is.GreaterThanOrEqualTo(1));
-            Assert.That(easyQuestCount, Is.LessThanOrEqualTo(3));
+            Assert.That(Constants.Quests.EasyQuestCount.Matches(easyQuestCount), Is.True);
 
             var normalQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.NORMAL);
-            Assert.That(normalQuestCount, Is.GreaterThanOrEqualTo(2));
-            Assert.That(normalQuestCount, Is.LessThanOrEqualTo(4));
+            Assert.That(Constants.Quests.NormalQuestCount.Matches(normalQuestCount), Is.True);
 
             var hardQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.HARD);
-            Assert.That(hardQuestCount, Is.GreaterThanOrEqualTo(1));
-            Assert.That(hardQuestCount, Is.LessThanOrEqualTo(3));
+            Assert.That(Constants.Quests.HardQuestCount.Matches(hardQuestCount), Is.True);
 
             var legendaryQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.LEGENDARY);
-            Assert.That(legendaryQuestCount, Is.EqualTo(1));
+            Assert.That(Constants.Quests.LegendaryQuestCount.Matches(legendaryQuestCount), Is.True);
         }
     }
 }

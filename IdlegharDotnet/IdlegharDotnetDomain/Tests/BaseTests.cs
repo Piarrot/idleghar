@@ -11,7 +11,7 @@ namespace IdlegharDotnetDomain.Tests
         protected ICryptoProvider CryptoProvider = new MockCryptoProvider();
         protected IAuthProvider AuthProvider = new MockAuthProvider();
         protected MockEmailsProvider EmailsProvider = new MockEmailsProvider();
-        protected IRandomnessProvider RandomnessProvider = new RandomnessProvider();
+        protected IRandomnessProvider RandomnessProvider = new RandomnessProvider("pizza");
         protected IQuestsProvider QuestsProvider = new MockQuestsProvider();
         protected MockTimeProvider TimeProvider = new MockTimeProvider();
 
