@@ -6,7 +6,6 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 {
     public class GetCurrentEncounterUseCaseTests : BaseTests
     {
-
         [Test]
         public async Task GivenAValidUserAndACharacterWithCurrentEncounterShouldReturnCorrectEncounter()
         {

@@ -1,5 +1,4 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.Transformers;
 using IdlegharDotnetShared.Quests;
@@ -19,28 +18,14 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             TimeProvider = timeProvider;
         }
 
-        public async Task<List<QuestViewModel>> Handle(AuthenticatedRequest req)
+        public async Task<List<QuestViewModel>> Handle()
         {
             var currentBatch = await QuestsProvider.GetCurrentQuestBatch();
-            if (IsValidQuestBatch(currentBatch))
+            if (!IsValidQuestBatch(currentBatch))
             {
-                return QuestTransformer.Transform(currentBatch!.Quests);
+                currentBatch = await (new UpdateQuestBatch(RandomnessProvider, QuestsProvider, TimeProvider).Handle());
             }
-            var quests = new List<Quest>();
-            var batchId = Guid.NewGuid().ToString();
-            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.EASY, RandomnessProvider.GetRandomInt(1, 3)));
-            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.NORMAL, RandomnessProvider.GetRandomInt(2, 4)));
-            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.HARD, RandomnessProvider.GetRandomInt(1, 3)));
-            quests.AddRange(CreateQuestsOfDifficulty(batchId, Constants.Difficulties.LEGENDARY, 1));
-
-            await QuestsProvider.UpdateQuestBatch(new QuestBatch
-            {
-                Id = batchId,
-                CreatedAt = TimeProvider.GetCurrentTime(),
-                Quests = quests
-            });
-
-            return QuestTransformer.Transform(quests);
+            return QuestTransformer.Transform(currentBatch!.Quests);
         }
 
         private bool IsValidQuestBatch(QuestBatch? currentBatch)
@@ -53,32 +38,6 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             }
 
             return true;
-        }
-
-        private List<Quest> CreateQuestsOfDifficulty(string batchId, string difficulty, int questCount)
-        {
-            var quests = new List<Quest>(questCount);
-            for (int i = 0; i < questCount; i++)
-            {
-                quests.Add(CreateQuestOfDifficulty(batchId, difficulty));
-            }
-            return quests;
-        }
-
-        private Quest CreateQuestOfDifficulty(string batchId, string difficulty)
-        {
-            var quest = new Quest()
-            {
-                Difficulty = difficulty,
-                BatchId = batchId
-            };
-
-            for (int i = 0; i < Constants.Quests.EncountersPerQuest; i++)
-            {
-                quest.Encounters.Add(new CombatEncounter());
-            }
-
-            return quest;
         }
     }
 }

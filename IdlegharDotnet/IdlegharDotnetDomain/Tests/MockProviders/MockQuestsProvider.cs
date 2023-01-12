@@ -28,7 +28,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             return this.CurrentBatch.IsValid(timeProvider);
         }
 
-        public async Task UpdateQuestBatch(QuestBatch batch)
+        public async Task SaveQuestBatch(QuestBatch batch)
         {
             await Task.Yield();
             CurrentBatch = batch;

@@ -19,9 +19,9 @@ namespace IdlegharDotnetDomain.Tests.Factories
             TimeProvider = timeProvider;
         }
 
-        public async Task<List<Quest>> GetAvailableQuests(User user)
+        public async Task<List<Quest>> GetAvailableQuests()
         {
-            await new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider).Handle(new AuthenticatedRequest(user));
+            await new GetAvailableQuestsUseCase(RandomnessProvider, QuestsProvider, TimeProvider).Handle();
             return (await QuestsProvider.GetCurrentQuestBatch())!.Quests;
         }
 
