@@ -19,13 +19,9 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = FakeCharacterFactory.CreateCharacterWithQuest(quest);
 
-            var encounterEnded = encounter.ProcessTick(character);
+            var encounterResult = encounter.ProcessEncounter(character);
 
-            Assert.That(encounterEnded, Is.False);
-            Assert.That(character.HP, Is.EqualTo(9));
-
-            encounterEnded = encounter.ProcessTick(character);
-            Assert.That(encounterEnded, Is.True);
+            Assert.That(encounterResult, Is.EqualTo(EncounterResult.Succeeded));
             Assert.That(character.HP, Is.EqualTo(9));
             Assert.That(((CombatEncounterState)character.CurrentEncounterState!).currentCreatures.Count, Is.EqualTo(0));
         }
@@ -42,9 +38,9 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             var character = FakeCharacterFactory.CreateCharacterWithQuest(quest);
 
-            var encounterEnded = encounter.ProcessTick(character);
+            var encounterResult = encounter.ProcessEncounter(character);
 
-            Assert.That(encounterEnded, Is.True);
+            Assert.That(encounterResult, Is.EqualTo(EncounterResult.Failed));
             Assert.That(character.HP, Is.LessThanOrEqualTo(0));
         }
 
@@ -60,8 +56,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = FakeCharacterFactory.CreateCharacterWithQuest(quest);
 
-            encounter.ProcessTick(character);
-            encounter.ProcessTick(character);
+            encounter.ProcessEncounter(character);
 
             Assert.That(encounter.EnemyCreatures[0].HP, Is.EqualTo(1));
             Assert.That(encounter.EnemyCreatures[1].HP, Is.EqualTo(1));
@@ -79,8 +74,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = FakeCharacterFactory.CreateCharacterWithQuest(quest);
 
-            encounter.ProcessTick(character);
-            encounter.ProcessTick(character);
+            encounter.ProcessEncounter(character);
 
             List<EncounterEvent> expectedEventList = new List<EncounterEvent>(){
                 new HitEvent(character.Name, "Goblin 1", 1),
@@ -106,7 +100,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             var character = FakeCharacterFactory.CreateCharacterWithQuest(quest);
 
-            var encounterEnded = encounter.ProcessTick(character);
+            encounter.ProcessEncounter(character);
 
             List<EncounterEvent> expectedEventList = new List<EncounterEvent>(){
                 new HitEvent(character.Name, "Dragon", 1),

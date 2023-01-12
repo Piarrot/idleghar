@@ -11,55 +11,57 @@ namespace IdlegharDotnetDomain.Entities.Encounters
             return new CombatEncounterState(this, EnemyCreatures);
         }
 
-        public override bool ProcessTick(Character character)
+        public override EncounterResult ProcessEncounter(Character character)
         {
             var state = GetStateOrThrow<CombatEncounterState>(character);
-
-            List<EnemyCreature> remainingCreatures = new List<EnemyCreature>();
-
             bool characterDefeated = false;
-
-            int damageLeftThisRound = character.Damage;
-
-            foreach (var creature in state.currentCreatures)
+            bool combatDone = false;
+            while (!combatDone)
             {
-                var damageToDeal = Math.Min(damageLeftThisRound, creature.HP);
-                if (damageToDeal > 0)
+                int damageLeftThisRound = character.Damage;
+                List<EnemyCreature> remainingCreatures = new List<EnemyCreature>();
+
+                foreach (var creature in state.currentCreatures)
                 {
-                    creature.ReceiveDamage(damageToDeal);
-                    character.CurrentQuestEvents.Add(new HitEvent(character.Name, creature.Name, damageToDeal));
-                    damageLeftThisRound -= damageToDeal;
-                    if (creature.HP <= 0)
+                    var damageToDeal = Math.Min(damageLeftThisRound, creature.HP);
+                    if (damageToDeal > 0)
                     {
-                        character.CurrentQuestEvents.Add(new CreatureDefeatedEvent(creature.Name));
-                        continue;
+                        creature.ReceiveDamage(damageToDeal);
+                        character.CurrentQuestEvents.Add(new HitEvent(character.Name, creature.Name, damageToDeal));
+                        damageLeftThisRound -= damageToDeal;
+                        if (creature.HP <= 0)
+                        {
+                            character.CurrentQuestEvents.Add(new CreatureDefeatedEvent(creature.Name));
+                            continue;
+                        }
+                    }
+
+                    remainingCreatures.Add(creature);
+
+                    character.ReceiveDamage(creature.Damage);
+
+                    character.CurrentQuestEvents.Add(new HitEvent(creature.Name, character.Name, creature.Damage));
+                    if (character.HP <= 0)
+                    {
+                        characterDefeated = true;
+                        combatDone = true;
+                        character.CurrentQuestEvents.Add(new PlayerCharacterDefeatedEvent(character.Name));
+                        break;
                     }
                 }
 
-                remainingCreatures.Add(creature);
+                state.currentCreatures = remainingCreatures;
 
-                character.ReceiveDamage(creature.Damage);
-
-                character.CurrentQuestEvents.Add(new HitEvent(creature.Name, character.Name, creature.Damage));
-                if (character.HP <= 0)
+                if (remainingCreatures.Count == 0)
                 {
-                    characterDefeated = true;
-                    character.CurrentQuestEvents.Add(new PlayerCharacterDefeatedEvent(character.Name));
-                    break;
+                    character.CurrentQuestEvents.Add(new EnemiesDefeatedEvent(character.Name));
+                    combatDone = true;
                 }
             }
 
+            if (characterDefeated == true) return EncounterResult.Failed;
 
-            state.currentCreatures = remainingCreatures;
-            if (remainingCreatures.Count == 0)
-            {
-                character.CurrentQuestEvents.Add(new EnemiesDefeatedEvent(character.Name));
-                return true;
-            }
-
-            if (characterDefeated == true) return true;
-
-            return false;
+            return EncounterResult.Succeeded;
         }
 
 

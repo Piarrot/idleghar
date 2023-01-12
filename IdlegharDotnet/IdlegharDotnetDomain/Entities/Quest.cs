@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Entities.Encounters;
+
 namespace IdlegharDotnetDomain.Entities
 {
     public class Quest : Entity

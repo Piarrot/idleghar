@@ -1,10 +1,10 @@
-namespace IdlegharDotnetDomain.Entities
+namespace IdlegharDotnetDomain.Entities.Encounters
 {
     public abstract class Encounter : Entity
     {
         public abstract EncounterState GetNewState();
 
-        public abstract bool ProcessTick(Character character);
+        public abstract EncounterResult ProcessEncounter(Character character);
 
         public T GetStateOrThrow<T>(Character character) where T : class
         {

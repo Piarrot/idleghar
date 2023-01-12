@@ -1,3 +1,4 @@
+using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Entities.Encounters.Events;
 
 namespace IdlegharDotnetDomain.Entities

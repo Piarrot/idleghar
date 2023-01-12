@@ -1,4 +1,4 @@
-using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Tests;
 using NUnit.Framework;
 
