@@ -28,18 +28,25 @@ namespace IdlegharDotnetDomain.Constants
             {
                 Difficulty.HARD,
                 new(new(){
-                    new (Difficulty.EASY,0.1),
-                    new (Difficulty.NORMAL,0.3),
+                    new (Difficulty.NORMAL,0.39),
                     new (Difficulty.HARD,0.6),
+                    new (Difficulty.LEGENDARY,0.01),
                 })
             },
             {
                 Difficulty.LEGENDARY,
                 new(new(){
-                    new (Difficulty.NORMAL,0.1),
-                    new (Difficulty.HARD,0.9),
+                    new (Difficulty.HARD,0.8),
+                    new (Difficulty.LEGENDARY,0.2),
                 })
             },
+        };
+
+        public static readonly Dictionary<Difficulty, int> EnemyHPByDifficulty = new(){
+            {Difficulty.EASY,4},
+            {Difficulty.NORMAL,10},
+            {Difficulty.HARD,20},
+            {Difficulty.LEGENDARY,40},
         };
     }
 }
