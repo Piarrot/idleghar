@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Goblins",
+    "description": "Small, green-skinned humanoids known for their love of mischief and thievery.",
+    "difficulty": "EASY"
+  },
+  {
+    "name": "Skeletons",
+    "description": "Animated bones of the dead, often summoned by necromancers to do their bidding.",
+    "difficulty": "EASY"
+  },
+  {
+    "name": "Zombies",
+    "description": "Reanimated corpses with a hunger for living flesh.",
+    "difficulty": "EASY"
+  },
+  {
+    "name": "Bandits",
+    "description": "Outlaws who prey on travelers and merchants for wealth and resources.",
+    "difficulty": "EASY"
+  },
+  {
+    "name": "Orcs",
+    "description": "Large, brutish humanoids with a love for battle and a fierce loyalty to their leaders.",
+    "difficulty": "NORMAL"
+  },
+  {
+    "name": "Werewolves",
+    "description": "Humans that can transform into wolves during a full moon.",
+    "difficulty": "NORMAL"
+  },
+  {
+    "name": "Vampires",
+    "description": "Undead beings that survive by drinking the blood of the living.",
+    "difficulty": "NORMAL"
+  },
+  {
+    "name": "Wraiths",
+    "description": "Ghost-like creatures that can pass through solid objects and drain the life force of their victims.",
+    "difficulty": "NORMAL"
+  },
+  {
+    "name": "Minotaurs",
+    "description": "Humanoids with the head of a bull and great physical strength.",
+    "difficulty": "HARD"
+  },
+  {
+    "name": "Giants",
+    "description": "Huge humanoids with great strength and endurance.",
+    "difficulty": "HARD"
+  },
+  {
+    "name": "Cyclops",
+    "description": "Giant one-eyed humanoids known for their brute strength.",
+    "difficulty": "HARD"
+  },
+  {
+    "name": "Harpies",
+    "description": "Winged humanoids with the head and chest of a woman and the body of a bird of prey.",
+    "difficulty": "HARD"
+  },
+  {
+    "name": "Necromancers",
+    "description": "Wizards who specialize in raising the dead and manipulating the spirits of the deceased.",
+    "difficulty": "LEGENDARY"
+  },
+  {
+    "name": "Dragons",
+    "description": "Large, winged reptiles with a love for hoarding treasure and breathing fire.",
+    "difficulty": "LEGENDARY"
+  },
+  {
+    "name": "Demons",
+    "description": "Malevolent supernatural beings from the underworld, often summoned for their powerful magical abilities.",
+    "difficulty": "LEGENDARY"
+  }
+]
