@@ -15,5 +15,7 @@ namespace IdlegharDotnetDomain.Constants
         internal static readonly string INVALID_VALIDATION_CODE = "Invalid code";
         internal static readonly string INVALID_CREDENTIALS = "Wrong Credentials";
         internal static readonly string CHANCES_DON_T_REACH_100 = "Chances are less than 100%";
+        internal static readonly string EMAIL_IN_USE = "Email already in use";
+        internal static readonly string INVALID_EMAIL = "Invalid Email";
     }
 }

@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Auth;
 

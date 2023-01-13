@@ -1,5 +1,4 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Auth;
 using NUnit.Framework;

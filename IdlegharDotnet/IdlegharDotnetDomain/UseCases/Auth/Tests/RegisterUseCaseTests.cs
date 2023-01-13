@@ -1,5 +1,4 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Auth;
 using NUnit.Framework;
@@ -44,10 +43,11 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var useCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
 
-            Assert.ThrowsAsync<EmailInUseException>(async delegate ()
+            var ex = Assert.ThrowsAsync<ArgumentException>(async delegate ()
             {
                 await useCase.Handle(testInput);
             });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.EMAIL_IN_USE));
             Assert.That(EmailsProvider.CountEmailsSentTo(testInput.Email), Is.EqualTo(0));
         }
     }

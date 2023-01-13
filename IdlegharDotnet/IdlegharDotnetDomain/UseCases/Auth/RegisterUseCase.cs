@@ -1,6 +1,5 @@
 using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Auth;
 
@@ -25,7 +24,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
 
             if (existingUser != null)
             {
-                throw new EmailInUseException();
+                throw new ArgumentException(Constants.ErrorMessages.EMAIL_IN_USE);
             }
 
             var code = CryptoProvider.GetRandomNumberDigits(6);

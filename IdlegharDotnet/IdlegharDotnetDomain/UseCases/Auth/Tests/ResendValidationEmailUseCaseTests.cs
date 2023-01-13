@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Auth;
 using NUnit.Framework;
@@ -38,12 +37,13 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
                 new RegisterUseCaseRequest(email, "user1234", "cooluser")
             );
 
-            Assert.ThrowsAsync<InvalidEmailException>(async () =>
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(
                     new ResendValidationUseCaseRequest("something.else@email.com")
                 );
             });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_EMAIL));
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
             Assert.That(sentEmails.Count, Is.EqualTo(1));
@@ -60,12 +60,14 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             user!.EmailValidated = true;
             await UsersProvider.Save(user);
 
-            Assert.ThrowsAsync<InvalidEmailException>(async () =>
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await new ResendValidationEmailUseCase(UsersProvider, EmailsProvider, CryptoProvider).Handle(
                     new ResendValidationUseCaseRequest(email)
                 );
             });
+
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.EMAIL_ALREADY_VALIDATED));
 
             var sentEmails = EmailsProvider.GetEmailsSentTo(email);
             Assert.That(sentEmails.Count, Is.EqualTo(1));

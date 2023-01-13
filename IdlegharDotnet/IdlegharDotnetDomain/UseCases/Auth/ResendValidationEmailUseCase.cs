@@ -1,6 +1,5 @@
 using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Exceptions;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Auth;
 
@@ -23,9 +22,14 @@ namespace IdlegharDotnetDomain.UseCases.Auth
         {
             var user = await UsersProvider.FindByEmail(req.Email);
 
-            if (user == null || user.EmailValidated)
+            if (user == null)
             {
-                throw new InvalidEmailException();
+                throw new ArgumentException(Constants.ErrorMessages.INVALID_EMAIL);
+            }
+
+            if (user.EmailValidated)
+            {
+                throw new ArgumentException(Constants.ErrorMessages.EMAIL_ALREADY_VALIDATED);
             }
 
             var code = CryptoProvider.GetRandomNumberDigits(6);
