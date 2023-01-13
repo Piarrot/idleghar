@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Factories;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.Transformers;
 using IdlegharDotnetShared.Quests;
@@ -23,7 +24,9 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             var currentBatch = await QuestsProvider.GetCurrentQuestBatch();
             if (!IsValidQuestBatch(currentBatch))
             {
-                currentBatch = await (new UpdateQuestBatch(RandomnessProvider, QuestsProvider, TimeProvider).Handle());
+                var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+                currentBatch = factory.CreateQuestBatch();
+                await QuestsProvider.SaveQuestBatch(currentBatch);
             }
             return QuestTransformer.Transform(currentBatch!.Quests);
         }
@@ -32,7 +35,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
         {
             if (currentBatch == null) return false;
 
-            if (TimeProvider.HaveTicksPassed(currentBatch.CreatedAt, Constants.TimeDefinitions.QuestsRegenerationTimeInTicks))
+            if (!currentBatch.IsValid(TimeProvider))
             {
                 return false;
             }

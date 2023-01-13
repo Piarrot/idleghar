@@ -1,11 +1,21 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Encounters;
+using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Factories
 {
     public class QuestFactory
     {
-        public static List<Quest> CreateQuests(string batchId, Constants.Difficulty difficulty, int questCount)
+        private IRandomnessProvider RandomnessProvider;
+        private ITimeProvider TimeProvider;
+
+        public QuestFactory(IRandomnessProvider randomnessProvider, ITimeProvider timeProvider)
+        {
+            RandomnessProvider = randomnessProvider;
+            TimeProvider = timeProvider;
+        }
+
+        public List<Quest> CreateQuests(string batchId, Constants.Difficulty difficulty, int questCount)
         {
             var quests = new List<Quest>(questCount);
             for (int i = 0; i < questCount; i++)
@@ -15,7 +25,7 @@ namespace IdlegharDotnetDomain.Factories
             return quests;
         }
 
-        public static Quest CreateQuest(string batchId, Constants.Difficulty difficulty)
+        public Quest CreateQuest(string batchId, Constants.Difficulty difficulty)
         {
             var quest = new Quest()
             {
@@ -29,6 +39,19 @@ namespace IdlegharDotnetDomain.Factories
             }
 
             return quest;
+        }
+
+        public QuestBatch CreateQuestBatch()
+        {
+            var questBatch = new QuestBatch(TimeProvider);
+
+            foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            {
+                var resolvedQuestCount = RandomnessProvider.Resolve(Constants.Quests.QuestCountByDifficulty[questDifficulty]);
+                var createdQuests = CreateQuests(questBatch.Id, questDifficulty, resolvedQuestCount);
+                questBatch.Quests.AddRange(createdQuests);
+            }
+            return questBatch;
         }
     }
 }
