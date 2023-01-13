@@ -5,7 +5,7 @@ namespace IdlegharDotnetDomain.Factories
 {
     public class QuestFactory
     {
-        public static List<Quest> CreateQuests(string batchId, string difficulty, int questCount)
+        public static List<Quest> CreateQuests(string batchId, Constants.Difficulty difficulty, int questCount)
         {
             var quests = new List<Quest>(questCount);
             for (int i = 0; i < questCount; i++)
@@ -15,7 +15,7 @@ namespace IdlegharDotnetDomain.Factories
             return quests;
         }
 
-        public static Quest CreateQuest(string batchId, string difficulty)
+        public static Quest CreateQuest(string batchId, Constants.Difficulty difficulty)
         {
             var quest = new Quest()
             {
@@ -25,7 +25,7 @@ namespace IdlegharDotnetDomain.Factories
 
             for (int i = 0; i < Constants.Quests.EncountersPerQuest; i++)
             {
-                quest.Encounters.Add(new CombatEncounter());
+                quest.Encounters.Add(new CombatEncounter(Constants.Difficulty.EASY));
             }
 
             return quest;

@@ -8,7 +8,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void CreatedQuestsShouldHaveEncounters()
         {
-            var quest = QuestFactory.CreateQuest(Guid.NewGuid().ToString(), Constants.Difficulties.EASY);
+            var quest = QuestFactory.CreateQuest(Guid.NewGuid().ToString(), Constants.Difficulty.EASY);
 
             Assert.That(quest.Encounters.Count == Constants.Quests.EncountersPerQuest, Is.True);
         }

@@ -22,5 +22,10 @@ namespace IdlegharDotnetDomain.Providers
         {
             return range.Resolve(this);
         }
+
+        public double GetRandomDouble(double min, double max)
+        {
+            return min + (RNG.NextDouble() * max);
+        }
     }
 }

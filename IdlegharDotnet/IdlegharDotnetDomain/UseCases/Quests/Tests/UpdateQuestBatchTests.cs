@@ -13,17 +13,11 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             var updatedQuestBatch = await QuestsProvider.GetCurrentQuestBatch();
 
-            var easyQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.EASY);
-            Assert.That(Constants.Quests.EasyQuestCount.Matches(easyQuestCount), Is.True);
-
-            var normalQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.NORMAL);
-            Assert.That(Constants.Quests.NormalQuestCount.Matches(normalQuestCount), Is.True);
-
-            var hardQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.HARD);
-            Assert.That(Constants.Quests.HardQuestCount.Matches(hardQuestCount), Is.True);
-
-            var legendaryQuestCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == Constants.Difficulties.LEGENDARY);
-            Assert.That(Constants.Quests.LegendaryQuestCount.Matches(legendaryQuestCount), Is.True);
+            foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            {
+                var questCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == questDifficulty);
+                Assert.That(Constants.Quests.QuestCountByDifficulty[questDifficulty].Matches(questCount), Is.True);
+            }
         }
     }
 }

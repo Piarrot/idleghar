@@ -20,10 +20,11 @@ namespace IdlegharDotnetDomain.UseCases.Quests
         public async Task<QuestBatch> Handle()
         {
             var questBatch = new QuestBatch(TimeProvider);
-            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.EASY, RandomnessProvider.Resolve(Constants.Quests.EasyQuestCount)));
-            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.NORMAL, RandomnessProvider.Resolve(Constants.Quests.NormalQuestCount)));
-            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.HARD, RandomnessProvider.Resolve(Constants.Quests.HardQuestCount)));
-            questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, Constants.Difficulties.LEGENDARY, RandomnessProvider.Resolve(Constants.Quests.LegendaryQuestCount)));
+
+            foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            {
+                questBatch.Quests.AddRange(QuestFactory.CreateQuests(questBatch.Id, questDifficulty, RandomnessProvider.Resolve(Constants.Quests.QuestCountByDifficulty[questDifficulty])));
+            }
             await QuestsProvider.SaveQuestBatch(questBatch);
             return questBatch;
         }

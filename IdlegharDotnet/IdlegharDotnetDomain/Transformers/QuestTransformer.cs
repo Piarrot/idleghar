@@ -7,7 +7,7 @@ namespace IdlegharDotnetDomain.Transformers
     {
         public static QuestViewModel Transform(Quest quest)
         {
-            return new QuestViewModel(quest.Id, quest.Name!, quest.Difficulty!);
+            return new QuestViewModel(quest.Id, quest.Name!, (int)quest.Difficulty!);
         }
 
         public static List<QuestViewModel> Transform(List<Quest> quests)

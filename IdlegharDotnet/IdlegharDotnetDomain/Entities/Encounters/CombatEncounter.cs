@@ -1,3 +1,4 @@
+using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities.Encounters.Events;
 
 namespace IdlegharDotnetDomain.Entities.Encounters
@@ -5,6 +6,12 @@ namespace IdlegharDotnetDomain.Entities.Encounters
     public class CombatEncounter : Encounter
     {
         public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
+        public Difficulty Difficulty { get; set; }
+
+        public CombatEncounter(Difficulty difficulty = Difficulty.EASY)
+        {
+            Difficulty = difficulty;
+        }
 
         public override EncounterState GetNewState()
         {
