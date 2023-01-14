@@ -7,5 +7,6 @@ namespace IdlegharDotnetDomain.Providers
         Task<List<Character>> FindAll();
         Task<List<Character>> FindAllQuesting();
         Task Save(Character character);
+        public Task<Character?> FindById(string id);
     }
 }

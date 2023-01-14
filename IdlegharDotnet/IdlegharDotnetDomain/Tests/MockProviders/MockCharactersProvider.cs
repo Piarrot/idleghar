@@ -30,5 +30,13 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             return charactersById.Values.ToList().FindAll(c => !c.IsQuesting);
         }
+
+        public async Task<Character?> FindById(string id)
+        {
+            await Task.Yield();
+            Character? character = null;
+            charactersById.TryGetValue(id, out character);
+            return character;
+        }
     }
 }
