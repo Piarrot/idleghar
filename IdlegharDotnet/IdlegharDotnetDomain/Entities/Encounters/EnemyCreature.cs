@@ -1,5 +1,6 @@
 namespace IdlegharDotnetDomain.Entities.Encounters
 {
+    [Serializable()]
     public class EnemyCreature
     {
         public EnemyCreature(string name, string description, int hp, int damage)

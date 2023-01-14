@@ -50,7 +50,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public async Task<User> CreateAndStoreUserAndCharacter()
         {
             var user = CreateUser();
-            user.Character = FakeCharacterFactory.CreateCharacter();
+            user.Character = await FakeCharacterFactory.CreateAndStoreCharacter();
             await UsersProvider.Save(user);
             return user;
         }
@@ -58,7 +58,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public async Task<User> CreateAndStoreUserAndCharacterWithQuest()
         {
             var user = CreateUser();
-            user.Character = FakeCharacterFactory.CreateCharacterWithQuest();
+            user.Character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
             await UsersProvider.Save(user);
             return user;
         }

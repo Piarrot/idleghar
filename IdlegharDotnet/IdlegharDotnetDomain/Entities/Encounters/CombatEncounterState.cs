@@ -1,5 +1,6 @@
 namespace IdlegharDotnetDomain.Entities.Encounters
 {
+    [Serializable()]
     public class CombatEncounterState : EncounterState
     {
         public List<EnemyCreature> currentCreatures;

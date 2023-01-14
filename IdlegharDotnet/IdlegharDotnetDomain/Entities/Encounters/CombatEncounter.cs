@@ -3,6 +3,7 @@ using IdlegharDotnetDomain.Entities.Encounters.Events;
 
 namespace IdlegharDotnetDomain.Entities.Encounters
 {
+    [Serializable()]
     public class CombatEncounter : Encounter
     {
         public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();

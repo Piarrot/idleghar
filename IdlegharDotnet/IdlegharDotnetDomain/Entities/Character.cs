@@ -3,6 +3,7 @@ using IdlegharDotnetDomain.Entities.Encounters.Events;
 
 namespace IdlegharDotnetDomain.Entities
 {
+    [Serializable()]
     public class Character : Entity
     {
         public string Name { get; set; } = String.Empty;

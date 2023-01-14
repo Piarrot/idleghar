@@ -3,6 +3,7 @@ using IdlegharDotnetDomain.Entities.Encounters;
 
 namespace IdlegharDotnetDomain.Entities
 {
+    [Serializable()]
     public class Quest : Entity
     {
         public string? Name { get; set; }

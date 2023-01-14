@@ -1,5 +1,6 @@
 namespace IdlegharDotnetDomain.Entities
 {
+    [Serializable()]
     public class User : Entity
     {
         public string Email { get; set; } = String.Empty;

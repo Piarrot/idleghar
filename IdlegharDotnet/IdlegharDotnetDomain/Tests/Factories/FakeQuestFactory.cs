@@ -1,5 +1,6 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Encounters;
+using IdlegharDotnetDomain.Entities.Random;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.UseCases.Quests;
 
@@ -54,9 +55,21 @@ namespace IdlegharDotnetDomain.Tests.Factories
             };
         }
 
+        public Encounter CreateEncounter(Constants.Difficulty difficulty)
+        {
+            return new CombatEncounter(difficulty);
+        }
+
         public Encounter CreateEncounter()
         {
-            return new CombatEncounter(Constants.Difficulty.EASY);
+            RandomValueFromList<Constants.Difficulty> randValueList = new(){
+                Constants.Difficulty.EASY,
+                Constants.Difficulty.NORMAL,
+                Constants.Difficulty.HARD,
+                Constants.Difficulty.LEGENDARY
+            };
+
+            return CreateEncounter(RandomnessProvider.ResolveOne(randValueList));
         }
 
     }
