@@ -18,9 +18,9 @@ namespace IdlegharDotnetDomain.Providers
             return RNG.Next(min, max + 1);
         }
 
-        public T Resolve<T>(RandomValue<T> range)
+        public T ResolveOne<T>(RandomValue<T> range)
         {
-            return range.Resolve(this);
+            return range.ResolveOne(this);
         }
 
         public double GetRandomDouble(double min, double max)

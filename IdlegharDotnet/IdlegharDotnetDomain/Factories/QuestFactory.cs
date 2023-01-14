@@ -47,7 +47,7 @@ namespace IdlegharDotnetDomain.Factories
 
             foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
             {
-                var resolvedQuestCount = RandomnessProvider.Resolve(Constants.Quests.QuestCountByDifficulty[questDifficulty]);
+                var resolvedQuestCount = RandomnessProvider.ResolveOne(Constants.Quests.QuestCountByDifficulty[questDifficulty]);
                 var createdQuests = CreateQuests(questBatch.Id, questDifficulty, resolvedQuestCount);
                 questBatch.Quests.AddRange(createdQuests);
             }

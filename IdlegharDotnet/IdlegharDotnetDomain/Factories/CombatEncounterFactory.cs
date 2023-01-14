@@ -15,7 +15,7 @@ namespace IdlegharDotnetDomain.Factories
 
         public CombatEncounter CreateCombatFromQuestDifficulty(Difficulty difficulty)
         {
-            return CreateCombat(RandomnessProvider.Resolve(Constants.Encounters.EncounterDifficultyByQuestDifficulty[difficulty]));
+            return CreateCombat(RandomnessProvider.ResolveOne(Constants.Encounters.EncounterDifficultyByQuestDifficulty[difficulty]));
         }
 
         public List<CombatEncounter> CreateCombatsFromQuestDifficulty(Difficulty difficulty, int count)

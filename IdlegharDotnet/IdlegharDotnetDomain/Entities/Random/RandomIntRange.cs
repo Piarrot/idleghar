@@ -13,7 +13,7 @@ namespace IdlegharDotnetDomain.Entities.Random
             Max = max;
         }
 
-        public override int Resolve(IRandomnessProvider randProvider)
+        public override int ResolveOne(IRandomnessProvider randProvider)
         {
             return randProvider.GetRandomInt(Min, Max);
         }

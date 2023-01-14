@@ -29,7 +29,7 @@ namespace IdlegharDotnetDomain.Entities.Random
             return chance == 0;
         }
 
-        public override T Resolve(IRandomnessProvider randProvider)
+        public override T ResolveOne(IRandomnessProvider randProvider)
         {
             var randValue = randProvider.GetRandomDouble(0, 1);
             var currentMin = 0.0;

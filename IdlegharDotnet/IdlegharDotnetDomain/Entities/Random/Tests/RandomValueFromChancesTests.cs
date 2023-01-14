@@ -23,9 +23,9 @@ namespace IdlegharDotnetDomain.Entities.Random.Tests
                 return 0;
             }
 
-            public T Resolve<T>(RandomValue<T> rndValue)
+            public T ResolveOne<T>(RandomValue<T> rndValue)
             {
-                return rndValue.Resolve(this);
+                return rndValue.ResolveOne(this);
             }
         }
 
@@ -38,13 +38,13 @@ namespace IdlegharDotnetDomain.Entities.Random.Tests
                 new ("world", 0.1)
             });
 
-            var result = valueFromChances.Resolve(new MockRandomnessProvider(0.5));
+            var result = valueFromChances.ResolveOne(new MockRandomnessProvider(0.5));
             Assert.That(result, Is.EqualTo("hello"));
 
-            result = valueFromChances.Resolve(new MockRandomnessProvider(0.7));
+            result = valueFromChances.ResolveOne(new MockRandomnessProvider(0.7));
             Assert.That(result, Is.EqualTo("banana"));
 
-            result = valueFromChances.Resolve(new MockRandomnessProvider(0.9));
+            result = valueFromChances.ResolveOne(new MockRandomnessProvider(0.9));
             Assert.That(result, Is.EqualTo("world"));
         }
     }
