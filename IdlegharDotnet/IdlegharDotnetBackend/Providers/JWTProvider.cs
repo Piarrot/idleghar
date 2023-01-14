@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using IdlegharDotnetDomain;
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
 using Microsoft.IdentityModel.Tokens;

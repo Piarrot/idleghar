@@ -1,8 +1,7 @@
 using System.Text.RegularExpressions;
-using IdlegharDotnetBackend.Providers;
 using NUnit.Framework;
 
-namespace IdlegharDotnetBackend.Tests.Providers
+namespace IdlegharDotnetBackend.Providers.Tests
 {
     public class HashProviderTests
     {
@@ -19,15 +18,15 @@ namespace IdlegharDotnetBackend.Tests.Providers
             var otherHashedPassword = cryptoProvider.HashPassword(otherPlainPassword);
 
             //Hashed passwords do not collide, even for the same password
-            Assert.AreNotEqual(hashedPassword1, otherHashedPassword);
-            Assert.AreNotEqual(hashedPassword1, hashedPassword2);
+            Assert.That(otherHashedPassword, Is.Not.EqualTo(hashedPassword1));
+            Assert.That(hashedPassword2, Is.Not.EqualTo(hashedPassword1));
 
             //Any hash of a password matches the plain password
-            Assert.IsTrue(cryptoProvider.DoesPasswordMatches(hashedPassword1, plainPassword));
-            Assert.IsTrue(cryptoProvider.DoesPasswordMatches(hashedPassword2, plainPassword));
+            Assert.That(cryptoProvider.DoesPasswordMatches(hashedPassword1, plainPassword), Is.True);
+            Assert.That(cryptoProvider.DoesPasswordMatches(hashedPassword2, plainPassword), Is.True);
 
             //A hash of another password do not match the password
-            Assert.IsFalse(cryptoProvider.DoesPasswordMatches(hashedPassword1, otherPlainPassword));
+            Assert.That(cryptoProvider.DoesPasswordMatches(hashedPassword1, otherPlainPassword), Is.False);
         }
 
         [Test]
@@ -35,8 +34,8 @@ namespace IdlegharDotnetBackend.Tests.Providers
         {
             var randomNumbers1 = cryptoProvider.GetRandomNumberDigits(6);
             var randomNumbers2 = cryptoProvider.GetRandomNumberDigits(6);
-            Assert.IsTrue(Regex.IsMatch(randomNumbers1, "^\\d{6}$"));
-            Assert.AreNotEqual(randomNumbers1, randomNumbers2);
+            Assert.That(Regex.IsMatch(randomNumbers1, "^\\d{6}$"), Is.True);
+            Assert.That(randomNumbers2, Is.Not.EqualTo(randomNumbers1));
         }
     }
 }

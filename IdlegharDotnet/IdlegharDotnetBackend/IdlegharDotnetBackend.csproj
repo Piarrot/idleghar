@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Compile Remove="**\*.Tests.cs" />
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Compile Remove="**\Tests\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' != 'Release'">

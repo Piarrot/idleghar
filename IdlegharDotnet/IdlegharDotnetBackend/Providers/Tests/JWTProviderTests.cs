@@ -1,8 +1,7 @@
-using IdlegharDotnetBackend.Providers;
 using IdlegharDotnetDomain.Entities;
 using NUnit.Framework;
 
-namespace IdlegharDotnetBackend.Tests.Providers
+namespace IdlegharDotnetBackend.Providers.Tests
 {
     public class JWTProviderTests
     {
@@ -12,9 +11,9 @@ namespace IdlegharDotnetBackend.Tests.Providers
             var email = "cool_guy_69@email.com";
             var provider = new JWTProvider("los gatitos son lo mejor");
             var token = provider.GenerateToken(new User { Email = email, Username = "CoolGuy69" });
-            Assert.IsNotNull(token);
+            Assert.That(token, Is.Not.Null);
             var parsedEmail = provider.ParseTokenEmail(token);
-            Assert.AreEqual(email, parsedEmail);
+            Assert.That(parsedEmail, Is.EqualTo(email));
         }
 
     }
