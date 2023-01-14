@@ -1,6 +1,6 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Encounters;
-using IdlegharDotnetDomain.Entities.Random;
+using IdlegharDotnetDomain.Factories;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.UseCases.Quests;
 
@@ -43,33 +43,14 @@ namespace IdlegharDotnetDomain.Tests.Factories
 
         public Quest CreateQuest()
         {
-            return CreateQuest(CreateEncounters());
+            var qf = new QuestFactory(RandomnessProvider, TimeProvider);
+            return qf.CreateQuest(Guid.NewGuid().ToString(), RandomnessProvider.ResolveOne(TestUtils.RandomDifficulty));
         }
 
-        public List<Encounter> CreateEncounters()
+        public Quest CreateQuest(Constants.Difficulty difficulty)
         {
-            return new List<Encounter>(){
-                CreateEncounter(),
-                CreateEncounter(),
-                CreateEncounter()
-            };
-        }
-
-        public Encounter CreateEncounter(Constants.Difficulty difficulty)
-        {
-            return new CombatEncounter(difficulty);
-        }
-
-        public Encounter CreateEncounter()
-        {
-            RandomValueFromList<Constants.Difficulty> randValueList = new(){
-                Constants.Difficulty.EASY,
-                Constants.Difficulty.NORMAL,
-                Constants.Difficulty.HARD,
-                Constants.Difficulty.LEGENDARY
-            };
-
-            return CreateEncounter(RandomnessProvider.ResolveOne(randValueList));
+            var qf = new QuestFactory(RandomnessProvider, TimeProvider);
+            return qf.CreateQuest(Guid.NewGuid().ToString(), difficulty);
         }
 
     }

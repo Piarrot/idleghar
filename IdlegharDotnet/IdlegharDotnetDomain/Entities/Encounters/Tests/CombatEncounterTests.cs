@@ -16,7 +16,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemyCreature("Goblin","Another Goblin",1,1),
             };
 
-            var quest = FakeQuestFactory.CreateQuest(new() { encounter });
+            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
             var encounterResult = encounter.ProcessEncounter(character);
@@ -35,7 +35,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemyCreature("Dragon","A Huge Dragon",2000,20),
             };
 
-            var quest = FakeQuestFactory.CreateQuest(new() { encounter });
+            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             var character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
             var encounterResult = encounter.ProcessEncounter(character);
@@ -53,7 +53,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemyCreature("Goblin","Another Goblin",1,1),
             };
 
-            var quest = FakeQuestFactory.CreateQuest(new() { encounter });
+            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
             encounter.ProcessEncounter(character);
@@ -71,7 +71,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemyCreature("Goblin 2","Another Goblin",1,1),
             };
 
-            var quest = FakeQuestFactory.CreateQuest(new() { encounter });
+            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
             encounter.ProcessEncounter(character);
@@ -97,7 +97,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemyCreature("Dragon","A Huge Dragon",2000,20),
             };
 
-            var quest = FakeQuestFactory.CreateQuest(new() { encounter });
+            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             var character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
             encounter.ProcessEncounter(character);
@@ -118,7 +118,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
 
             var encounter = factory.CreateCombat(Constants.Difficulty.EASY);
 
-            var quest = FakeQuestFactory.CreateQuest(new() { encounter });
+            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
             var encounterResult = encounter.ProcessEncounter(character);
 

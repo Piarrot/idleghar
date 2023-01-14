@@ -1,5 +1,4 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Factories
