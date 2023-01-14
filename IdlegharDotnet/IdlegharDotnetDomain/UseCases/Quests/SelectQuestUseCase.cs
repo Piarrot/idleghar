@@ -19,7 +19,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
         public async Task Handle(AuthenticatedRequest<SelectQuestUseCaseRequest> authRequest)
         {
             var currentCharacter = authRequest.CurrentUser.GetCharacterOrThrow();
-            currentCharacter.ThrowIfNotQuesting();
+            currentCharacter.ThrowIfQuesting();
 
             var quest = await QuestsProvider.FindById(authRequest.Request.QuestId);
 
@@ -28,8 +28,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
                 throw new InvalidOperationException(Constants.ErrorMessages.INVALID_QUEST);
             }
 
-            currentCharacter.CurrentQuest = quest;
-            currentCharacter.CurrentEncounterState = quest.Encounters[0].GetNewState();
+            currentCharacter.StartQuest(quest);
             await UsersProvider.Save(authRequest.CurrentUser);
         }
     }

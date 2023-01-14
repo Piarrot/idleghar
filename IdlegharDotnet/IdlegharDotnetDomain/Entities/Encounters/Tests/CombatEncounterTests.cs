@@ -23,7 +23,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
 
             Assert.That(encounterResult, Is.EqualTo(EncounterResult.Succeeded));
             Assert.That(character.HP, Is.EqualTo(9));
-            Assert.That(((CombatEncounterState)character.CurrentEncounterState!).currentCreatures.Count, Is.EqualTo(0));
+            Assert.That(character.CurrentQuestState!.GetCurrentEncounterStateOrThrow<CombatEncounterState>().CurrentCreatures.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemiesDefeatedEvent(character.Name)
             };
 
-            Assert.That(character.CurrentQuestEvents, Is.EqualTo(expectedEventList));
+            Assert.That(character.CurrentQuestState!.QuestEvents, Is.EqualTo(expectedEventList));
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new PlayerCharacterDefeatedEvent(character.Name)
             };
 
-            Assert.That(character.CurrentQuestEvents, Is.EqualTo(expectedEventList));
+            Assert.That(character.CurrentQuestState!.QuestEvents, Is.EqualTo(expectedEventList));
         }
 
         [Test]

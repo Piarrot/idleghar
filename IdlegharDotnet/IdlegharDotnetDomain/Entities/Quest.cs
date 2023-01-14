@@ -10,5 +10,10 @@ namespace IdlegharDotnetDomain.Entities
         public Difficulty Difficulty { get; set; }
         public string? BatchId { get; set; }
         public List<Encounter> Encounters { get; set; } = new List<Encounter>();
+
+        public QuestState GetNewState(Character character)
+        {
+            return new QuestState(this, character);
+        }
     }
 }

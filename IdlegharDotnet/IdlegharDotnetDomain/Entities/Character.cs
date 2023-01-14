@@ -1,5 +1,4 @@
 using IdlegharDotnetDomain.Entities.Encounters;
-using IdlegharDotnetDomain.Entities.Encounters.Events;
 
 namespace IdlegharDotnetDomain.Entities
 {
@@ -7,35 +6,48 @@ namespace IdlegharDotnetDomain.Entities
     public class Character : Entity
     {
         public string Name { get; set; } = String.Empty;
-        public Quest? CurrentQuest { get; set; }
-        public EncounterState? CurrentEncounterState { get; set; }
-        public bool IsQuesting => CurrentQuest != null && CurrentEncounterState != null;
-
+        public QuestState? CurrentQuestState { get; private set; }
+        public bool IsQuesting => CurrentQuestState != null;
         public int HP { get; private set; } = 10;
-
         public int Damage { get; private set; } = 1;
-        public List<EncounterEvent> CurrentQuestEvents { get; private set; } = new List<EncounterEvent>();
+
+        public Quest GetCurrentQuestOrThrow()
+        {
+            ThrowIfNotQuesting();
+            return CurrentQuestState!.Quest;
+        }
 
         public Encounter GetEncounterOrThrow()
         {
-            if (CurrentQuest == null || CurrentEncounterState == null)
-            {
-                throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_QUESTING);
-            }
-            return CurrentEncounterState.Encounter;
+            ThrowIfNotQuesting();
+            return CurrentQuestState!.CurrentEncounterState.Encounter;
+        }
+
+        public QuestState GetQuestStateOrThrow()
+        {
+            ThrowIfNotQuesting();
+            return CurrentQuestState!;
         }
 
         public void ThrowIfNotQuesting()
         {
-            if (CurrentQuest != null || CurrentEncounterState != null)
-            {
+            if (!IsQuesting)
+                throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_QUESTING);
+        }
+        public void ThrowIfQuesting()
+        {
+            if (IsQuesting)
                 throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING);
-            }
         }
 
         public void ReceiveDamage(int damage)
         {
             this.HP -= damage;
+        }
+
+        public void StartQuest(Quest quest)
+        {
+            this.CurrentQuestState = quest.GetNewState(this);
         }
     }
 }

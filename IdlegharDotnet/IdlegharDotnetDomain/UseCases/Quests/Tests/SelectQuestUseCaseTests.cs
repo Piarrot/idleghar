@@ -78,7 +78,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         {
             User user = await FakeUserFactory.CreateAndStoreUserAndCharacterWithQuest();
             var quests = await FakeQuestFactory.GetAvailableQuests();
-            Quest quest = user.Character!.CurrentQuest!;
+            Quest quest = user.Character!.GetCurrentQuestOrThrow();
 
             var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -90,7 +90,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             var updatedUser = await UsersProvider.FindById(user.Id);
             Assert.That(updatedUser!.Character!.IsQuesting, Is.True);
-            Assert.That(updatedUser!.Character!.CurrentQuest, Is.EqualTo(quest));
+            Assert.That(updatedUser!.Character!.CurrentQuestState!.Quest, Is.EqualTo(quest));
         }
     }
 }
