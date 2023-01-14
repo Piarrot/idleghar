@@ -16,7 +16,9 @@ namespace IdlegharDotnetDomain.Entities
         List<EncounterEvent> questEvents { get; set; } = new();
         public ReadOnlyCollection<EncounterEvent> QuestEvents => questEvents.AsReadOnly();
         public bool Completed => this.current.Completed && this.remaining.Count == 0;
+        public bool Done { get; private set; }
         public EncounterState CurrentEncounterState => this.current;
+        public EncounterResult Status { get; private set; }
 
         public QuestState(Quest quest, Character character)
         {
@@ -40,7 +42,7 @@ namespace IdlegharDotnetDomain.Entities
             this.questEvents.Add(newEvent);
         }
 
-        internal void ProcessTick()
+        public void ProcessTick()
         {
             var result = current.Encounter.ProcessEncounter(Character);
             if (result == EncounterResult.Succeeded)
@@ -48,8 +50,20 @@ namespace IdlegharDotnetDomain.Entities
                 if (!this.Completed)
                 {
                     AdvanceToNextEncounter();
+                    return;
+                }
+                else
+                {
+                    this.Status = EncounterResult.Succeeded;
+                    Character.QuestDone();
                 }
             }
+            else
+            {
+                this.Status = EncounterResult.Failed;
+                Character.QuestDone();
+            }
+
         }
 
         private void AdvanceToNextEncounter()

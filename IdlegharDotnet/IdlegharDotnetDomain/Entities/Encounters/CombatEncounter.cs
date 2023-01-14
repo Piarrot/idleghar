@@ -67,9 +67,9 @@ namespace IdlegharDotnetDomain.Entities.Encounters
                 }
             }
 
-            if (characterDefeated == true) return EncounterResult.Failed;
+            state.Result = (characterDefeated == true) ? EncounterResult.Failed : EncounterResult.Succeeded;
 
-            return EncounterResult.Succeeded;
+            return state.Result;
         }
 
 

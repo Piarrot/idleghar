@@ -10,6 +10,7 @@ namespace IdlegharDotnetDomain.Entities
         public bool IsQuesting => CurrentQuestState != null;
         public int HP { get; private set; } = 10;
         public int Damage { get; private set; } = 1;
+        public List<QuestState> QuestHistory { get; internal set; } = new();
 
         public Quest GetCurrentQuestOrThrow()
         {
@@ -48,6 +49,12 @@ namespace IdlegharDotnetDomain.Entities
         public void StartQuest(Quest quest)
         {
             this.CurrentQuestState = quest.GetNewState(this);
+        }
+
+        public void QuestDone()
+        {
+            this.QuestHistory.Add(CurrentQuestState!);
+            this.CurrentQuestState = null;
         }
     }
 }
