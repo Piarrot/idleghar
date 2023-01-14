@@ -6,13 +6,11 @@ namespace IdlegharDotnetDomain.Entities.Encounters
     [Serializable()]
     public class CombatEncounter : Encounter
     {
-        public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
-        public Difficulty Difficulty { get; set; }
-
-        public CombatEncounter(Difficulty difficulty = Difficulty.EASY)
+        public CombatEncounter(Difficulty difficulty = Difficulty.EASY) : base(difficulty)
         {
-            Difficulty = difficulty;
         }
+
+        public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
 
         public override EncounterState GetNewState()
         {

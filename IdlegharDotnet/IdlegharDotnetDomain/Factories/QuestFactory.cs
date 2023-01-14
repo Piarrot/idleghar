@@ -33,9 +33,11 @@ namespace IdlegharDotnetDomain.Factories
                 BatchId = batchId
             };
 
+            var ef = new CombatEncounterFactory(RandomnessProvider);
+
             for (int i = 0; i < Constants.Quests.EncountersPerQuest; i++)
             {
-                quest.Encounters.Add(new CombatEncounter(Constants.Difficulty.EASY));
+                quest.Encounters.Add(ef.CreateCombatFromQuestDifficulty(difficulty));
             }
 
             return quest;

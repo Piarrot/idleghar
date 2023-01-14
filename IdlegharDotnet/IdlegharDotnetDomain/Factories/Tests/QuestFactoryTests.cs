@@ -15,6 +15,16 @@ namespace IdlegharDotnetDomain.Factories.Tests
         }
 
         [Test]
+        public void CreatedQuestsShouldHaveEncountersOfManyDifficulties()
+        {
+            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Constants.Difficulty.NORMAL);
+
+            var differentDifficultiesCount = quest.Encounters.Select((e) => e.Difficulty).Distinct().Count();
+            Assert.That(differentDifficultiesCount, Is.GreaterThanOrEqualTo(2));
+        }
+
+        [Test]
         public void CreatedQuestsShouldConformWithSpecification()
         {
             var factory = new QuestFactory(RandomnessProvider, TimeProvider);
