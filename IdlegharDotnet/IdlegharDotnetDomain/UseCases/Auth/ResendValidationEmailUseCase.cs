@@ -1,5 +1,5 @@
 using IdlegharDotnetDomain.Constants;
-using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Entities.Notifications;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Auth;
 

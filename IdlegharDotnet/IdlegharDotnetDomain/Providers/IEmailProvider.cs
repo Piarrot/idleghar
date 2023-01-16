@@ -1,4 +1,4 @@
-using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Entities.Notifications;
 
 namespace IdlegharDotnetDomain.Providers
 {

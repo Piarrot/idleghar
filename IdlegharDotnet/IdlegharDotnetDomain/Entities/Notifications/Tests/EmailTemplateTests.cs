@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Tests;
 using NUnit.Framework;
 
-namespace IdlegharDotnetDomain.Entities.Tests
+namespace IdlegharDotnetDomain.Entities.Notifications.Tests
 {
     class EmailTemplateTests : BaseTests
     {

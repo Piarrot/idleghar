@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace IdlegharDotnetDomain.Entities
+namespace IdlegharDotnetDomain.Entities.Notifications
 {
     public class EmailTemplate : Entity
     {
@@ -10,11 +10,11 @@ namespace IdlegharDotnetDomain.Entities
 
         public string RenderMessage(Dictionary<string, string>? context = null)
         {
-            string result = this.Message;
+            string result = Message;
 
             string pattern = @"{(.*?)}";
 
-            var matches = Regex.Matches(this.Message, pattern);
+            var matches = Regex.Matches(Message, pattern);
 
             foreach (Match match in matches)
             {

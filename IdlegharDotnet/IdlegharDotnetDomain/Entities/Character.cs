@@ -8,9 +8,20 @@ namespace IdlegharDotnetDomain.Entities
         public string Name { get; set; } = String.Empty;
         public QuestState? CurrentQuestState { get; private set; }
         public bool IsQuesting => CurrentQuestState != null;
-        public int HP { get; private set; } = 10;
+
+        public int Level { get; private set; } = 1;
+        public int XP { get; private set; } = 0;
+        public int HP { get; private set; } = 1;
+        public int MaxHP => Toughness * Constants.Characters.TOUGHNESS_TO_MAX_HP_MULTIPLIER;
         public int Damage { get; private set; } = 1;
+        public int Toughness { get; private set; } = 1;
+
         public List<QuestState> QuestHistory { get; internal set; } = new();
+
+        public Character()
+        {
+            this.HP = this.MaxHP;
+        }
 
         public Quest GetCurrentQuestOrThrow()
         {
