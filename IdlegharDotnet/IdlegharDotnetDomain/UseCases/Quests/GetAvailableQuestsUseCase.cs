@@ -28,7 +28,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests
                 currentBatch = factory.CreateQuestBatch();
                 await QuestsProvider.SaveQuestBatch(currentBatch);
             }
-            return QuestTransformer.Transform(currentBatch!.Quests);
+            QuestTransformer questTransformer = new();
+            return questTransformer.TransformMany(currentBatch!.Quests);
         }
 
         private bool IsValidQuestBatch(QuestBatch? currentBatch)

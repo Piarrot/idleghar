@@ -3,19 +3,11 @@ using IdlegharDotnetShared.Quests;
 
 namespace IdlegharDotnetDomain.Transformers
 {
-    public static class QuestTransformer
+    public class QuestTransformer : Transformer<Quest, QuestViewModel>
     {
-        public static QuestViewModel Transform(Quest quest)
+        public override QuestViewModel TransformOne(Quest quest)
         {
             return new QuestViewModel(quest.Id, quest.Name!, (int)quest.Difficulty!);
-        }
-
-        public static List<QuestViewModel> Transform(List<Quest> quests)
-        {
-            return quests.ConvertAll<QuestViewModel>((quest) =>
-            {
-                return Transform(quest);
-            });
         }
     }
 }
