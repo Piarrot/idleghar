@@ -10,29 +10,29 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         public async Task GivenCorrectValidationCodeShouldValidateEmail()
         {
             var email = "email@email.com";
-            var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
+            var registerUseCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
             var result = await registerUseCase.Handle(new RegisterUseCaseRequest(email, "user1234", "CoolUser69"));
 
             var mails = EmailsProvider.GetEmailsSentTo(email);
             var sentCode = mails[0].Context!["code"];
 
-            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
+            var validateUseCase = new ValidateEmailUseCase(PlayersProvider);
             await validateUseCase.Handle(new ValidateEmailUseCaseRequest(result.Id, sentCode));
 
-            var user = await UsersProvider.FindById(result.Id);
+            var player = await PlayersProvider.FindById(result.Id);
 
-            Assert.That(user!.EmailValidated, Is.True);
-            Assert.That(user.EmailValidationCode, Is.Null);
+            Assert.That(player!.EmailValidated, Is.True);
+            Assert.That(player.EmailValidationCode, Is.Null);
         }
 
         [Test]
         public async Task GivenIncorrectValidationCodeShouldFailToValidateEmail()
         {
             var email = "email@email.com";
-            var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
+            var registerUseCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
             var result = await registerUseCase.Handle(new RegisterUseCaseRequest(email, "user1234", "CoolUser69"));
 
-            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
+            var validateUseCase = new ValidateEmailUseCase(PlayersProvider);
 
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
@@ -40,36 +40,36 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             });
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_VALIDATION_CODE));
 
-            var user = await UsersProvider.FindById(result.Id);
-            Assert.That(user!.EmailValidated, Is.False);
+            var player = await PlayersProvider.FindById(result.Id);
+            Assert.That(player!.EmailValidated, Is.False);
         }
 
         [Test]
-        public async Task GivenIncorrectUserIdShouldFailToValidateEmail()
+        public async Task GivenIncorrectPlayerIdShouldFailToValidateEmail()
         {
             var email = "email@email.com";
-            var registerUseCase = new RegisterUseCase(UsersProvider, CryptoProvider, EmailsProvider);
+            var registerUseCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
             var result = await registerUseCase.Handle(new RegisterUseCaseRequest(email, "user1234", "CoolUser69"));
 
-            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
+            var validateUseCase = new ValidateEmailUseCase(PlayersProvider);
 
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await validateUseCase.Handle(new ValidateEmailUseCaseRequest("any-id", "any-code"));
             });
-            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_USER));
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_PLAYER));
         }
 
         [Test]
         public async Task GivenEmailAlreadyValidatedItShouldFail()
         {
-            var user = await FakeUserFactory.CreateAndStoreUser();
+            var player = await FakePlayerFactory.CreateAndStorePlayer();
 
-            var validateUseCase = new ValidateEmailUseCase(UsersProvider);
+            var validateUseCase = new ValidateEmailUseCase(PlayersProvider);
 
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await validateUseCase.Handle(new ValidateEmailUseCaseRequest(user.Id, "any-code"));
+                await validateUseCase.Handle(new ValidateEmailUseCaseRequest(player.Id, "any-code"));
             });
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.EMAIL_ALREADY_VALIDATED));
         }

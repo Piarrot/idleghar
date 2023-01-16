@@ -2,11 +2,11 @@ using IdlegharDotnetDomain.Entities;
 
 namespace IdlegharDotnetDomain.Providers
 {
-    public interface IUsersProvider
+    public interface IPlayersProvider
     {
-        Task<User?> FindByEmail(string email);
-        Task<User?> FindByUsername(string username);
-        Task<User?> FindById(string id);
-        Task Save(User user);
+        Task<Player?> FindByEmail(string email);
+        Task<Player?> FindByUsername(string username);
+        Task<Player?> FindById(string id);
+        Task Save(Player player);
     }
 }

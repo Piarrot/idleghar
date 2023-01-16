@@ -7,42 +7,42 @@ namespace IdlegharDotnetDomain.UseCases.Auth
 {
     public class ResendValidationEmailUseCase
     {
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
         private IEmailsProvider EmailsProvider;
         private ICryptoProvider CryptoProvider;
 
-        public ResendValidationEmailUseCase(IUsersProvider usersProvider, IEmailsProvider emailsProvider, ICryptoProvider cryptoProvider)
+        public ResendValidationEmailUseCase(IPlayersProvider playersProvider, IEmailsProvider emailsProvider, ICryptoProvider cryptoProvider)
         {
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
             EmailsProvider = emailsProvider;
             CryptoProvider = cryptoProvider;
         }
 
         public async Task Handle(ResendValidationUseCaseRequest req)
         {
-            var user = await UsersProvider.FindByEmail(req.Email);
+            var player = await PlayersProvider.FindByEmail(req.Email);
 
-            if (user == null)
+            if (player == null)
             {
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_EMAIL);
             }
 
-            if (user.EmailValidated)
+            if (player.EmailValidated)
             {
                 throw new ArgumentException(Constants.ErrorMessages.EMAIL_ALREADY_VALIDATED);
             }
 
             var code = CryptoProvider.GetRandomNumberDigits(6);
 
-            user.EmailValidationCode = code;
+            player.EmailValidationCode = code;
 
-            await UsersProvider.Save(user);
+            await PlayersProvider.Save(player);
             await EmailsProvider.sendEmail(new SendEmailRequest(
-                user.Email,
+                player.Email,
                 await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
                 new Dictionary<string, string>
                 {
-                    ["username"] = user.Username,
+                    ["username"] = player.Username,
                     ["code"] = code
                 }
             ));

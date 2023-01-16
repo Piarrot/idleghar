@@ -6,16 +6,16 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 {
     public class EditCharacterUseCase
     {
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
 
-        public EditCharacterUseCase(IUsersProvider usersProvider)
+        public EditCharacterUseCase(IPlayersProvider playersProvider)
         {
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
         }
 
         public async Task<Character> Handle(AuthenticatedRequest<EditCharacterUseCaseRequest> authenticatedRequest)
         {
-            var character = authenticatedRequest.CurrentUser.Character;
+            var character = authenticatedRequest.CurrentPlayer.Character;
 
             if (character == null)
             {
@@ -24,7 +24,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 
             character.Name = authenticatedRequest.Request.Name;
 
-            await UsersProvider.Save(authenticatedRequest.CurrentUser);
+            await PlayersProvider.Save(authenticatedRequest.CurrentPlayer);
 
             return character;
         }

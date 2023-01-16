@@ -4,7 +4,7 @@ namespace IdlegharDotnetDomain.Providers
 {
     public interface IAuthProvider
     {
-        string GenerateToken(User user);
+        string GenerateToken(Player player);
         string? ParseTokenEmail(string token);
     }
 }

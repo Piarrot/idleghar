@@ -5,12 +5,12 @@ namespace IdlegharDotnetDomain.Constants
     public static class ErrorMessages
     {
         public static readonly string MORE_THAN_ONE_CHARACTER = "Cannot create more than one character";
-        public static readonly string CHARACTER_NOT_CREATED = "Current user doesn't have a character yet";
+        public static readonly string CHARACTER_NOT_CREATED = "Current player doesn't have a character yet";
         public static readonly string INVALID_QUEST = "Requested quest is invalid";
         public static readonly string CHARACTER_NOT_QUESTING = "Character is not questing";
         internal static readonly string CHARACTER_ALREADY_QUESTING = "Character is already questing";
         internal static readonly string INVALID_ENCOUNTER_STATE = "Character is in an invalid encounter state";
-        internal static readonly string INVALID_USER = "Invalid user";
+        internal static readonly string INVALID_PLAYER = "Invalid player";
         internal static readonly string EMAIL_ALREADY_VALIDATED = "Email already validated";
         internal static readonly string INVALID_VALIDATION_CODE = "Invalid code";
         internal static readonly string INVALID_CREDENTIALS = "Wrong Credentials";

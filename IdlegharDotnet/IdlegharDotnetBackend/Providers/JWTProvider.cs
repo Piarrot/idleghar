@@ -18,7 +18,7 @@ namespace IdlegharDotnetBackend.Providers
             ExpireMinutes = expireMinutes;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(Player user)
         {
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor
             {
@@ -70,7 +70,7 @@ namespace IdlegharDotnetBackend.Providers
             };
         }
 
-        private Claim[] GetUserClaims(User user)
+        private Claim[] GetUserClaims(Player user)
         {
             return new Claim[] {
             new Claim(ClaimTypes.Name, user.Username),

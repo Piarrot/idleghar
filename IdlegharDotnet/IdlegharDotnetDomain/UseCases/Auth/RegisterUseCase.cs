@@ -7,29 +7,29 @@ namespace IdlegharDotnetDomain.UseCases.Auth
 {
     public class RegisterUseCase
     {
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
         private ICryptoProvider CryptoProvider;
         private IEmailsProvider EmailsProvider;
 
-        public RegisterUseCase(IUsersProvider usersProvider, ICryptoProvider cryptoProvider, IEmailsProvider emailsProvider)
+        public RegisterUseCase(IPlayersProvider playersProvider, ICryptoProvider cryptoProvider, IEmailsProvider emailsProvider)
         {
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
             CryptoProvider = cryptoProvider;
             EmailsProvider = emailsProvider;
         }
 
         public async Task<RegisterUseCaseResponse> Handle(RegisterUseCaseRequest req)
         {
-            var existingUser = await UsersProvider.FindByEmail(req.Email);
+            var existingPlayer = await PlayersProvider.FindByEmail(req.Email);
 
-            if (existingUser != null)
+            if (existingPlayer != null)
             {
                 throw new ArgumentException(Constants.ErrorMessages.EMAIL_IN_USE);
             }
 
             var code = CryptoProvider.GetRandomNumberDigits(6);
 
-            User newUser = new User()
+            Player newPlayer = new Player()
             {
                 Email = req.Email,
                 Username = req.Username,
@@ -38,18 +38,18 @@ namespace IdlegharDotnetDomain.UseCases.Auth
                 EmailValidationCode = code
             };
 
-            await UsersProvider.Save(newUser);
+            await PlayersProvider.Save(newPlayer);
             await EmailsProvider.sendEmail(new SendEmailRequest(
-                newUser.Email,
+                newPlayer.Email,
                 await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
                 new Dictionary<string, string>
                 {
-                    ["username"] = newUser.Username,
+                    ["username"] = newPlayer.Username,
                     ["code"] = code
                 }
             ));
 
-            return new RegisterUseCaseResponse(newUser.Id, newUser.Email, newUser.Username);
+            return new RegisterUseCaseResponse(newPlayer.Id, newPlayer.Email, newPlayer.Username);
         }
     }
 }

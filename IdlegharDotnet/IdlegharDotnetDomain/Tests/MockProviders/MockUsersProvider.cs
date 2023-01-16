@@ -3,42 +3,43 @@ using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Tests.MockProviders
 {
-    public class MockUsersProvider : IUsersProvider
+    public class MockPlayersProvider : IPlayersProvider
     {
-        private Dictionary<string, User> usersByEmail = new Dictionary<string, User>();
-        private Dictionary<string, User> usersByUsername = new Dictionary<string, User>();
-        private Dictionary<string, User> usersById = new Dictionary<string, User>();
+        private Dictionary<string, Player> playersByEmail = new Dictionary<string, Player>();
+        private Dictionary<string, Player> playersByUsername = new Dictionary<string, Player>();
+        private Dictionary<string, Player> playersById = new Dictionary<string, Player>();
 
-        public async Task<User?> FindByEmail(string email)
+        public async Task<Player?> FindByEmail(string email)
         {
             await Task.Yield();
-            User? result = null;
-            usersByEmail.TryGetValue(email, out result);
+            Player? result = null;
+            playersByEmail.TryGetValue(email, out result);
             return result;
         }
 
-        public async Task<User?> FindById(string id)
+        public async Task<Player?> FindById(string id)
         {
             await Task.Yield();
-            User? result = null;
-            usersById.TryGetValue(id, out result);
+            Player? result = null;
+            playersById.TryGetValue(id, out result);
             return result;
         }
 
-        public async Task<User?> FindByUsername(string username)
+        public async Task<Player?> FindByUsername(string username)
         {
             await Task.Yield();
-            User? result = null;
-            usersByUsername.TryGetValue(username, out result);
+            Player? result = null;
+            playersByUsername.TryGetValue(username, out result);
             return result;
         }
 
-        public async Task Save(User user)
+        public async Task Save(Player player)
         {
             await Task.Yield();
-            usersByEmail[user.Email] = user;
-            usersByUsername[user.Username] = user;
-            usersById[user.Id] = user;
+            var clonedPlayer = (Player)TestUtils.DeepClone(player);
+            playersByEmail[player.Email] = clonedPlayer;
+            playersByUsername[player.Username] = clonedPlayer;
+            playersById[player.Id] = clonedPlayer;
         }
     }
 }

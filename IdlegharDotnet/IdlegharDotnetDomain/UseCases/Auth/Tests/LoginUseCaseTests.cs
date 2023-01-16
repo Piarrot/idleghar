@@ -14,7 +14,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             var username = "CoolUser69";
             var email = "email@email.com";
 
-            await this.UsersProvider.Save(new User
+            await this.PlayersProvider.Save(new Player
             {
                 Email = email,
                 Id = Guid.NewGuid().ToString(),
@@ -24,7 +24,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var input = new LoginUseCaseRequest(username, plainPassword);
 
-            var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
+            var useCase = new LoginUseCase(AuthProvider, PlayersProvider, CryptoProvider);
             var result = await useCase.Handle(input);
 
             Assert.That(result, Is.InstanceOf<LoginUseCaseResponse>());
@@ -39,7 +39,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var input = new LoginUseCaseRequest(username, plainPassword);
 
-            var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
+            var useCase = new LoginUseCase(AuthProvider, PlayersProvider, CryptoProvider);
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(input);
@@ -54,7 +54,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             var username = "CoolUser69";
             var email = "email@email.com";
 
-            await this.UsersProvider.Save(new User
+            await this.PlayersProvider.Save(new Player
             {
                 Email = email,
                 Id = Guid.NewGuid().ToString(),
@@ -64,7 +64,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var input = new LoginUseCaseRequest(username, "wrongPassword");
 
-            var useCase = new LoginUseCase(AuthProvider, UsersProvider, CryptoProvider);
+            var useCase = new LoginUseCase(AuthProvider, PlayersProvider, CryptoProvider);
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(input);

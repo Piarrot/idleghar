@@ -6,18 +6,18 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 {
     public class GetCurrentEncounterUseCase
     {
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
 
-        public GetCurrentEncounterUseCase(IUsersProvider usersProvider)
+        public GetCurrentEncounterUseCase(IPlayersProvider playersProvider)
         {
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
         }
 
         public Encounter Handle(AuthenticatedRequest req)
         {
-            Character userCharacter = req.CurrentUser.GetCharacterOrThrow();
+            Character playersCharacter = req.CurrentPlayer.GetCharacterOrThrow();
 
-            Encounter currentEncounter = userCharacter.GetEncounterOrThrow();
+            Encounter currentEncounter = playersCharacter.GetEncounterOrThrow();
 
             return currentEncounter;
         }

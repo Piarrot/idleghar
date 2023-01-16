@@ -6,16 +6,16 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 {
     public class CreateCharacterUseCase
     {
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
 
-        public CreateCharacterUseCase(IUsersProvider usersProvider)
+        public CreateCharacterUseCase(IPlayersProvider playersProvider)
         {
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
         }
 
         public async Task<Character> Handle(AuthenticatedRequest<CreateCharacterUseCaseRequest> authRequest)
         {
-            if (authRequest.CurrentUser.Character != null)
+            if (authRequest.CurrentPlayer.Character != null)
             {
                 throw new InvalidOperationException(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER);
             }
@@ -25,8 +25,8 @@ namespace IdlegharDotnetDomain.UseCases.Characters
                 Name = authRequest.Request.Name
             };
 
-            authRequest.CurrentUser.Character = newCharacter;
-            await UsersProvider.Save(authRequest.CurrentUser);
+            authRequest.CurrentPlayer.Character = newCharacter;
+            await PlayersProvider.Save(authRequest.CurrentPlayer);
 
 
             return newCharacter;

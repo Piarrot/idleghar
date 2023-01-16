@@ -8,28 +8,28 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
     public class SelectQuestUseCaseTests : BaseTests
     {
         [Test]
-        public async Task GivenAValidUserAndAValidQuestShouldStartQuest()
+        public async Task GivenAValidPlayerAndAValidQuestShouldStartQuest()
         {
-            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+            var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
-            var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
-            await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
+            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
+            await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
 
-            var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.IsTrue(updatedUser!.Character!.IsQuesting);
+            var updatedPlayer = await PlayersProvider.FindById(player.Id);
+            Assert.IsTrue(updatedPlayer!.Character!.IsQuesting);
         }
 
         [Test]
-        public async Task GivenAnInvalidUserItShouldFail()
+        public async Task GivenAnInvalidPlayerItShouldFail()
         {
-            var user = await FakeUserFactory.CreateAndStoreUser();
+            var player = await FakePlayerFactory.CreateAndStorePlayer();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
-            var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
+                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
             });
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_NOT_CREATED));
@@ -38,59 +38,59 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenAnInvalidQuestItShouldFail()
         {
-            var user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+            var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
-            var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest("wrongQuestId")));
+                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest("wrongQuestId")));
             });
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
-            var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.That(updatedUser!.Character!.IsQuesting, Is.False);
+            var updatedPlayer = await PlayersProvider.FindById(player.Id);
+            Assert.That(updatedPlayer!.Character!.IsQuesting, Is.False);
         }
 
         [Test]
         public async Task GivenAnOldQuestItShouldFail()
         {
-            User user = await FakeUserFactory.CreateAndStoreUserAndCharacter();
+            Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
             TimeProvider.MoveTimeInTicks(Constants.TimeDefinitions.QuestsRegenerationTimeInTicks);
 
-            var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
+                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
             });
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
-            var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.That(updatedUser!.Character!.IsQuesting, Is.False);
+            var updatedPlayer = await PlayersProvider.FindById(player.Id);
+            Assert.That(updatedPlayer!.Character!.IsQuesting, Is.False);
         }
 
         [Test]
         public async Task GivenACharacterAlreadyQuestingShouldFail()
         {
-            User user = await FakeUserFactory.CreateAndStoreUserAndCharacterWithQuest();
+            Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacterWithQuest();
             var quests = await FakeQuestFactory.GetAvailableQuests();
-            Quest quest = user.Character!.GetCurrentQuestOrThrow();
+            Quest quest = player.Character!.GetCurrentQuestOrThrow();
 
-            var useCase = new SelectQuestUseCase(UsersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(user, new SelectQuestUseCaseRequest(quests[0].Id)));
+                await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
             });
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING));
 
-            var updatedUser = await UsersProvider.FindById(user.Id);
-            Assert.That(updatedUser!.Character!.IsQuesting, Is.True);
-            Assert.That(updatedUser!.Character!.CurrentQuestState!.Quest, Is.EqualTo(quest));
+            var updatedPlayer = await PlayersProvider.FindById(player.Id);
+            Assert.That(updatedPlayer!.Character!.IsQuesting, Is.True);
+            Assert.That(updatedPlayer!.Character!.CurrentQuestState!.Quest, Is.EqualTo(quest));
         }
     }
 }

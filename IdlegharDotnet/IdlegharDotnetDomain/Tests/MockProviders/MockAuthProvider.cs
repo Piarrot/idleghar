@@ -5,9 +5,9 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
 {
     public class MockAuthProvider : IAuthProvider
     {
-        public string GenerateToken(User user)
+        public string GenerateToken(Player player)
         {
-            return $"[TOKEN]{user.Email}[TOKEN]";
+            return $"[TOKEN]{player.Email}[TOKEN]";
         }
 
         public string? ParseTokenEmail(string token)

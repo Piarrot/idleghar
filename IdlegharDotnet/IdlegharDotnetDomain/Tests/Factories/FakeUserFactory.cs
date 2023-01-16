@@ -3,64 +3,64 @@ using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Tests.Factories
 {
-    public class FakeUserFactory
+    public class FakePlayerFactory
     {
         private ICryptoProvider CryptoProvider;
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
         private FakeCharacterFactory FakeCharacterFactory;
 
-        public FakeUserFactory(ICryptoProvider cryptoProvider, IUsersProvider usersProvider, FakeCharacterFactory fakeCharacterFactory)
+        public FakePlayerFactory(ICryptoProvider cryptoProvider, IPlayersProvider playersProvider, FakeCharacterFactory fakeCharacterFactory)
         {
             CryptoProvider = cryptoProvider;
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
             FakeCharacterFactory = fakeCharacterFactory;
         }
 
-        public User CreateUser()
+        public Player CreatePlayer()
         {
-            return CreateUser(Faker.Internet.Email(), "user1234", Faker.Internet.UserName(), true);
+            return CreatePlayer(Faker.Internet.Email(), "user1234", Faker.Internet.UserName(), true);
         }
 
-        public User CreateUser(string email, string password, string username, bool emailValidated)
+        public Player CreatePlayer(string email, string password, string username, bool emailValidated)
         {
-            var user = new User
+            var player = new Player
             {
                 Email = email,
                 EmailValidated = emailValidated,
                 Username = username,
                 Password = CryptoProvider.HashPassword(password)
             };
-            return user;
+            return player;
         }
 
-        public async Task<User> CreateAndStoreUser(string email, string password, string username, bool emailValidated)
+        public async Task<Player> CreateAndStorePlayer(string email, string password, string username, bool emailValidated)
         {
-            var user = CreateUser(email, password, username, emailValidated);
-            await UsersProvider.Save(user);
-            return user;
+            var player = CreatePlayer(email, password, username, emailValidated);
+            await PlayersProvider.Save(player);
+            return player;
         }
 
-        public async Task<User> CreateAndStoreUser()
+        public async Task<Player> CreateAndStorePlayer()
         {
-            var user = CreateUser();
-            await UsersProvider.Save(user);
-            return user;
+            var player = CreatePlayer();
+            await PlayersProvider.Save(player);
+            return player;
         }
 
-        public async Task<User> CreateAndStoreUserAndCharacter()
+        public async Task<Player> CreateAndStorePlayerAndCharacter()
         {
-            var user = CreateUser();
-            user.Character = await FakeCharacterFactory.CreateAndStoreCharacter();
-            await UsersProvider.Save(user);
-            return user;
+            var player = CreatePlayer();
+            player.Character = await FakeCharacterFactory.CreateAndStoreCharacter();
+            await PlayersProvider.Save(player);
+            return player;
         }
 
-        public async Task<User> CreateAndStoreUserAndCharacterWithQuest()
+        public async Task<Player> CreateAndStorePlayerAndCharacterWithQuest()
         {
-            var user = CreateUser();
-            user.Character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
-            await UsersProvider.Save(user);
-            return user;
+            var player = CreatePlayer();
+            player.Character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
+            await PlayersProvider.Save(player);
+            return player;
         }
     }
 }

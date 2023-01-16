@@ -6,19 +6,19 @@ namespace IdlegharDotnetDomain.UseCases.Quests
     public class SelectQuestUseCase
     {
         private IQuestsProvider QuestsProvider;
-        private IUsersProvider UsersProvider;
+        private IPlayersProvider PlayersProvider;
         private ITimeProvider TimeProvider;
 
-        public SelectQuestUseCase(IUsersProvider usersProvider, IQuestsProvider questsProvider, ITimeProvider timeProvider)
+        public SelectQuestUseCase(IPlayersProvider playersProvider, IQuestsProvider questsProvider, ITimeProvider timeProvider)
         {
-            UsersProvider = usersProvider;
+            PlayersProvider = playersProvider;
             QuestsProvider = questsProvider;
             TimeProvider = timeProvider;
         }
 
         public async Task Handle(AuthenticatedRequest<SelectQuestUseCaseRequest> authRequest)
         {
-            var currentCharacter = authRequest.CurrentUser.GetCharacterOrThrow();
+            var currentCharacter = authRequest.CurrentPlayer.GetCharacterOrThrow();
             currentCharacter.ThrowIfQuesting();
 
             var quest = await QuestsProvider.FindById(authRequest.Request.QuestId);
@@ -29,7 +29,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
             }
 
             currentCharacter.StartQuest(quest);
-            await UsersProvider.Save(authRequest.CurrentUser);
+            await PlayersProvider.Save(authRequest.CurrentPlayer);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace IdlegharDotnetDomain.Tests
 {
     public class BaseTests
     {
-        protected MockUsersProvider UsersProvider = new MockUsersProvider();
+        protected MockPlayersProvider PlayersProvider = new MockPlayersProvider();
         protected MockCryptoProvider CryptoProvider = new MockCryptoProvider();
         protected MockAuthProvider AuthProvider = new MockAuthProvider();
         protected MockEmailsProvider EmailsProvider = new MockEmailsProvider();
@@ -17,7 +17,7 @@ namespace IdlegharDotnetDomain.Tests
         protected MockCharactersProvider CharactersProvider = new();
 
 
-        protected FakeUserFactory FakeUserFactory;
+        protected FakePlayerFactory FakePlayerFactory;
         protected FakeCharacterFactory FakeCharacterFactory;
         protected FakeQuestFactory FakeQuestFactory;
 
@@ -29,7 +29,7 @@ namespace IdlegharDotnetDomain.Tests
         [SetUp]
         public void Setup()
         {
-            UsersProvider = new MockUsersProvider();
+            PlayersProvider = new MockPlayersProvider();
             EmailsProvider = new MockEmailsProvider();
 
             InitFakers();
@@ -40,7 +40,7 @@ namespace IdlegharDotnetDomain.Tests
         {
             FakeQuestFactory = new FakeQuestFactory(RandomnessProvider, QuestsProvider, TimeProvider);
             FakeCharacterFactory = new FakeCharacterFactory(CharactersProvider, FakeQuestFactory);
-            FakeUserFactory = new FakeUserFactory(CryptoProvider, UsersProvider, FakeCharacterFactory);
+            FakePlayerFactory = new FakePlayerFactory(CryptoProvider, PlayersProvider, FakeCharacterFactory);
         }
     }
 }

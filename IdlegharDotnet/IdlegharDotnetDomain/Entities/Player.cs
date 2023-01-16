@@ -1,7 +1,7 @@
 namespace IdlegharDotnetDomain.Entities
 {
     [Serializable()]
-    public class User : Entity
+    public class Player : Entity
     {
         public string Email { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;

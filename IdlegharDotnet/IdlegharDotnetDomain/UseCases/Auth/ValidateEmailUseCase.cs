@@ -5,33 +5,33 @@ namespace IdlegharDotnetDomain;
 
 public class ValidateEmailUseCase
 {
-    private IUsersProvider UsersProvider { get; set; }
-    public ValidateEmailUseCase(IUsersProvider usersProvider)
+    private IPlayersProvider PlayersProvider { get; set; }
+    public ValidateEmailUseCase(IPlayersProvider playersProvider)
     {
-        UsersProvider = usersProvider;
+        PlayersProvider = playersProvider;
     }
 
     public async Task Handle(ValidateEmailUseCaseRequest request)
     {
-        var user = await this.UsersProvider.FindById(request.Id);
-        if (user == null)
+        var player = await this.PlayersProvider.FindById(request.Id);
+        if (player == null)
         {
-            throw new ArgumentException(Constants.ErrorMessages.INVALID_USER);
+            throw new ArgumentException(Constants.ErrorMessages.INVALID_PLAYER);
         }
 
-        if (user.EmailValidated)
+        if (player.EmailValidated)
         {
             throw new ArgumentException(Constants.ErrorMessages.EMAIL_ALREADY_VALIDATED);
         }
 
-        if (user.EmailValidationCode != request.Code)
+        if (player.EmailValidationCode != request.Code)
         {
             throw new ArgumentException(Constants.ErrorMessages.INVALID_VALIDATION_CODE);
         }
 
-        user.EmailValidated = true;
-        user.EmailValidationCode = null;
+        player.EmailValidated = true;
+        player.EmailValidationCode = null;
 
-        await this.UsersProvider.Save(user);
+        await this.PlayersProvider.Save(player);
     }
 }
