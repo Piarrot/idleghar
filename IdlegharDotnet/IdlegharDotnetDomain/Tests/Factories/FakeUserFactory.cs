@@ -9,6 +9,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         private IPlayersProvider PlayersProvider;
         private FakeCharacterFactory FakeCharacterFactory;
 
+
         public FakePlayerFactory(ICryptoProvider cryptoProvider, IPlayersProvider playersProvider, FakeCharacterFactory fakeCharacterFactory)
         {
             CryptoProvider = cryptoProvider;
@@ -50,7 +51,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public async Task<Player> CreateAndStorePlayerAndCharacter()
         {
             var player = CreatePlayer();
-            player.Character = await FakeCharacterFactory.CreateAndStoreCharacter();
+            await FakeCharacterFactory.CreateAndStoreCharacter(player);
             await PlayersProvider.Save(player);
             return player;
         }
@@ -58,7 +59,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public async Task<Player> CreateAndStorePlayerAndCharacterWithQuest()
         {
             var player = CreatePlayer();
-            player.Character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
+            await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(player);
             await PlayersProvider.Save(player);
             return player;
         }

@@ -7,15 +7,17 @@ namespace IdlegharDotnetDomain.UseCases.Quests
     public class GetCurrentEncounterUseCase
     {
         private IPlayersProvider PlayersProvider;
+        private ICharactersProvider CharactersProvider;
 
-        public GetCurrentEncounterUseCase(IPlayersProvider playersProvider)
+        public GetCurrentEncounterUseCase(IPlayersProvider playersProvider, ICharactersProvider charactersProvider)
         {
             PlayersProvider = playersProvider;
+            CharactersProvider = charactersProvider;
         }
 
-        public Encounter Handle(AuthenticatedRequest req)
+        public async Task<Encounter> Handle(AuthenticatedRequest req)
         {
-            Character playersCharacter = req.CurrentPlayer.GetCharacterOrThrow();
+            Character playersCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(req.CurrentPlayer);
 
             Encounter currentEncounter = playersCharacter.GetEncounterOrThrow();
 

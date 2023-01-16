@@ -6,27 +6,27 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 {
     public class CreateCharacterUseCase
     {
-        private IPlayersProvider PlayersProvider;
+        private ICharactersProvider CharactersProvider;
 
-        public CreateCharacterUseCase(IPlayersProvider playersProvider)
+        public CreateCharacterUseCase(ICharactersProvider charactersProvider)
         {
-            PlayersProvider = playersProvider;
+            CharactersProvider = charactersProvider;
         }
 
         public async Task<Character> Handle(AuthenticatedRequest<CreateCharacterUseCaseRequest> authRequest)
         {
-            if (authRequest.CurrentPlayer.Character != null)
+            var character = await CharactersProvider.FindByPlayerId(authRequest.CurrentPlayer.Id);
+            if (character != null)
             {
                 throw new InvalidOperationException(Constants.ErrorMessages.MORE_THAN_ONE_CHARACTER);
             }
 
-            var newCharacter = new Character
+            var newCharacter = new Character(authRequest.CurrentPlayer)
             {
                 Name = authRequest.Request.Name
             };
 
-            authRequest.CurrentPlayer.Character = newCharacter;
-            await PlayersProvider.Save(authRequest.CurrentPlayer);
+            await CharactersProvider.Save(newCharacter);
 
 
             return newCharacter;

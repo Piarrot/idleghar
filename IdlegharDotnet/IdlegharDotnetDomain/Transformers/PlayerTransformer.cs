@@ -12,7 +12,6 @@ namespace IdlegharDotnetDomain.Transformers
                 Id = entity.Id,
                 Email = entity.Email,
                 Username = entity.Username,
-                Currency = entity.Currency,
             };
         }
     }

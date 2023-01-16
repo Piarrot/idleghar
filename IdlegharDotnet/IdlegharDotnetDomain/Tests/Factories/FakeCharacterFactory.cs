@@ -14,9 +14,13 @@ namespace IdlegharDotnetDomain.Tests.Factories
             FakeQuestFactory = fakeQuestFactory;
         }
 
-        public async Task<Character> CreateAndStoreCharacter()
+        public async Task<Character> CreateAndStoreCharacter(Player? player = null)
         {
-            var character = new Character
+            if (player == null)
+            {
+                player = new Player();
+            }
+            var character = new Character(player)
             {
                 Name = Faker.Name.FullName(),
             };
@@ -26,18 +30,18 @@ namespace IdlegharDotnetDomain.Tests.Factories
             return character;
         }
 
-        public async Task<Character> CreateAndStoreCharacterWithQuest(Quest quest)
+        public async Task<Character> CreateAndStoreCharacterWithQuest(Quest quest, Player? player = null)
         {
-            Character character = await CreateAndStoreCharacter();
+            Character character = await CreateAndStoreCharacter(player);
             character.StartQuest(quest);
             await CharactersProvider.Save(character);
             return character;
         }
 
-        public async Task<Character> CreateAndStoreCharacterWithQuest()
+        public async Task<Character> CreateAndStoreCharacterWithQuest(Player? player = null)
         {
             var quest = FakeQuestFactory.CreateQuest();
-            return await CreateAndStoreCharacterWithQuest(quest);
+            return await CreateAndStoreCharacterWithQuest(quest, player);
         }
 
         public async Task<List<Character>> CreateAndStoreMultipleCharactersWithQuests(int count)

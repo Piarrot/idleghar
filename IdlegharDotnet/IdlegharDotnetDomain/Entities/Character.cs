@@ -5,6 +5,7 @@ namespace IdlegharDotnetDomain.Entities
     [Serializable()]
     public class Character : Entity
     {
+        public Player Player { get; private set; }
         public string Name { get; set; } = String.Empty;
         public QuestState? CurrentQuestState { get; private set; }
         public bool IsQuesting => CurrentQuestState != null;
@@ -18,9 +19,10 @@ namespace IdlegharDotnetDomain.Entities
 
         public List<QuestState> QuestHistory { get; internal set; } = new();
 
-        public Character()
+        public Character(Player player)
         {
             this.HP = this.MaxHP;
+            this.Player = player;
         }
 
         public Quest GetCurrentQuestOrThrow()

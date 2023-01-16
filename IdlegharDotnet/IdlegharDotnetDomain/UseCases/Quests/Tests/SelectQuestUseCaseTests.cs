@@ -13,11 +13,11 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
-            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
             await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
 
-            var updatedPlayer = await PlayersProvider.FindById(player.Id);
-            Assert.IsTrue(updatedPlayer!.Character!.IsQuesting);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            Assert.IsTrue(updatedCharacter.IsQuesting);
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var player = await FakePlayerFactory.CreateAndStorePlayer();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
-            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
@@ -41,7 +41,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             var quests = await FakeQuestFactory.GetAvailableQuests();
 
-            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest("wrongQuestId")));
@@ -49,8 +49,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
-            var updatedPlayer = await PlayersProvider.FindById(player.Id);
-            Assert.That(updatedPlayer!.Character!.IsQuesting, Is.False);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            Assert.That(updatedCharacter.IsQuesting, Is.False);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             TimeProvider.MoveTimeInTicks(Constants.TimeDefinitions.QuestsRegenerationTimeInTicks);
 
-            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
@@ -69,8 +69,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
-            var updatedPlayer = await PlayersProvider.FindById(player.Id);
-            Assert.That(updatedPlayer!.Character!.IsQuesting, Is.False);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            Assert.That(updatedCharacter.IsQuesting, Is.False);
         }
 
         [Test]
@@ -78,9 +78,10 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacterWithQuest();
             var quests = await FakeQuestFactory.GetAvailableQuests();
-            Quest quest = player.Character!.GetCurrentQuestOrThrow();
+            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            Quest quest = character.GetCurrentQuestOrThrow();
 
-            var useCase = new SelectQuestUseCase(PlayersProvider, QuestsProvider, TimeProvider);
+            var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
                 await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
@@ -88,9 +89,9 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING));
 
-            var updatedPlayer = await PlayersProvider.FindById(player.Id);
-            Assert.That(updatedPlayer!.Character!.IsQuesting, Is.True);
-            Assert.That(updatedPlayer!.Character!.CurrentQuestState!.Quest, Is.EqualTo(quest));
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            Assert.That(updatedCharacter.IsQuesting, Is.True);
+            Assert.That(updatedCharacter.CurrentQuestState!.Quest, Is.EqualTo(quest));
         }
     }
 }

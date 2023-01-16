@@ -15,7 +15,6 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             Assert.That(result.Id, Is.EqualTo(player.Id));
             Assert.That(result.Username, Is.EqualTo(player.Username));
             Assert.That(result.Email, Is.EqualTo(player.Email));
-            Assert.That(result.Currency, Is.EqualTo(player.Currency));
         }
     }
 }
