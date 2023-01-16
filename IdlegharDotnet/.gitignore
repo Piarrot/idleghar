@@ -282,3 +282,5 @@ obj/
 
 # Code coverage
 coverage
+
+.$*
