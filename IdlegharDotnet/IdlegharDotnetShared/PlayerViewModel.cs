@@ -1,3 +1,4 @@
+using IdlegharDotnetShared.Characters;
 using IdlegharDotnetShared.Items;
 using IdlegharDotnetShared.Rewards;
 
@@ -9,6 +10,7 @@ namespace IdlegharDotnetShared
         public string Username { get; set; } = String.Empty;
         public int Currency { get; set; } = 0;
         public List<ItemViewModel> Items { get; set; } = new();
-        public List<RewardViewModel> UnclaimedRewards { get; private set; } = new();
+        public List<RewardViewModel> UnclaimedRewards { get; set; } = new();
+        public CharacterViewModel? Character;
     }
 }

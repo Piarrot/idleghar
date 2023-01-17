@@ -5,11 +5,11 @@ using IdlegharDotnetShared;
 
 namespace IdlegharDotnetDomain.UseCases.Players
 {
-    public class GetCurrentPlayersInventory
+    public class GetCurrentPlayer
     {
         IPlayersProvider PlayersProvider;
 
-        public GetCurrentPlayersInventory(IPlayersProvider playersProvider)
+        public GetCurrentPlayer(IPlayersProvider playersProvider)
         {
             PlayersProvider = playersProvider;
         }

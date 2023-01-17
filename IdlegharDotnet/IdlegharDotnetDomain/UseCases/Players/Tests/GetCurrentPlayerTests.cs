@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Entities.Items;
+using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Tests;
 using NUnit.Framework;
 
@@ -6,10 +8,15 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
     public class GetCurrentPlayerTests : BaseTests
     {
         [Test]
-        public async Task ShouldReturnTheCurrentPlayersInventory()
+        public async Task ShouldReturnTheCurrentPlayers()
         {
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
-            GetCurrentPlayersInventory useCase = new(PlayersProvider);
+            player.Currency = 15000;
+            player.Items.Add(new Weapon("Cool Sword", "A really cool sword to slice things"));
+            player.UnclaimedRewards.Add(new XPReward());
+            await PlayersProvider.Save(player);
+
+            GetCurrentPlayer useCase = new(PlayersProvider);
             var result = await useCase.Handle(new AuthenticatedRequest(player));
 
             Assert.That(result.Id, Is.EqualTo(player.Id));
@@ -17,6 +24,8 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             Assert.That(result.Username, Is.EqualTo(player.Username));
             Assert.That(result.Currency, Is.EqualTo(player.Currency));
             Assert.That(result.Items.Count, Is.EqualTo(player.Items.Count));
+            Assert.That(result.UnclaimedRewards.Count, Is.EqualTo(player.UnclaimedRewards.Count));
+            Assert.That(result.Character!.Id, Is.EqualTo(player.Character!.Id));
         }
     }
 }
