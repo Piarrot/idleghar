@@ -26,6 +26,7 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             Assert.That(result.Items.Count, Is.EqualTo(player.Items.Count));
             Assert.That(result.UnclaimedRewards.Count, Is.EqualTo(player.UnclaimedRewards.Count));
             Assert.That(result.Character!.Id, Is.EqualTo(player.Character!.Id));
+            Assert.That(result.Character.Level, Is.EqualTo(player.Character.Level));
         }
     }
 }

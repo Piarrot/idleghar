@@ -1,3 +1,5 @@
+using IdlegharDotnetShared.Quests;
+
 namespace IdlegharDotnetShared.Characters
 {
     public class CharacterViewModel : EntityViewModel
@@ -9,5 +11,7 @@ namespace IdlegharDotnetShared.Characters
         public int MaxHP { get; set; } = 1;
         public int Damage { get; set; } = 1;
         public int Toughness { get; set; } = 1;
+
+        public QuestStateViewModel? CurrentQuestState { get; set; }
     }
 }

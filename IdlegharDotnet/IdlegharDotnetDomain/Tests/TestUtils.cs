@@ -1,15 +1,16 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using IdlegharDotnetDomain.Entities.Random;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Tests
 {
     public static class TestUtils
     {
-        public static RandomValueFromList<Constants.Difficulty> RandomDifficulty = new(){
-                Constants.Difficulty.EASY,
-                Constants.Difficulty.NORMAL,
-                Constants.Difficulty.HARD,
-                Constants.Difficulty.LEGENDARY
+        public static RandomValueFromList<Difficulty> RandomDifficulty = new(){
+                Difficulty.EASY,
+                Difficulty.NORMAL,
+                Difficulty.HARD,
+                Difficulty.LEGENDARY
             };
 
 

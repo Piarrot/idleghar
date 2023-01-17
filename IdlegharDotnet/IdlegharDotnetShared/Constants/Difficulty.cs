@@ -1,4 +1,4 @@
-namespace IdlegharDotnetDomain.Constants
+namespace IdlegharDotnetShared.Constants
 {
     public enum Difficulty
     {

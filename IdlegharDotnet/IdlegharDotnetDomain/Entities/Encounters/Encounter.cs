@@ -1,4 +1,4 @@
-using IdlegharDotnetDomain.Constants;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Entities.Encounters
 {

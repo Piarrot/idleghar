@@ -1,5 +1,6 @@
 using IdlegharDotnetDomain.Entities.Encounters.Events;
 using IdlegharDotnetDomain.Tests;
+using IdlegharDotnetShared.Constants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Entities.Encounters.Tests
@@ -116,7 +117,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         {
             var factory = new Factories.CombatEncounterFactory(RandomnessProvider);
 
-            var encounter = factory.CreateCombat(Constants.Difficulty.EASY);
+            var encounter = factory.CreateCombat(Difficulty.EASY);
 
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);

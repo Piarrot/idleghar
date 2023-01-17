@@ -6,9 +6,9 @@ namespace IdlegharDotnetDomain.Transformers
 {
     public class PlayerTransformer : Transformer<Player, PlayerViewModel>
     {
-        ItemTransformer itemTransformer = new ItemTransformer();
-        RewardTransformer rewardTransformer = new RewardTransformer();
-        CharacterTransformer characterTransformer = new CharacterTransformer();
+        ItemTransformer itemTransformer = new();
+        RewardTransformer rewardTransformer = new();
+        CharacterTransformer characterTransformer = new();
         public override PlayerViewModel TransformOne(Player entity)
         {
             return new PlayerViewModel()

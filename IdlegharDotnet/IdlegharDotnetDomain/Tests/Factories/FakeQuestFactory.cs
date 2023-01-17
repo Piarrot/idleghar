@@ -3,6 +3,7 @@ using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Factories;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.UseCases.Quests;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Tests.Factories
 {
@@ -25,7 +26,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
             return (await QuestsProvider.GetCurrentQuestBatch())!.Quests;
         }
 
-        public Quest CreateQuest(Constants.Difficulty difficulty, List<Encounter> encounters)
+        public Quest CreateQuest(Difficulty difficulty, List<Encounter> encounters)
         {
             return new Quest
             {
@@ -38,7 +39,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
 
         public Quest CreateQuest(List<Encounter> encounters)
         {
-            return CreateQuest(Constants.Difficulty.EASY, encounters);
+            return CreateQuest(Difficulty.EASY, encounters);
         }
 
         public Quest CreateQuest()
@@ -47,7 +48,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
             return qf.CreateQuest(Guid.NewGuid().ToString(), RandomnessProvider.ResolveOne(TestUtils.RandomDifficulty));
         }
 
-        public Quest CreateQuest(Constants.Difficulty difficulty)
+        public Quest CreateQuest(Difficulty difficulty)
         {
             var qf = new QuestFactory(RandomnessProvider, TimeProvider);
             return qf.CreateQuest(Guid.NewGuid().ToString(), difficulty);

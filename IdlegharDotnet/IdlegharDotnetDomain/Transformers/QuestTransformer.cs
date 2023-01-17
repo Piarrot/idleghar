@@ -7,7 +7,7 @@ namespace IdlegharDotnetDomain.Transformers
     {
         public override QuestViewModel TransformOne(Quest quest)
         {
-            return new QuestViewModel(quest.Id, quest.Name!, (int)quest.Difficulty!);
+            return new QuestViewModel(quest.Id, quest.Name!, quest.Difficulty!);
         }
     }
 }

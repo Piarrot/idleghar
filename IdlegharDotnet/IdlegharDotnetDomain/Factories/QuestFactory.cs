@@ -1,5 +1,6 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Factories
 {
@@ -14,7 +15,7 @@ namespace IdlegharDotnetDomain.Factories
             TimeProvider = timeProvider;
         }
 
-        public List<Quest> CreateQuests(string batchId, Constants.Difficulty difficulty, int questCount)
+        public List<Quest> CreateQuests(string batchId, Difficulty difficulty, int questCount)
         {
             var quests = new List<Quest>(questCount);
             for (int i = 0; i < questCount; i++)
@@ -24,7 +25,7 @@ namespace IdlegharDotnetDomain.Factories
             return quests;
         }
 
-        public Quest CreateQuest(string batchId, Constants.Difficulty difficulty)
+        public Quest CreateQuest(string batchId, Difficulty difficulty)
         {
             var quest = new Quest()
             {
@@ -46,7 +47,7 @@ namespace IdlegharDotnetDomain.Factories
         {
             var questBatch = new QuestBatch(TimeProvider);
 
-            foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
                 var resolvedQuestCount = RandomnessProvider.ResolveOne(Constants.Quests.QuestCountByDifficulty[questDifficulty]);
                 var createdQuests = CreateQuests(questBatch.Id, questDifficulty, resolvedQuestCount);

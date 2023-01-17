@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Tests;
+using IdlegharDotnetShared.Constants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Factories.Tests
@@ -9,7 +10,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         public void CreatedQuestsShouldHaveEncounters()
         {
             var factory = new QuestFactory(RandomnessProvider, TimeProvider);
-            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Constants.Difficulty.EASY);
+            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.EASY);
 
             Assert.That(quest.Encounters.Count == Constants.Quests.EncountersPerQuest, Is.True);
         }
@@ -18,13 +19,13 @@ namespace IdlegharDotnetDomain.Factories.Tests
         public void CreatedQuestsShouldHaveEncountersOfManyDifficulties()
         {
             var factory = new QuestFactory(RandomnessProvider, TimeProvider);
-            var quests = factory.CreateQuests(Guid.NewGuid().ToString(), Constants.Difficulty.NORMAL, 1000);
+            var quests = factory.CreateQuests(Guid.NewGuid().ToString(), Difficulty.NORMAL, 1000);
 
             var generatedEncounterDifficulties = quests.SelectMany((q) => q.Encounters.Select((e) => e.Difficulty)).Distinct();
 
-            Assert.That(generatedEncounterDifficulties.Contains(Constants.Difficulty.EASY), Is.True);
-            Assert.That(generatedEncounterDifficulties.Contains(Constants.Difficulty.NORMAL), Is.True);
-            Assert.That(generatedEncounterDifficulties.Contains(Constants.Difficulty.HARD), Is.True);
+            Assert.That(generatedEncounterDifficulties.Contains(Difficulty.EASY), Is.True);
+            Assert.That(generatedEncounterDifficulties.Contains(Difficulty.NORMAL), Is.True);
+            Assert.That(generatedEncounterDifficulties.Contains(Difficulty.HARD), Is.True);
         }
 
         [Test]
@@ -33,7 +34,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
             var factory = new QuestFactory(RandomnessProvider, TimeProvider);
             var updatedQuestBatch = factory.CreateQuestBatch();
 
-            foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
                 var questCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == questDifficulty);
                 Assert.That(Constants.Quests.QuestCountByDifficulty[questDifficulty].Matches(questCount), Is.True);

@@ -1,6 +1,7 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Tests;
+using IdlegharDotnetShared.Constants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.UseCases.System.Tests
@@ -51,7 +52,7 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
         [Test]
         public async Task GivenAQuestingCharacterThatFailsAnEncounterTheQuestShouldRemainIncomplete()
         {
-            var quest = FakeQuestFactory.CreateQuest(Constants.Difficulty.LEGENDARY);
+            var quest = FakeQuestFactory.CreateQuest(Difficulty.LEGENDARY);
             var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
             var useCase = new ProcessTickUseCase(CharactersProvider);
             await useCase.Handle();

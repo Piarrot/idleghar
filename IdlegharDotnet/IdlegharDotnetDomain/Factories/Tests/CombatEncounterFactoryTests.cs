@@ -1,5 +1,6 @@
 using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Tests;
+using IdlegharDotnetShared.Constants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Factories.Tests
@@ -13,7 +14,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         {
             var factory = new CombatEncounterFactory(RandomnessProvider);
 
-            foreach (Constants.Difficulty questDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
                 var encounters = factory.CreateCombatsFromQuestDifficulty(questDifficulty, GENERATION_COUNT);
                 AssertEncountersChanceFor(encounters, questDifficulty);
@@ -25,7 +26,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         {
             var factory = new CombatEncounterFactory(RandomnessProvider);
 
-            foreach (Constants.Difficulty combatDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            foreach (Difficulty combatDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
                 var encounter = factory.CreateCombat(combatDifficulty);
                 var totalHP = encounter.EnemyCreatures.Sum(c => c.HP);
@@ -34,10 +35,10 @@ namespace IdlegharDotnetDomain.Factories.Tests
         }
 
 
-        private void AssertEncountersChanceFor(List<CombatEncounter> encounters, Constants.Difficulty questDifficulty)
+        private void AssertEncountersChanceFor(List<CombatEncounter> encounters, Difficulty questDifficulty)
         {
             var encounterRandomDiff = Constants.Encounters.EncounterDifficultyByQuestDifficulty;
-            foreach (Constants.Difficulty encounterDifficulty in Enum.GetValues(typeof(Constants.Difficulty)))
+            foreach (Difficulty encounterDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
                 var easyEncounters = encounters.Sum(e => e.Difficulty == encounterDifficulty ? 1 : 0);
                 double aproxChance = (double)easyEncounters / GENERATION_COUNT;
