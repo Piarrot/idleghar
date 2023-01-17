@@ -18,10 +18,13 @@ namespace IdlegharDotnetDomain.Factories.Tests
         public void CreatedQuestsShouldHaveEncountersOfManyDifficulties()
         {
             var factory = new QuestFactory(RandomnessProvider, TimeProvider);
-            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Constants.Difficulty.NORMAL);
+            var quests = factory.CreateQuests(Guid.NewGuid().ToString(), Constants.Difficulty.NORMAL, 1000);
 
-            var differentDifficultiesCount = quest.Encounters.Select((e) => e.Difficulty).Distinct().Count();
-            Assert.That(differentDifficultiesCount, Is.GreaterThanOrEqualTo(2));
+            var generatedEncounterDifficulties = quests.SelectMany((q) => q.Encounters.Select((e) => e.Difficulty)).Distinct();
+
+            Assert.That(generatedEncounterDifficulties.Contains(Constants.Difficulty.EASY), Is.True);
+            Assert.That(generatedEncounterDifficulties.Contains(Constants.Difficulty.NORMAL), Is.True);
+            Assert.That(generatedEncounterDifficulties.Contains(Constants.Difficulty.HARD), Is.True);
         }
 
         [Test]
