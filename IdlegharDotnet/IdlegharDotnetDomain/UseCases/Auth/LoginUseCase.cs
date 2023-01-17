@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetDomain.Transformers;
 using IdlegharDotnetShared.Auth;
 
 namespace IdlegharDotnetDomain.UseCases.Auth
@@ -25,7 +26,8 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             }
 
             var token = AuthProvider.GenerateToken(player);
-            return new LoginUseCaseResponse(token);
+            var transformer = new PlayerTransformer();
+            return new LoginUseCaseResponse(token, transformer.TransformOne(player));
         }
     }
 }
