@@ -1,5 +1,6 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Encounters;
+using IdlegharDotnetDomain.Entities.Quests;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Constants;
 using NUnit.Framework;
@@ -69,7 +70,7 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
 
             var failedQuestState = questingCharacter.QuestHistory.First();
             Assert.That(failedQuestState.Completed, Is.False);
-            Assert.That(failedQuestState.Status, Is.EqualTo(EncounterResult.Failed));
+            Assert.That(failedQuestState.Status, Is.EqualTo(QuestStatus.Failed));
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Entities.Encounters.Events;
 
-namespace IdlegharDotnetDomain.Entities
+namespace IdlegharDotnetDomain.Entities.Quests
 {
     [Serializable()]
     public class QuestState : Entity
@@ -15,23 +15,23 @@ namespace IdlegharDotnetDomain.Entities
         List<EncounterState> remaining = new();
         List<EncounterEvent> questEvents { get; set; } = new();
         public ReadOnlyCollection<EncounterEvent> QuestEvents => questEvents.AsReadOnly();
-        public bool Completed => this.current.Completed && this.remaining.Count == 0;
+        public bool Completed => current.Completed && remaining.Count == 0;
         public bool Done { get; private set; }
-        public EncounterState CurrentEncounterState => this.current;
-        public EncounterResult Status { get; private set; }
+        public EncounterState CurrentEncounterState => current;
+        public QuestStatus Status { get; private set; } = QuestStatus.Pending;
 
         public QuestState(Quest quest, Character character)
         {
-            this.Quest = quest;
+            Quest = quest;
             Character = character;
-            this.current = quest.Encounters.First().GetNewState();
-            this.remaining = quest.Encounters.Skip(1).Select((e) => e.GetNewState()).ToList();
+            current = quest.Encounters.First().GetNewState();
+            remaining = quest.Encounters.Skip(1).Select((e) => e.GetNewState()).ToList();
         }
 
 
         public EncounterType GetCurrentEncounterStateOrThrow<EncounterType>() where EncounterType : EncounterState
         {
-            EncounterType? state = this.current as EncounterType;
+            EncounterType? state = current as EncounterType;
             if (state == null)
                 throw new InvalidOperationException(Constants.ErrorMessages.INVALID_ENCOUNTER_STATE);
             return state!;
@@ -39,7 +39,7 @@ namespace IdlegharDotnetDomain.Entities
 
         public void AddEvent(EncounterEvent newEvent)
         {
-            this.questEvents.Add(newEvent);
+            questEvents.Add(newEvent);
         }
 
         public void ProcessTick()
@@ -47,20 +47,20 @@ namespace IdlegharDotnetDomain.Entities
             var result = current.Encounter.ProcessEncounter(Character);
             if (result == EncounterResult.Succeeded)
             {
-                if (!this.Completed)
+                if (!Completed)
                 {
                     AdvanceToNextEncounter();
                     return;
                 }
                 else
                 {
-                    this.Status = EncounterResult.Succeeded;
+                    Status = QuestStatus.Succeeded;
                     Character.QuestDone();
                 }
             }
             else
             {
-                this.Status = EncounterResult.Failed;
+                Status = QuestStatus.Failed;
                 Character.QuestDone();
             }
 
@@ -68,9 +68,9 @@ namespace IdlegharDotnetDomain.Entities
 
         private void AdvanceToNextEncounter()
         {
-            this.previous.Add(current);
-            this.current = this.remaining.First();
-            this.remaining.RemoveAt(0);
+            previous.Add(current);
+            current = remaining.First();
+            remaining.RemoveAt(0);
         }
     }
 }
