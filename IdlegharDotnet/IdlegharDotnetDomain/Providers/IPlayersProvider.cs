@@ -8,5 +8,7 @@ namespace IdlegharDotnetDomain.Providers
         Task<Player?> FindByUsername(string username);
         Task<Player?> FindById(string id);
         Task Save(Player player);
+        Task<PlayerCreds?> FindCredsFromEmail(string email);
+        Task<Player> GetByIdOrThrow(string id);
     }
 }

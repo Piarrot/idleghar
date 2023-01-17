@@ -15,7 +15,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 
         public async Task<Character> Handle(AuthenticatedRequest<EditCharacterUseCaseRequest> authenticatedRequest)
         {
-            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(authenticatedRequest.CurrentPlayer);
+            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(authenticatedRequest.CurrentPlayerCreds.Id);
 
             character.Name = authenticatedRequest.Request.Name;
 

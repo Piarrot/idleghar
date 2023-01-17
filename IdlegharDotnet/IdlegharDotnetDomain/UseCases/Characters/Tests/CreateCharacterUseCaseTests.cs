@@ -11,7 +11,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         public async Task GivenANameAndAValidPlayerShouldCreateACharacter()
         {
             var player = await FakePlayerFactory.CreateAndStorePlayer();
-            var useCase = new CreateCharacterUseCase(CharactersProvider);
+            var useCase = new CreateCharacterUseCase(CharactersProvider, PlayersProvider);
 
             var request = new CreateCharacterUseCaseRequest("Cool Character");
 
@@ -32,7 +32,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
 
             var request = new CreateCharacterUseCaseRequest("Cool Character");
-            var useCase = new CreateCharacterUseCase(CharactersProvider);
+            var useCase = new CreateCharacterUseCase(CharactersProvider, PlayersProvider);
 
             var e = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {

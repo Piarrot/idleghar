@@ -18,7 +18,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 
         public async Task Handle(AuthenticatedRequest<SelectQuestUseCaseRequest> authRequest)
         {
-            var currentCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(authRequest.CurrentPlayer);
+            var currentCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(authRequest.CurrentPlayerCreds.Id);
             currentCharacter.ThrowIfQuesting();
 
             var quest = await QuestsProvider.FindById(authRequest.Request.QuestId);

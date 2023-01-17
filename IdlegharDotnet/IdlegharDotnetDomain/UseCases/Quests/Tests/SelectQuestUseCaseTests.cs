@@ -16,7 +16,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
             var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
             await useCase.Handle(new AuthenticatedRequest<SelectQuestUseCaseRequest>(player, new SelectQuestUseCaseRequest(quests[0].Id)));
 
-            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player.Id);
             Assert.IsTrue(updatedCharacter.IsQuesting);
         }
 
@@ -49,7 +49,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
-            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player.Id);
             Assert.That(updatedCharacter.IsQuesting, Is.False);
         }
 
@@ -69,7 +69,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_QUEST));
 
-            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player.Id);
             Assert.That(updatedCharacter.IsQuesting, Is.False);
         }
 
@@ -78,7 +78,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacterWithQuest();
             var quests = await FakeQuestFactory.GetAvailableQuests();
-            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(player.Id);
             Quest quest = character.GetCurrentQuestOrThrow();
 
             var useCase = new SelectQuestUseCase(QuestsProvider, TimeProvider, CharactersProvider);
@@ -89,7 +89,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
 
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.CHARACTER_ALREADY_QUESTING));
 
-            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            var updatedCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(player.Id);
             Assert.That(updatedCharacter.IsQuesting, Is.True);
             Assert.That(updatedCharacter.CurrentQuestState!.Quest, Is.EqualTo(quest));
         }

@@ -17,7 +17,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 
         public async Task<Encounter> Handle(AuthenticatedRequest req)
         {
-            Character playersCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(req.CurrentPlayer);
+            Character playersCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(req.CurrentPlayerCreds.Id);
 
             Encounter currentEncounter = playersCharacter.GetEncounterOrThrow();
 

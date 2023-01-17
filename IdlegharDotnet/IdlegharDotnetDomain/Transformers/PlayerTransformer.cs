@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared;
 
 namespace IdlegharDotnetDomain.Transformers

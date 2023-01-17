@@ -2,6 +2,6 @@ using IdlegharDotnetDomain.Entities;
 
 namespace IdlegharDotnetDomain.UseCases
 {
-    public record class AuthenticatedRequest<RequestType>(Player CurrentPlayer, RequestType Request);
-    public record class AuthenticatedRequest(Player CurrentPlayer);
+    public record class AuthenticatedRequest<RequestType>(PlayerCreds CurrentPlayerCreds, RequestType Request);
+    public record class AuthenticatedRequest(PlayerCreds CurrentPlayerCreds);
 }

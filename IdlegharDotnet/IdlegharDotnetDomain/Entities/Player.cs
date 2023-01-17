@@ -1,12 +1,15 @@
+using IdlegharDotnetDomain.Entities.Items;
+using IdlegharDotnetDomain.Entities.Rewards;
+
 namespace IdlegharDotnetDomain.Entities
 {
     [Serializable()]
-    public class Player : Entity
+    public class Player : PlayerCreds
     {
-        public string Email { get; set; } = String.Empty;
-        public string Password { get; set; } = String.Empty;
-        public string Username { get; set; } = String.Empty;
-        public bool EmailValidated { get; set; } = false;
-        public string? EmailValidationCode { get; set; }
+        Character? Character { set; get; }
+
+        public int Currency { get; set; } = 0;
+        public List<Item> Items { get; set; } = new();
+        public List<Reward> UnclaimedRewards { get; private set; } = new();
     }
 }

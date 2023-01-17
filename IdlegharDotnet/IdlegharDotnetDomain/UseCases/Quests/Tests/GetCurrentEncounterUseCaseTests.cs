@@ -10,7 +10,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         public async Task GivenAValidPlayerAndACharacterWithCurrentEncounterShouldReturnCorrectEncounter()
         {
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacterWithQuest();
-            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(player);
+            var character = await CharactersProvider.GetCharacterFromPlayerOrThrow(player.Id);
             Encounter encounter = character.GetEncounterOrThrow();
 
             var useCase = new GetCurrentEncounterUseCase(PlayersProvider, CharactersProvider);

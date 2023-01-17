@@ -5,9 +5,10 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
 {
     public class MockPlayersProvider : IPlayersProvider
     {
-        private Dictionary<string, Player> playersByEmail = new Dictionary<string, Player>();
-        private Dictionary<string, Player> playersByUsername = new Dictionary<string, Player>();
-        private Dictionary<string, Player> playersById = new Dictionary<string, Player>();
+        private Dictionary<string, Player> playersByEmail = new();
+        private Dictionary<string, Player> playersByUsername = new();
+        private Dictionary<string, Player> playersById = new();
+
 
         public async Task<Player?> FindByEmail(string email)
         {
@@ -31,6 +32,25 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             Player? result = null;
             playersByUsername.TryGetValue(username, out result);
             return result;
+        }
+
+        public async Task<PlayerCreds?> FindCredsFromEmail(string email)
+        {
+            await Task.Yield();
+            Player? result = null;
+            playersByEmail.TryGetValue(email, out result);
+            if (result == null) return null;
+            return PlayerCreds.From(result);
+        }
+
+        public async Task<Player> GetByIdOrThrow(string id)
+        {
+            var player = await FindById(id);
+            if (player == null)
+            {
+                throw new ArgumentException(Constants.ErrorMessages.INVALID_PLAYER);
+            }
+            return player;
         }
 
         public async Task Save(Player player)

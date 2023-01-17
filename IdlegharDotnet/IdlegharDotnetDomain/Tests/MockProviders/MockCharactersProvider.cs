@@ -44,9 +44,9 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             return character;
         }
 
-        public async Task<Character> GetCharacterFromPlayerOrThrow(Player player)
+        public async Task<Character> GetCharacterFromPlayerOrThrow(string playerId)
         {
-            var character = await this.FindByPlayerId(player.Id);
+            var character = await this.FindByPlayerId(playerId);
             if (character == null)
                 throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_CREATED);
 

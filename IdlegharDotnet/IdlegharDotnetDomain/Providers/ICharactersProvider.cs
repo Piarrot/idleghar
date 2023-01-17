@@ -9,6 +9,6 @@ namespace IdlegharDotnetDomain.Providers
         Task Save(Character character);
         Task<Character?> FindById(string id);
         Task<Character?> FindByPlayerId(string id);
-        Task<Character> GetCharacterFromPlayerOrThrow(Player player);
+        Task<Character> GetCharacterFromPlayerOrThrow(string playerId);
     }
 }
