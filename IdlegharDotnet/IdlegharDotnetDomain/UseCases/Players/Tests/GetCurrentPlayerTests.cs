@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.UseCases.Players.Tests
 {
-    public class GetCurrentPlayerInventoryTests : BaseTests
+    public class GetCurrentPlayerTests : BaseTests
     {
         [Test]
         public async Task ShouldReturnTheCurrentPlayersInventory()
