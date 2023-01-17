@@ -14,6 +14,7 @@ namespace IdlegharDotnetDomain.Entities
         {
             return new PlayerCreds()
             {
+                Id = player.Id,
                 Email = player.Email,
                 Password = player.Password,
                 Username = player.Username,
