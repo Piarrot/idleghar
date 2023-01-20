@@ -19,7 +19,8 @@ namespace IdlegharDotnetDomain.Transformers
                 HP = entity.HP,
                 Damage = entity.Damage,
                 Toughness = entity.Toughness,
-                CurrentQuestState = questStateTransformer.TransformOneOptional(entity.CurrentQuestState)
+                CurrentQuestState = questStateTransformer.TransformOneOptional(entity.CurrentQuestState),
+                QuestHistory = questStateTransformer.TransformMany(entity.QuestHistory),
             };
         }
     }

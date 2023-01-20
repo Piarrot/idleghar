@@ -13,5 +13,6 @@ namespace IdlegharDotnetShared.Characters
         public int Toughness { get; set; } = 1;
 
         public QuestStateViewModel? CurrentQuestState { get; set; }
+        public List<QuestStateViewModel> QuestHistory { get; set; } = new();
     }
 }
