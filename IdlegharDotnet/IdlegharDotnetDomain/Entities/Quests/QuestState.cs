@@ -1,6 +1,4 @@
-using System.Collections.ObjectModel;
 using IdlegharDotnetDomain.Entities.Encounters;
-using IdlegharDotnetDomain.Entities.Encounters.Events;
 
 namespace IdlegharDotnetDomain.Entities.Quests
 {
@@ -11,48 +9,32 @@ namespace IdlegharDotnetDomain.Entities.Quests
         public Character Character { get; }
 
         List<EncounterState> previous = new();
-        EncounterState current;
-        List<EncounterState> remaining = new();
-        List<EncounterEvent> questEvents { get; set; } = new();
-        public ReadOnlyCollection<EncounterEvent> QuestEvents => questEvents.AsReadOnly();
-        public bool Completed => current.Completed && remaining.Count == 0;
+        Stack<Encounter> remaining = new();
+
+        public bool Completed => remaining.Count == 0;
         public bool Done { get; private set; }
-        public EncounterState CurrentEncounterState => current;
         public QuestStatus Status { get; private set; } = QuestStatus.Pending;
+
+        public float Progress => 1 - (float)this.remaining.Count / Constants.Quests.EncountersPerQuest;
 
         public QuestState(Quest quest, Character character)
         {
             Quest = quest;
             Character = character;
-            current = quest.Encounters.First().GetNewState();
-            remaining = quest.Encounters.Skip(1).Select((e) => e.GetNewState()).ToList();
-        }
-
-
-        public EncounterType GetCurrentEncounterStateOrThrow<EncounterType>() where EncounterType : EncounterState
-        {
-            EncounterType? state = current as EncounterType;
-            if (state == null)
-                throw new InvalidOperationException(Constants.ErrorMessages.INVALID_ENCOUNTER_STATE);
-            return state!;
-        }
-
-        public void AddEvent(EncounterEvent newEvent)
-        {
-            questEvents.Add(newEvent);
+            remaining = new(quest.Encounters);
         }
 
         public void ProcessTick()
         {
-            var result = current.Encounter.ProcessEncounter(Character);
-            if (result == EncounterResult.Succeeded)
+            if (Completed) throw new InvalidOperationException(Constants.ErrorMessages.INVALID_QUEST);
+
+            var current = remaining.Pop().ProcessEncounter(Character);
+
+            this.previous.Add(current);
+
+            if (current.Result == EncounterResult.Succeeded)
             {
-                if (!Completed)
-                {
-                    AdvanceToNextEncounter();
-                    return;
-                }
-                else
+                if (Completed)
                 {
                     Status = QuestStatus.Succeeded;
                     Character.QuestDone();
@@ -63,14 +45,6 @@ namespace IdlegharDotnetDomain.Entities.Quests
                 Status = QuestStatus.Failed;
                 Character.QuestDone();
             }
-
-        }
-
-        private void AdvanceToNextEncounter()
-        {
-            previous.Add(current);
-            current = remaining.First();
-            remaining.RemoveAt(0);
         }
     }
 }

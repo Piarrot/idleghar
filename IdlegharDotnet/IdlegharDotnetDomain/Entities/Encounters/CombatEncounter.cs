@@ -13,15 +13,9 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 
         public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
 
-        public override EncounterState GetNewState()
+        public override CombatEncounterState ProcessEncounter(Character character)
         {
-            return new CombatEncounterState(this, EnemyCreatures);
-        }
-
-        public override EncounterResult ProcessEncounter(Character character)
-        {
-            QuestState questState = character.GetQuestStateOrThrow();
-            CombatEncounterState state = questState.GetCurrentEncounterStateOrThrow<CombatEncounterState>();
+            CombatEncounterState combatState = new CombatEncounterState(this, EnemyCreatures);
             bool characterDefeated = false;
             bool combatDone = false;
 
@@ -30,17 +24,17 @@ namespace IdlegharDotnetDomain.Entities.Encounters
                 int damageLeftThisRound = character.Damage;
                 List<EnemyCreature> remainingCreatures = new List<EnemyCreature>();
 
-                foreach (var creature in state.CurrentCreatures)
+                foreach (var creature in combatState.CurrentCreatures)
                 {
                     var damageToDeal = Math.Min(damageLeftThisRound, creature.HP);
                     if (damageToDeal > 0)
                     {
                         creature.ReceiveDamage(damageToDeal);
-                        questState.AddEvent(new HitEvent(character.Name, creature.Name, damageToDeal));
+                        combatState.AddEvent(new HitEvent(character.Name, creature.Name, damageToDeal));
                         damageLeftThisRound -= damageToDeal;
                         if (creature.HP <= 0)
                         {
-                            questState.AddEvent(new CreatureDefeatedEvent(creature.Name));
+                            combatState.AddEvent(new CreatureDefeatedEvent(creature.Name));
                             continue;
                         }
                     }
@@ -49,28 +43,28 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 
                     character.ReceiveDamage(creature.Damage);
 
-                    questState.AddEvent(new HitEvent(creature.Name, character.Name, creature.Damage));
+                    combatState.AddEvent(new HitEvent(creature.Name, character.Name, creature.Damage));
                     if (character.HP <= 0)
                     {
                         characterDefeated = true;
                         combatDone = true;
-                        questState.AddEvent(new PlayerCharacterDefeatedEvent(character.Name));
+                        combatState.AddEvent(new PlayerCharacterDefeatedEvent(character.Name));
                         break;
                     }
                 }
 
-                state.CurrentCreatures = remainingCreatures;
+                combatState.CurrentCreatures = remainingCreatures;
 
                 if (remainingCreatures.Count == 0)
                 {
-                    questState.AddEvent(new EnemiesDefeatedEvent(character.Name));
+                    combatState.AddEvent(new EnemiesDefeatedEvent(character.Name));
                     combatDone = true;
                 }
             }
 
-            state.Result = (characterDefeated == true) ? EncounterResult.Failed : EncounterResult.Succeeded;
+            combatState.Result = (characterDefeated == true) ? EncounterResult.Failed : EncounterResult.Succeeded;
 
-            return state.Result;
+            return combatState;
         }
 
 

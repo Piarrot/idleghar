@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Entities.Quests;
 
 namespace IdlegharDotnetDomain.Entities
@@ -30,12 +29,6 @@ namespace IdlegharDotnetDomain.Entities
         {
             ThrowIfNotQuesting();
             return CurrentQuestState!.Quest;
-        }
-
-        public Encounter GetEncounterOrThrow()
-        {
-            ThrowIfNotQuesting();
-            return CurrentQuestState!.CurrentEncounterState.Encounter;
         }
 
         public QuestState GetQuestStateOrThrow()

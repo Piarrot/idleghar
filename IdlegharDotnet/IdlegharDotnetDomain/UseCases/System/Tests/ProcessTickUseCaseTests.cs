@@ -27,24 +27,30 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
             foreach (var character in updatedQuestingCharacters)
             {
                 var oldCharacter = questingCharacters.Find(c => c.Id == character.Id);
-                Assert.That(oldCharacter!.GetEncounterOrThrow().Id, Is.Not.EqualTo(character.GetEncounterOrThrow().Id));
+                Assert.That(oldCharacter!.CurrentQuestState!.Progress, Is.Not.EqualTo(character.CurrentQuestState!.Progress));
             }
         }
 
         [Test]
         public async Task GivenAQuestingCharacterAndMultipleTicksItShouldCompleteTheQuest()
         {
-            var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
+            var quest = FakeQuestFactory.CreateQuest(Difficulty.EASY);
+            var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
             var useCase = new ProcessTickUseCase(CharactersProvider);
             await useCase.Handle();
 
             var questState = questingCharacter.GetQuestStateOrThrow();
 
             questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
+            var prevProgress = questingCharacter!.CurrentQuestState!.Progress;
             while (questingCharacter!.IsQuesting)
             {
                 await useCase.Handle();
                 questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
+                if (questingCharacter!.IsQuesting)
+                {
+                    Assert.That(prevProgress, Is.LessThan(questingCharacter!.CurrentQuestState!.Progress));
+                }
             }
 
             Assert.That(questingCharacter.QuestHistory.Contains(questState), Is.True);

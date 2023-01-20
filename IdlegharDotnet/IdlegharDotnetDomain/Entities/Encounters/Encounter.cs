@@ -6,13 +6,12 @@ namespace IdlegharDotnetDomain.Entities.Encounters
     public abstract class Encounter : Entity
     {
         public Difficulty Difficulty { get; set; }
-        public abstract EncounterState GetNewState();
 
         public Encounter(Difficulty difficulty = Difficulty.EASY)
         {
             Difficulty = difficulty;
         }
 
-        public abstract EncounterResult ProcessEncounter(Character character);
+        public abstract EncounterState ProcessEncounter(Character character);
     }
 }

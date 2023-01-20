@@ -8,7 +8,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
     public class CombatEncounterTests : BaseTests
     {
         [Test]
-        public async Task GivenACharacterItShouldAdvanceTheCombatAsync()
+        public async Task GivenACharacterItShouldAdvanceTheCombat()
         {
             var encounter = new CombatEncounter();
 
@@ -20,15 +20,15 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
-            var encounterResult = encounter.ProcessEncounter(character);
+            var encounterState = encounter.ProcessEncounter(character);
 
-            Assert.That(encounterResult, Is.EqualTo(EncounterResult.Succeeded));
+            Assert.That(encounterState.Result, Is.EqualTo(EncounterResult.Succeeded));
             Assert.That(character.HP, Is.EqualTo(9));
-            Assert.That(character.CurrentQuestState!.GetCurrentEncounterStateOrThrow<CombatEncounterState>().CurrentCreatures.Count, Is.EqualTo(0));
+            Assert.That(encounterState.CurrentCreatures.Count, Is.EqualTo(0));
         }
 
         [Test]
-        public async Task GivenAStrongEnemyItShouldDefeatThePCAsync()
+        public async Task GivenAStrongEnemyItShouldDefeatThePC()
         {
             var encounter = new CombatEncounter();
 
@@ -39,14 +39,14 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             var character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
-            var encounterResult = encounter.ProcessEncounter(character);
+            var encounterState = encounter.ProcessEncounter(character);
 
-            Assert.That(encounterResult, Is.EqualTo(EncounterResult.Failed));
+            Assert.That(encounterState.Result, Is.EqualTo(EncounterResult.Failed));
             Assert.That(character.HP, Is.LessThanOrEqualTo(0));
         }
 
         [Test]
-        public async Task GivenAResolvedCombatTheEncounterCreaturesAreNotTouchedAsync()
+        public async Task GivenAResolvedCombatTheEncounterCreaturesAreNotTouched()
         {
             var encounter = new CombatEncounter();
             encounter.EnemyCreatures = new List<EnemyCreature>{
@@ -64,7 +64,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         }
 
         [Test]
-        public async Task GivenAResolvedCombatItShouldContainTheCombatLogsAsync()
+        public async Task GivenAResolvedCombatItShouldContainTheCombatLogs()
         {
             var encounter = new CombatEncounter();
             encounter.EnemyCreatures = new List<EnemyCreature>{
@@ -75,7 +75,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
-            encounter.ProcessEncounter(character);
+            var state = encounter.ProcessEncounter(character);
 
             List<EncounterEvent> expectedEventList = new(){
                 new HitEvent(character.Name, "Goblin 1", 1),
@@ -86,11 +86,11 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new EnemiesDefeatedEvent(character.Name)
             };
 
-            Assert.That(character.CurrentQuestState!.QuestEvents, Is.EqualTo(expectedEventList));
+            Assert.That(state.EncounterEvents, Is.EqualTo(expectedEventList));
         }
 
         [Test]
-        public async Task GivenAFailedCombatItShouldContainTheCombatLogsAsync()
+        public async Task GivenAFailedCombatItShouldContainTheCombatLogs()
         {
             var encounter = new CombatEncounter();
 
@@ -101,7 +101,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             var character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
 
-            encounter.ProcessEncounter(character);
+            var state = encounter.ProcessEncounter(character);
 
             List<EncounterEvent> expectedEventList = new(){
                 new HitEvent(character.Name, "Dragon", 1),
@@ -109,11 +109,11 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
                 new PlayerCharacterDefeatedEvent(character.Name)
             };
 
-            Assert.That(character.CurrentQuestState!.QuestEvents, Is.EqualTo(expectedEventList));
+            Assert.That(state.EncounterEvents, Is.EqualTo(expectedEventList));
         }
 
         [Test]
-        public async Task ItShouldBePossibleForANewCharacterToWinAnEasyCombatAsync()
+        public async Task ItShouldBePossibleForANewCharacterToWinAnEasyCombat()
         {
             var factory = new Factories.CombatEncounterFactory(RandomnessProvider);
 
@@ -121,9 +121,9 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
 
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
-            var encounterResult = encounter.ProcessEncounter(character);
+            var encounterState = encounter.ProcessEncounter(character);
 
-            Assert.That(encounterResult, Is.EqualTo(EncounterResult.Succeeded));
+            Assert.That(encounterState.Result, Is.EqualTo(EncounterResult.Succeeded));
             Assert.That(character.HP, Is.EqualTo(4));
         }
     }
