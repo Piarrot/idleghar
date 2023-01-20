@@ -1,4 +1,4 @@
-namespace IdlegharDotnetDomain.Entities.Encounters
+namespace IdlegharDotnetShared.Constants
 {
     public enum EncounterResult
     {

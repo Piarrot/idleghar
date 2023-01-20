@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Entities.Encounters;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Entities.Quests
 {
@@ -8,7 +9,7 @@ namespace IdlegharDotnetDomain.Entities.Quests
         public Quest Quest { get; private set; }
         public Character Character { get; }
 
-        List<EncounterState> previous = new();
+        public List<EncounterState> Previous { get; set; } = new();
         Stack<Encounter> remaining = new();
 
         public bool Completed => remaining.Count == 0;
@@ -30,7 +31,7 @@ namespace IdlegharDotnetDomain.Entities.Quests
 
             var current = remaining.Pop().ProcessEncounter(Character);
 
-            this.previous.Add(current);
+            this.Previous.Add(current);
 
             if (current.Result == EncounterResult.Succeeded)
             {

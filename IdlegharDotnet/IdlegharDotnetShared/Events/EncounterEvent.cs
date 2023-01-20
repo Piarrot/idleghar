@@ -1,4 +1,4 @@
-namespace IdlegharDotnetDomain.Entities.Encounters.Events
+namespace IdlegharDotnetShared.Events
 {
     [Serializable()]
     public abstract record class EncounterEvent()

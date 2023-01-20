@@ -1,4 +1,4 @@
-namespace IdlegharDotnetDomain.Entities.Quests
+namespace IdlegharDotnetShared.Constants
 {
     public enum QuestStatus
     {

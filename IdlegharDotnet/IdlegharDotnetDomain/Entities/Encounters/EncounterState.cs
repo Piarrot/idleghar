@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
-using IdlegharDotnetDomain.Entities.Encounters.Events;
+using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.Events;
 
 namespace IdlegharDotnetDomain.Entities.Encounters
 {
@@ -9,12 +10,12 @@ namespace IdlegharDotnetDomain.Entities.Encounters
         public Encounter Encounter { get; protected set; }
         public EncounterResult Result { get; set; }
         public bool Completed => Result != EncounterResult.Pending;
-        List<EncounterEvent> encounterEvents { get; set; } = new();
-        public ReadOnlyCollection<EncounterEvent> EncounterEvents => encounterEvents.AsReadOnly();
+        List<EncounterEvent> events { get; set; } = new();
+        public ReadOnlyCollection<EncounterEvent> EncounterEvents => events.AsReadOnly();
 
         public void AddEvent(EncounterEvent newEvent)
         {
-            encounterEvents.Add(newEvent);
+            events.Add(newEvent);
         }
 
         protected EncounterState(Encounter encounter)

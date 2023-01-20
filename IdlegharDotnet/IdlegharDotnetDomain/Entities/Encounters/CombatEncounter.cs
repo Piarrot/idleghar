@@ -1,6 +1,5 @@
-using IdlegharDotnetDomain.Entities.Encounters.Events;
-using IdlegharDotnetDomain.Entities.Quests;
 using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.Events;
 
 namespace IdlegharDotnetDomain.Entities.Encounters
 {

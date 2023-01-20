@@ -1,6 +1,4 @@
 using IdlegharDotnetDomain.Entities;
-using IdlegharDotnetDomain.Entities.Encounters;
-using IdlegharDotnetDomain.Entities.Quests;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Constants;
 using NUnit.Framework;
@@ -36,15 +34,16 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
         {
             var quest = FakeQuestFactory.CreateQuest(Difficulty.EASY);
             var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
+            var questState = questingCharacter.GetQuestStateOrThrow();
+
             var useCase = new ProcessTickUseCase(CharactersProvider);
             await useCase.Handle();
 
-            var questState = questingCharacter.GetQuestStateOrThrow();
-
             questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
-            var prevProgress = questingCharacter!.CurrentQuestState!.Progress;
+
             while (questingCharacter!.IsQuesting)
             {
+                var prevProgress = questingCharacter!.CurrentQuestState!.Progress;
                 await useCase.Handle();
                 questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
                 if (questingCharacter!.IsQuesting)
