@@ -14,7 +14,7 @@ namespace IdlegharDotnetDomain.Entities
         public int XP { get; private set; } = 0;
         public int HP { get; private set; } = 1;
         public int MaxHP => Toughness * Constants.Characters.TOUGHNESS_TO_MAX_HP_MULTIPLIER;
-        public int Damage { get; private set; } = 1;
+        public int Damage { get; private set; } = 6;
         public int Toughness { get; private set; } = 1;
 
         public List<QuestState> QuestHistory { get; internal set; } = new();

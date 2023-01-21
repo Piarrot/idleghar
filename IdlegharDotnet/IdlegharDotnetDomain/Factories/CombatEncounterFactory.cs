@@ -37,7 +37,7 @@ namespace IdlegharDotnetDomain.Factories
             var index = 1;
             while (encounterTotalHP != desiredHP)
             {
-                var creature = new EnemyCreature($"Globin {index}", "A Goblin", 1, 1);
+                var creature = new EnemyCreature($"Goblin {index}", "A Goblin", 1, 1);
                 combat.EnemyCreatures.Add(creature);
                 encounterTotalHP += creature.HP;
                 index++;

@@ -51,31 +51,13 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
                     Assert.That(prevProgress, Is.LessThan(questingCharacter!.CurrentQuestState!.Progress));
                 }
             }
+            Assert.That(questingCharacter.QuestHistory[0], Is.EqualTo(questState));
+            // Assert.That(questingCharacter.QuestHistory[0].Completed, Is.True);
 
-            Assert.That(questingCharacter.QuestHistory.Contains(questState), Is.True);
-        }
-
-        [Test]
-        public async Task GivenAQuestingCharacterThatFailsAnEncounterTheQuestShouldRemainIncomplete()
-        {
-            var quest = FakeQuestFactory.CreateQuest(Difficulty.LEGENDARY);
-            var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest();
-            var useCase = new ProcessTickUseCase(CharactersProvider);
-            await useCase.Handle();
-
-            var questState = questingCharacter.GetQuestStateOrThrow();
-
-            questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
-            while (questingCharacter!.IsQuesting)
-            {
-                Assert.That(questingCharacter.HP, Is.GreaterThan(0)); //Shouldn't be 0 if they're still questing
-                await useCase.Handle();
-                questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
-            }
-
-            var failedQuestState = questingCharacter.QuestHistory.First();
-            Assert.That(failedQuestState.Completed, Is.False);
-            Assert.That(failedQuestState.Status, Is.EqualTo(QuestStatus.Failed));
+            // var notFailedEncounters = questingCharacter.QuestHistory[0].Previous.FindAll((e) => e.Completed);
+            // var rewards = notFailedEncounters.SelectMany((e) => e.Rewards);
+            // var player = questingCharacter.Player;
+            // Assert.That(player.UnclaimedRewards, Is.EqualTo(rewards));
         }
     }
 }

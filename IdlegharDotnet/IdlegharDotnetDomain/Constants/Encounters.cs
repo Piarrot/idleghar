@@ -37,8 +37,8 @@ namespace IdlegharDotnetDomain.Constants
             {
                 Difficulty.LEGENDARY,
                 new(new(){
-                    new (Difficulty.HARD,0.8),
-                    new (Difficulty.LEGENDARY,0.2),
+                    new (Difficulty.HARD,0.6),
+                    new (Difficulty.LEGENDARY,0.4),
                 })
             },
         };
