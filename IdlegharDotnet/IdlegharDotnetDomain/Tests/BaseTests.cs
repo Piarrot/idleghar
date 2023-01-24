@@ -15,11 +15,13 @@ namespace IdlegharDotnetDomain.Tests
         protected MockQuestsProvider QuestsProvider = new MockQuestsProvider();
         protected MockTimeProvider TimeProvider = new MockTimeProvider();
         protected MockCharactersProvider CharactersProvider = new();
+        protected MockItemsProvider ItemsProvider = new();
 
 
         protected FakePlayerFactory FakePlayerFactory;
         protected FakeCharacterFactory FakeCharacterFactory;
         protected FakeQuestFactory FakeQuestFactory;
+        protected FakeItemFactory FakeItemFactory;
 
         public BaseTests()
         {
@@ -41,6 +43,7 @@ namespace IdlegharDotnetDomain.Tests
             FakeQuestFactory = new FakeQuestFactory(RandomnessProvider, QuestsProvider, TimeProvider);
             FakeCharacterFactory = new FakeCharacterFactory(CharactersProvider, FakeQuestFactory);
             FakePlayerFactory = new FakePlayerFactory(CryptoProvider, PlayersProvider, FakeCharacterFactory);
+            FakeItemFactory = new(ItemsProvider);
         }
     }
 }

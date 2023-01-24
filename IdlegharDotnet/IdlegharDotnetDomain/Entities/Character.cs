@@ -1,3 +1,4 @@
+using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Entities.Quests;
 
 namespace IdlegharDotnetDomain.Entities
@@ -5,7 +6,7 @@ namespace IdlegharDotnetDomain.Entities
     [Serializable()]
     public class Character : Entity
     {
-        public Player Player { get; private set; }
+        public Player Owner { get; private set; }
         public string Name { get; set; } = String.Empty;
         public QuestState? CurrentQuestState { get; private set; }
         public bool IsQuesting => CurrentQuestState != null;
@@ -14,15 +15,27 @@ namespace IdlegharDotnetDomain.Entities
         public int XP { get; private set; } = 0;
         public int HP { get; private set; } = 1;
         public int MaxHP => Toughness * Constants.Characters.TOUGHNESS_TO_MAX_HP_MULTIPLIER;
-        public int Damage { get; private set; } = 6;
+
+        public int BaseDamage { get; private set; } = 6;
+
+        public int Damage
+        {
+            get
+            {
+                return BaseDamage + Inventory.EquippedDamage;
+            }
+        }
         public int Toughness { get; private set; } = 1;
+
+        public Inventory Inventory { get; private set; }
 
         public List<QuestState> QuestHistory { get; internal set; } = new();
 
         public Character(Player player)
         {
             this.HP = this.MaxHP;
-            this.Player = player;
+            this.Owner = player;
+            this.Inventory = new Inventory(this);
         }
 
         public Quest GetCurrentQuestOrThrow()
@@ -62,6 +75,11 @@ namespace IdlegharDotnetDomain.Entities
         {
             this.QuestHistory.Add(CurrentQuestState!);
             this.CurrentQuestState = null;
+        }
+
+        public Equipment? EquipItem(Equipment equipment)
+        {
+            return this.Inventory.EquipItem(equipment);
         }
     }
 }

@@ -17,5 +17,7 @@ namespace IdlegharDotnetDomain.Constants
         internal static readonly string CHANCES_DON_T_REACH_100 = "Chances are less than 100%";
         internal static readonly string EMAIL_IN_USE = "Email already in use";
         internal static readonly string INVALID_EMAIL = "Invalid Email";
+        internal static readonly string ITEM_NOT_OWNED = "Item not owned by player, cannot equip";
+        internal static readonly string INVALID_ITEM = "Invalid item";
     }
 }

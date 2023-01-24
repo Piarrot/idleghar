@@ -12,7 +12,12 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
         {
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             player.Currency = 15000;
-            player.Items.Add(new Weapon("Cool Sword", "A really cool sword to slice things"));
+            player.Items.Add(new Weapon
+            {
+                Name = "Cool Sword",
+                Description = "A really cool sword to slice things",
+                DamageIncrease = 5
+            });
             player.UnclaimedRewards.Add(new XPReward());
             await PlayersProvider.Save(player);
 

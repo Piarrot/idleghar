@@ -1,10 +1,20 @@
+using IdlegharDotnetShared.Constants;
+
 namespace IdlegharDotnetDomain.Entities.Items
 {
     [Serializable()]
-    public class Weapon : Item
+    public class Weapon : Equipment
     {
-        public Weapon(string name, string description) : base(name, description)
+        public int DamageIncrease { get; set; }
+
+        public Weapon()
         {
+            this.Type = EquipmentType.Weapon;
+        }
+
+        public override Equipment? EquipTo(Inventory inventory)
+        {
+            return inventory.EquipWeapon(this);
         }
     }
 }

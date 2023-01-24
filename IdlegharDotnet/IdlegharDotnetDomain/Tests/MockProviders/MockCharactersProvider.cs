@@ -19,7 +19,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             var clonedCharacter = (Character)TestUtils.DeepClone(character);
             charactersById[character.Id] = clonedCharacter;
-            charactersByPlayerId[character.Player.Id] = clonedCharacter;
+            charactersByPlayerId[character.Owner.Id] = clonedCharacter;
         }
 
         public async Task<List<Character>> FindAllNotQuesting()

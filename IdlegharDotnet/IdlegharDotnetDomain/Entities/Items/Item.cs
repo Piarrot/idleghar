@@ -3,13 +3,8 @@ namespace IdlegharDotnetDomain.Entities.Items
     [Serializable()]
     public abstract class Item : Entity
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
 
-        protected Item(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
     }
 }
