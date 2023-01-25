@@ -15,5 +15,15 @@ namespace IdlegharDotnetDomain.Constants
             { Difficulty.HARD, new RandomIntRange(1,3) },
             { Difficulty.LEGENDARY, new RandomIntRange(1,1) },
         };
+
+        public static readonly Dictionary<Difficulty, ArbitraryDistribution<ItemQuality?>> QuestItemRewardChances = new()
+        {
+            [Difficulty.EASY] = new()
+            {
+                [ItemQuality.Common] = 0.1,
+                [ItemQuality.Exceptional] = 0.05,
+                [ItemQuality.Enchanted] = 0.01
+            },
+        };
     }
 }

@@ -40,5 +40,14 @@ namespace IdlegharDotnetDomain.Factories.Tests
                 Assert.That(Constants.Quests.QuestCountByDifficulty[questDifficulty].Matches(questCount), Is.True);
             }
         }
+
+        [Test]
+        public void QuestsShouldContainRewards()
+        {
+            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.EASY);
+
+            Assert.That(quest.Rewards.Count, Is.GreaterThan(0));
+        }
     }
 }

@@ -40,6 +40,9 @@ namespace IdlegharDotnetDomain.Factories
                 quest.Encounters.Add(ef.CreateCombatFromQuestDifficulty(difficulty));
             }
 
+            var rewardFactory = new RewardFactory(RandomnessProvider);
+            quest.Rewards = rewardFactory.CreateQuestRewards(difficulty);
+
             return quest;
         }
 

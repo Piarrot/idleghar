@@ -6,7 +6,7 @@ namespace IdlegharDotnetDomain.Tests
 {
     public static class TestUtils
     {
-        public static RandomValueFromList<Difficulty> RandomDifficulty = new(){
+        public static UniformDistribution<Difficulty> RandomDifficulty = new(){
                 Difficulty.EASY,
                 Difficulty.NORMAL,
                 Difficulty.HARD,

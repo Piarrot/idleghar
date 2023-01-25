@@ -32,11 +32,12 @@ namespace IdlegharDotnetDomain.Entities.Random.Tests
         [Test]
         public void ItShouldProperlyResolveChances()
         {
-            RandomValueFromChances<string> valueFromChances = new(new(){
-                new ("hello", 0.6),
-                new ("banana", 0.3),
-                new ("world", 0.1)
-            });
+            ArbitraryDistribution<string> valueFromChances = new()
+            {
+                ["hello"] = 0.6,
+                ["banana"] = 0.3,
+                ["world"] = 0.1
+            };
 
             var result = valueFromChances.ResolveOne(new MockRandomnessProvider(0.5));
             Assert.That(result, Is.EqualTo("hello"));

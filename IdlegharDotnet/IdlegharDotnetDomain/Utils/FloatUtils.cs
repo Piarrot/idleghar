@@ -1,6 +1,6 @@
 namespace IdlegharDotnetDomain.Utils
 {
-    public static class FloatUtils
+    public static class MathUtils
     {
         public static bool Equals(double x, double y)
         {
