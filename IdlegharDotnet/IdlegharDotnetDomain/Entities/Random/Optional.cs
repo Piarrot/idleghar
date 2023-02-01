@@ -1,5 +1,3 @@
-using IdlegharDotnetShared.Constants;
-
 namespace IdlegharDotnetDomain.Entities.Random
 {
     public struct Optional<T>
@@ -11,22 +9,27 @@ namespace IdlegharDotnetDomain.Entities.Random
 
         public static Optional<T> Some(T value)
         {
-            return new Optional<T>();
+            return new Optional<T>(value);
         }
 
         public bool HasValue { get; private set; }
-        private T value;
+        private T? value;
         public T Value
         {
             get
             {
                 if (HasValue)
-                    return value;
+                    return value!;
                 else
                     throw new InvalidOperationException();
             }
         }
 
+        public Optional()
+        {
+            value = default(T);
+            HasValue = false;
+        }
         public Optional(T value)
         {
             this.value = value;
@@ -42,7 +45,7 @@ namespace IdlegharDotnetDomain.Entities.Random
             return new Optional<T>(value);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Optional<T>)
                 return this.Equals((Optional<T>)obj);
@@ -52,9 +55,14 @@ namespace IdlegharDotnetDomain.Entities.Random
         public bool Equals(Optional<T> other)
         {
             if (HasValue && other.HasValue)
-                return object.Equals(value, other.value);
+                return value!.Equals(other.value);
             else
                 return HasValue == other.HasValue;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(HasValue, value);
         }
     }
 }
