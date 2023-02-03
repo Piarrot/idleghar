@@ -7,7 +7,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
 {
     public class CombatEncounterFactoryTests : BaseTests
     {
-        readonly int GENERATION_COUNT = 1000;
+        readonly int GENERATION_COUNT = 5000;
 
         [Test]
         public void ItShouldGenerateCombatsOfDifficultyBasedOnQuestDifficulty()

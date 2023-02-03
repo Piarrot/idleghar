@@ -1,3 +1,5 @@
+using IdlegharDotnetShared.Constants;
+
 namespace IdlegharDotnetDomain.Entities.Items
 {
     [Serializable()]
@@ -5,6 +7,7 @@ namespace IdlegharDotnetDomain.Entities.Items
     {
         public string Name { get; set; } = String.Empty;
         public string Description { get; set; } = String.Empty;
+        public ItemQuality Quality { get; set; } = ItemQuality.Common;
 
     }
 }

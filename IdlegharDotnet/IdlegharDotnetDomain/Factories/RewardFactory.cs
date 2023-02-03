@@ -15,10 +15,17 @@ namespace IdlegharDotnetDomain.Factories
 
         public List<Reward> CreateQuestRewards(Difficulty questDifficulty)
         {
-            return new(){
-                new XPReward(),
-                new EquipmentReward(),
-            };
+            List<Reward> rewards = new();
+            rewards.Add(new XPReward());
+
+            var optionalItemQuality = Constants.Quests.QuestItemRewardChances[questDifficulty].ResolveOne(this.RandomnessProvider);
+            if (optionalItemQuality.HasValue)
+            {
+                var eqFactory = new EquipmentFactory(this.RandomnessProvider);
+                rewards.Add(new EquipmentReward(eqFactory.CreateEquipment(optionalItemQuality.Value)));
+            }
+
+            return rewards;
         }
     }
 }
