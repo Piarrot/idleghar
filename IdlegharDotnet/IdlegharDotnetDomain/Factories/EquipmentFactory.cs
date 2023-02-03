@@ -15,7 +15,7 @@ namespace IdlegharDotnetDomain.Factories
 
         public IRandomnessProvider RandomnessProvider { get; }
 
-        public Equipment CreateEquipment(IdlegharDotnetShared.Constants.ItemQuality itemQuality)
+        public Equipment CreateEquipment(ItemQuality itemQuality)
         {
             var itemType = EquipmentItems.RandomEquipmentType.ResolveOne(this.RandomnessProvider);
 
@@ -24,28 +24,30 @@ namespace IdlegharDotnetDomain.Factories
             return eq;
         }
 
-        private Equipment CreateEquipment(ItemQuality itemQuality, EquipmentType itemType)
+        public Equipment CreateEquipment(ItemQuality itemQuality, EquipmentType itemType)
         {
-            switch (itemType)
+            return new Equipment()
             {
-                case EquipmentType.Weapon: return CreateWeapon(itemQuality);
-                default:
-                    throw new ArgumentException(ErrorMessages.INVALID_ITEM_TYPE);
-            }
-        }
-
-        private Equipment CreateWeapon(ItemQuality quality)
-        {
-            return new Weapon()
-            {
-                Quality = quality,
-                DamageIncrease = GetAbilityIncrease(quality)
+                Quality = itemQuality,
+                Type = itemType,
+                StatChanges = GetEquipmentStats(itemQuality)
             };
         }
 
-        private int GetAbilityIncrease(ItemQuality quality)
+        public EquipmentStats GetEquipmentStats(ItemQuality quality)
         {
-            return EquipmentItems.RandomAbilityIncrease[quality].ResolveOne(this.RandomnessProvider);
+            var remainingStatChange = EquipmentItems.RandomAbilityIncrease[quality].ResolveOne(this.RandomnessProvider);
+
+            EquipmentStats stats = new();
+
+            while (remainingStatChange > 0)
+            {
+                int value = this.RandomnessProvider.GetRandomInt(1, remainingStatChange);
+                stats.Add(Characters.RandomStat.ResolveOne(this.RandomnessProvider), value);
+                remainingStatChange -= value;
+            }
+
+            return stats;
         }
     }
 }

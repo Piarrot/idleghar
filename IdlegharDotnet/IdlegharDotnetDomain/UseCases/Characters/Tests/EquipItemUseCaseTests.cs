@@ -12,8 +12,8 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
 
-            Weapon weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
-            Weapon weapon2 = await FakeItemFactory.CreateAndStoreWeapon(10);
+            Equipment weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
+            Equipment weapon2 = await FakeItemFactory.CreateAndStoreWeapon(10);
 
             player.Items.Add(weapon);
             player.Items.Add(weapon2);
@@ -47,7 +47,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacterWithQuest();
             Character character = player.Character!;
-            Weapon weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
+            Equipment weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
             player.Items.Add(weapon);
             await PlayersProvider.Save(player);
 
@@ -65,7 +65,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             Character character = player.Character!;
-            Weapon weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
+            Equipment weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
 
             var useCase = new EquipItemUseCase(PlayersProvider, ItemsProvider);
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>

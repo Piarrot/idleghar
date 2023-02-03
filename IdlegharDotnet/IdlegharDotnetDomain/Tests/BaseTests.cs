@@ -1,6 +1,7 @@
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.Tests.Factories;
 using IdlegharDotnetDomain.Tests.MockProviders;
+using Moq;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Tests
@@ -11,7 +12,7 @@ namespace IdlegharDotnetDomain.Tests
         protected MockCryptoProvider CryptoProvider = new MockCryptoProvider();
         protected MockAuthProvider AuthProvider = new MockAuthProvider();
         protected MockEmailsProvider EmailsProvider = new MockEmailsProvider();
-        protected RandomnessProvider RandomnessProvider = new RandomnessProvider("pizza");
+        protected RandomnessProvider RandomnessProviderMock = new("pizza");
         protected MockQuestsProvider QuestsProvider = new MockQuestsProvider();
         protected MockTimeProvider TimeProvider = new MockTimeProvider();
         protected MockCharactersProvider CharactersProvider = new();
@@ -40,7 +41,7 @@ namespace IdlegharDotnetDomain.Tests
 
         private void InitFakers()
         {
-            FakeQuestFactory = new FakeQuestFactory(RandomnessProvider, QuestsProvider, TimeProvider);
+            FakeQuestFactory = new FakeQuestFactory(RandomnessProviderMock, QuestsProvider, TimeProvider);
             FakeCharacterFactory = new FakeCharacterFactory(CharactersProvider, FakeQuestFactory);
             FakePlayerFactory = new FakePlayerFactory(CryptoProvider, PlayersProvider, FakeCharacterFactory);
             FakeItemFactory = new(ItemsProvider);

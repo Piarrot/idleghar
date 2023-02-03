@@ -11,12 +11,13 @@ namespace IdlegharDotnetDomain.Factories.Tests
     public class RewardFactoryTests : BaseTests
     {
         [Test]
-        [TestCase(Difficulty.EASY, 0.11, ItemQuality.Enchanted)]
+        [TestCase(Difficulty.EASY, 0.11, ItemQuality.Exceptional)]
         public void QuestRewardsShouldConformWithSpecs(Difficulty difficulty, double randValue, ItemQuality quality)
         {
             var rndProviderMock = new Mock<IRandomnessProvider>();
             Expression<Func<IRandomnessProvider, double>> call = (x) => x.GetRandomDouble(0, 1);
-            RewardFactory rf = new(RandomnessProvider);
+
+            RewardFactory rf = new(rndProviderMock.Object);
             rndProviderMock.Setup(call).Returns(randValue);
 
             var rewards = rf.CreateQuestRewards(difficulty);

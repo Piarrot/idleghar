@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Entities.Items;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Entities
 {
@@ -7,12 +8,21 @@ namespace IdlegharDotnetDomain.Entities
     {
         public Character Owner { get; set; }
 
-        public Weapon? Weapon { get; private set; } = null;
+        public Equipment? Weapon
+        {
+            get
+            {
+                return this.EquippedItems.Find((e) => e.Type == EquipmentType.Weapon);
+            }
+        }
+
+        private List<Equipment> EquippedItems { get; set; } = new();
+
         public int EquippedDamage
         {
             get
             {
-                return Weapon?.DamageIncrease ?? 0;
+                return this.EquippedItems.Sum(e => e.GetStatIncrease(Constants.Characters.Stat.DAMAGE));
             }
         }
 
@@ -21,16 +31,17 @@ namespace IdlegharDotnetDomain.Entities
             Owner = owner;
         }
 
-        public Equipment? EquipWeapon(Weapon weapon)
-        {
-            Equipment? oldWeapon = this.Weapon;
-            this.Weapon = weapon;
-            return oldWeapon;
-        }
-
         public Equipment? EquipItem(Equipment equipment)
         {
-            return equipment.EquipTo(this);
+            var oldEquipmentIndex = this.EquippedItems.FindIndex(e => equipment.Type == e.Type);
+            Equipment? oldEquipment = null;
+            if (oldEquipmentIndex >= 0)
+            {
+                oldEquipment = this.EquippedItems[oldEquipmentIndex];
+                this.EquippedItems.Remove(oldEquipment);
+            }
+            this.EquippedItems.Add(equipment);
+            return oldEquipment;
         }
     }
 }

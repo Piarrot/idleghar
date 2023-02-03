@@ -10,7 +10,7 @@ namespace IdlegharDotnetDomain.Transformers.Tests
         [Test]
         public async Task TestCharacterTransformer()
         {
-            var encounterFactory = new CombatEncounterFactory(RandomnessProvider);
+            var encounterFactory = new CombatEncounterFactory(RandomnessProviderMock);
             var quest = FakeQuestFactory.CreateQuest(Difficulty.EASY, new(){
                 encounterFactory.CreateCombat(Difficulty.EASY),
                 encounterFactory.CreateCombat(Difficulty.EASY)

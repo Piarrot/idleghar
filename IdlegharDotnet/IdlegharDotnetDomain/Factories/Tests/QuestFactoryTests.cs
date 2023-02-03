@@ -9,7 +9,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void CreatedQuestsShouldHaveEncounters()
         {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+            var factory = new QuestFactory(RandomnessProviderMock, TimeProvider);
             var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.EASY);
 
             Assert.That(quest.Encounters.Count == Constants.Quests.EncountersPerQuest, Is.True);
@@ -18,7 +18,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void CreatedQuestsShouldHaveEncountersOfManyDifficulties()
         {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+            var factory = new QuestFactory(RandomnessProviderMock, TimeProvider);
             var quests = factory.CreateQuests(Guid.NewGuid().ToString(), Difficulty.NORMAL, 1000);
 
             var generatedEncounterDifficulties = quests.SelectMany((q) => q.Encounters.Select((e) => e.Difficulty)).Distinct();
@@ -31,7 +31,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void CreatedQuestsShouldConformWithSpecification()
         {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+            var factory = new QuestFactory(RandomnessProviderMock, TimeProvider);
             var updatedQuestBatch = factory.CreateQuestBatch();
 
             foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
@@ -44,7 +44,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void QuestsShouldContainRewards()
         {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
+            var factory = new QuestFactory(RandomnessProviderMock, TimeProvider);
             var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.EASY);
 
             Assert.That(quest.Rewards.Count, Is.GreaterThan(0));

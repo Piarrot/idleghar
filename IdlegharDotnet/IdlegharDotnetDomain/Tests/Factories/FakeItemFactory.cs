@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Tests.Factories
 {
@@ -16,11 +13,15 @@ namespace IdlegharDotnetDomain.Tests.Factories
             this.itemsProvider = itemProvider;
         }
 
-        public async Task<Weapon> CreateAndStoreWeapon(int damage)
+        public async Task<Equipment> CreateAndStoreWeapon(int damage)
         {
-            var weapon = new Weapon()
+            var weapon = new Equipment()
             {
-                DamageIncrease = damage,
+                Type = EquipmentType.Weapon,
+                StatChanges = new()
+                {
+                    [Constants.Characters.Stat.DAMAGE] = damage
+                },
                 Name = Faker.Lorem.Sentence()
             };
             await itemsProvider.Save(weapon);

@@ -3,10 +3,18 @@ using IdlegharDotnetShared.Constants;
 namespace IdlegharDotnetDomain.Entities.Items
 {
     [Serializable()]
-    public abstract class Equipment : Item
+    public class Equipment : Item
     {
         public EquipmentType Type { get; set; }
+        public EquipmentStats StatChanges { get; set; } = new();
+        public int GetStatIncrease(Constants.Characters.Stat stat)
+        {
+            return StatChanges.GetStat(stat);
+        }
 
-        public abstract Equipment? EquipTo(Inventory inventory);
+        public void AddStat(Constants.Characters.Stat stat, int value)
+        {
+            StatChanges.Add(stat, value);
+        }
     }
 }

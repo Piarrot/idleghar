@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Entities.Random;
 using IdlegharDotnetShared.Constants;
 
@@ -21,7 +20,7 @@ namespace IdlegharDotnetDomain.Constants
             [ItemQuality.Common] = new(1, 1),
             [ItemQuality.Exceptional] = new(2, 4),
             [ItemQuality.Enchanted] = new(5, 7),
-            [ItemQuality.Mythic] = new(8, 1),
+            [ItemQuality.Mythic] = new(8, 10),
             [ItemQuality.Legendary] = new(11, 13),
         };
     }

@@ -12,7 +12,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void ItShouldGenerateCombatsOfDifficultyBasedOnQuestDifficulty()
         {
-            var factory = new CombatEncounterFactory(RandomnessProvider);
+            var factory = new CombatEncounterFactory(RandomnessProviderMock);
 
             foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
@@ -24,7 +24,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [Test]
         public void ItShouldGenerateEnemiesBasedOnCombatDifficulty()
         {
-            var factory = new CombatEncounterFactory(RandomnessProvider);
+            var factory = new CombatEncounterFactory(RandomnessProviderMock);
 
             foreach (Difficulty combatDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
