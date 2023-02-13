@@ -9,7 +9,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenManyConsecutiveRequestsShouldListTheSameAvailableQuests()
         {
-            var useCase = new GetAvailableQuestsUseCase(RandomnessProviderMock, QuestsProvider, TimeProvider);
+            var useCase = new GetAvailableQuestsUseCase(RandomnessProviderMock.Object, QuestsProvider, TimeProvider);
             var firstQuestsBatch = await useCase.Handle();
             var secondQuestsBatch = await useCase.Handle();
 
@@ -21,7 +21,7 @@ namespace IdlegharDotnetDomain.UseCases.Quests.Tests
         [Test]
         public async Task GivenEnoughTicksItShouldListNewQuests()
         {
-            var useCase = new GetAvailableQuestsUseCase(RandomnessProviderMock, QuestsProvider, TimeProvider);
+            var useCase = new GetAvailableQuestsUseCase(RandomnessProviderMock.Object, QuestsProvider, TimeProvider);
 
             var firstQuestsBatch = await useCase.Handle();
 
