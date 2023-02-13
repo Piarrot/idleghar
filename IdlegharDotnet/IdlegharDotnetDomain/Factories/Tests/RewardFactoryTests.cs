@@ -14,11 +14,8 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [TestCase(Difficulty.EASY, 0.11, ItemQuality.Exceptional)]
         public void QuestRewardsShouldConformWithSpecs(Difficulty difficulty, double randValue, ItemQuality quality)
         {
-            var rndProviderMock = new Mock<IRandomnessProvider>();
-            Expression<Func<IRandomnessProvider, double>> call = (x) => x.GetRandomDouble(0, 1);
-
-            RewardFactory rf = new(rndProviderMock.Object);
-            rndProviderMock.Setup(call).Returns(randValue);
+            RewardFactory rf = new(RandomnessProviderMock.Object);
+            RandomnessProviderMock.Setup(MockRandomDoubleLambda).Returns(randValue);
 
             var rewards = rf.CreateQuestRewards(difficulty);
             var itemRewards = rewards.OfType<EquipmentReward>().ToList();

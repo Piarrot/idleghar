@@ -1,16 +1,15 @@
 using IdlegharDotnetDomain.Providers;
+using IdlegharDotnetDomain.Tests;
 using Moq;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Entities.Random.Tests
 {
-    public class RandomValueFromChancesTests
+    public class RandomValueFromChancesTests : BaseTests
     {
         [Test]
         public void ItShouldProperlyResolveChances()
         {
-            var rngProviderMock = new Mock<IRandomnessProvider>();
-
             ArbitraryDistribution<string> valueFromChances = new()
             {
                 ["hello"] = 0.6,
@@ -18,15 +17,18 @@ namespace IdlegharDotnetDomain.Entities.Random.Tests
                 ["world"] = 0.1
             };
 
-            rngProviderMock.SetupSequence(x => x.GetRandomDouble(0, 1)).Returns(0.5).Returns(0.7).Returns(0.9);
+            RandomnessProviderMock.SetupSequence(MockRandomDoubleLambda)
+                .Returns(0.5)
+                .Returns(0.7)
+                .Returns(0.9);
 
-            var result = valueFromChances.ResolveOne(rngProviderMock.Object);
+            var result = valueFromChances.ResolveOne(RandomnessProviderMock.Object);
             Assert.That(result, Is.EqualTo("hello"));
 
-            result = valueFromChances.ResolveOne(rngProviderMock.Object);
+            result = valueFromChances.ResolveOne(RandomnessProviderMock.Object);
             Assert.That(result, Is.EqualTo("banana"));
 
-            result = valueFromChances.ResolveOne(rngProviderMock.Object);
+            result = valueFromChances.ResolveOne(RandomnessProviderMock.Object);
             Assert.That(result, Is.EqualTo("world"));
         }
     }

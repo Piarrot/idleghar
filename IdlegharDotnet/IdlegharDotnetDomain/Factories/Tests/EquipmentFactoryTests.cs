@@ -14,9 +14,8 @@ namespace IdlegharDotnetDomain.Factories.Tests
         [TestCase(ItemQuality.Exceptional, 3, 1)]
         public void GetEquipmentStatsShouldReturnValidValues(ItemQuality quality, int value, int step)
         {
-            var mock = new Mock<IRandomnessProvider>();
-            mock.SetupSequence((r) => r.GetRandomInt(It.IsAny<int>(), It.IsAny<int>())).Returns(value).Returns(value).Returns(0);
-            var factory = new EquipmentFactory(mock.Object);
+            RandomnessProviderMock.SetupSequence(MockRandomIntLambda).Returns(value).Returns(value).Returns(0);
+            var factory = new EquipmentFactory(RandomnessProviderMock.Object);
             var stats = factory.GetEquipmentStats(quality);
             Assert.That(stats.GetStat(Constants.Characters.Stat.DAMAGE), Is.EqualTo(value));
         }
