@@ -10,7 +10,7 @@ namespace IdlegharDotnetDomain.Transformers.Tests
         [Test]
         public async Task TestCharacterTransformer()
         {
-            var encounterFactory = new CombatEncounterFactory(RandomnessProvider);
+            var encounterFactory = new CombatEncounterFactory(RandomnessProviderMock.Object);
             var quest = FakeQuestFactory.CreateQuest(Difficulty.EASY, new(){
                 encounterFactory.CreateCombat(Difficulty.EASY),
                 encounterFactory.CreateCombat(Difficulty.EASY)
@@ -24,7 +24,6 @@ namespace IdlegharDotnetDomain.Transformers.Tests
             var viewModel = transformer.TransformOne(character);
             while (character.IsQuesting)
             {
-
                 Assert.That(viewModel.Id, Is.EqualTo(character.Id));
                 Assert.That(viewModel.Name, Is.EqualTo(character.Name));
                 Assert.That(viewModel.CurrentQuestState!.Quest.Id, Is.EqualTo(character.CurrentQuestState!.Quest.Id));

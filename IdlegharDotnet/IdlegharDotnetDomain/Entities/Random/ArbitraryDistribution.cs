@@ -3,17 +3,27 @@ using IdlegharDotnetDomain.Utils;
 
 namespace IdlegharDotnetDomain.Entities.Random
 {
-    public class RandomValueFromChances<T> : RandomValue<T>
+    public class ArbitraryDistribution<T> : RandomValue<T>
     {
-        List<ValueChance<T>> ValueChances = new List<ValueChance<T>>();
+        List<ArbitraryChance<T>> ValueChances = new List<ArbitraryChance<T>>();
 
-        public RandomValueFromChances(List<ValueChance<T>> valueChances)
+        public double this[T ChanceValue]
         {
-            this.ValueChances = valueChances;
-
-            if (!FloatUtils.Equals(valueChances.Sum(c => c.Chance), 1))
+            get
             {
-                throw new ArgumentException(Constants.ErrorMessages.CHANCES_DON_T_REACH_100);
+                return ValueChances.Find((vc) => vc.Value!.Equals(ChanceValue))?.Chance ?? 0;
+            }
+            set
+            {
+                var existing = ValueChances.Find((vc) => vc.Value!.Equals(ChanceValue));
+                if (existing != null)
+                {
+                    existing.Chance = value;
+                }
+                else
+                {
+                    ValueChances.Add(new(ChanceValue, value));
+                }
             }
         }
 
@@ -24,7 +34,7 @@ namespace IdlegharDotnetDomain.Entities.Random
 
         public bool Matches(T value, double chance)
         {
-            var exists = this.ValueChances.Any((v) => v.Value!.Equals(value) && FloatUtils.Equals(v.Chance, chance, 0.05));
+            var exists = this.ValueChances.Any((v) => v.Value!.Equals(value) && MathUtils.Equals(v.Chance, chance, 0.05));
             if (exists) return true;
             return chance == 0;
         }

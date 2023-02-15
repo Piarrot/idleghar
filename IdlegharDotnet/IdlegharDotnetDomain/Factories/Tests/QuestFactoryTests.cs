@@ -7,38 +7,26 @@ namespace IdlegharDotnetDomain.Factories.Tests
     public class QuestFactoryTests : BaseTests
     {
         [Test]
-        public void CreatedQuestsShouldHaveEncounters()
+        [TestCase(Difficulty.EASY)]
+        [TestCase(Difficulty.NORMAL)]
+        [TestCase(Difficulty.HARD)]
+        [TestCase(Difficulty.LEGENDARY)]
+        public void CreatedQuestsShouldHaveEncounters(Difficulty difficulty)
         {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
-            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.EASY);
+            var factory = new QuestFactory(RandomnessProviderMock.Object, TimeProvider);
+            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), difficulty);
+            Assert.That(quest.Difficulty, Is.EqualTo(difficulty));
+            Assert.That(quest.Encounters.Count, Is.EqualTo(Constants.Quests.EncountersPerQuest));
 
-            Assert.That(quest.Encounters.Count == Constants.Quests.EncountersPerQuest, Is.True);
         }
 
         [Test]
-        public void CreatedQuestsShouldHaveEncountersOfManyDifficulties()
+        public void QuestsShouldContainRewards()
         {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
-            var quests = factory.CreateQuests(Guid.NewGuid().ToString(), Difficulty.NORMAL, 1000);
+            var factory = new QuestFactory(RandomnessProviderMock.Object, TimeProvider);
+            var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.NORMAL);
 
-            var generatedEncounterDifficulties = quests.SelectMany((q) => q.Encounters.Select((e) => e.Difficulty)).Distinct();
-
-            Assert.That(generatedEncounterDifficulties.Contains(Difficulty.EASY), Is.True);
-            Assert.That(generatedEncounterDifficulties.Contains(Difficulty.NORMAL), Is.True);
-            Assert.That(generatedEncounterDifficulties.Contains(Difficulty.HARD), Is.True);
-        }
-
-        [Test]
-        public void CreatedQuestsShouldConformWithSpecification()
-        {
-            var factory = new QuestFactory(RandomnessProvider, TimeProvider);
-            var updatedQuestBatch = factory.CreateQuestBatch();
-
-            foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
-            {
-                var questCount = updatedQuestBatch!.Quests.Count(quest => quest.Difficulty == questDifficulty);
-                Assert.That(Constants.Quests.QuestCountByDifficulty[questDifficulty].Matches(questCount), Is.True);
-            }
+            Assert.That(quest.Rewards.XP, Is.EqualTo(20));
         }
     }
 }

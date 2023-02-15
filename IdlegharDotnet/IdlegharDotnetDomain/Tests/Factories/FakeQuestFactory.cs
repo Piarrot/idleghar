@@ -45,13 +45,19 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public Quest CreateQuest()
         {
             var qf = new QuestFactory(RandomnessProvider, TimeProvider);
-            return qf.CreateQuest(Guid.NewGuid().ToString(), RandomnessProvider.ResolveOne(TestUtils.RandomDifficulty));
+            return qf.CreateQuest(Guid.NewGuid().ToString(), RandomnessProvider.GetRandomDifficulty());
         }
 
         public Quest CreateQuest(Difficulty difficulty)
         {
             var qf = new QuestFactory(RandomnessProvider, TimeProvider);
             return qf.CreateQuest(Guid.NewGuid().ToString(), difficulty);
+        }
+
+        public CombatEncounter CreateCombatEncounter(Difficulty difficulty)
+        {
+            var qf = new CombatEncounterFactory(RandomnessProvider);
+            return qf.CreateCombat(difficulty);
         }
 
     }

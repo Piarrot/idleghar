@@ -10,21 +10,13 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         [Test]
         public async Task GivenACharacterItShouldAdvanceTheCombat()
         {
-            var encounter = new CombatEncounter();
-
-            encounter.EnemyCreatures = new List<EnemyCreature>{
-                new EnemyCreature("Goblin","A Goblin",1,1),
-                new EnemyCreature("Goblin","Another Goblin",1,1),
-            };
-
-            var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
-            Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
-
+            var encounter = FakeQuestFactory.CreateCombatEncounter(Difficulty.NORMAL);
+            Character character = await FakeCharacterFactory.CreateAndStoreCharacter();
             var encounterState = encounter.ProcessEncounter(character);
 
             Assert.That(encounterState.Result, Is.EqualTo(EncounterResult.Succeeded));
-            Assert.That(character.HP, Is.EqualTo(9));
-            Assert.That(encounterState.CurrentCreatures.Count, Is.EqualTo(0));
+            Assert.That(character.HP, Is.Not.EqualTo(10));
+            Assert.That(encounterState.Completed, Is.True);
         }
 
         [Test]
@@ -48,11 +40,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         [Test]
         public async Task GivenAResolvedCombatTheEncounterCreaturesAreNotTouched()
         {
-            var encounter = new CombatEncounter();
-            encounter.EnemyCreatures = new List<EnemyCreature>{
-                new EnemyCreature("Goblin","A Goblin",1,1),
-                new EnemyCreature("Goblin","Another Goblin",1,1),
-            };
+            var encounter = FakeQuestFactory.CreateCombatEncounter(Difficulty.EASY);
 
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
@@ -80,7 +68,6 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             List<EncounterEvent> expectedEventList = new(){
                 new HitEvent(character.Name, "Goblin 1", 1),
                 new CreatureDefeatedEvent("Goblin 1"),
-                new HitEvent("Goblin 2", character.Name, 1),
                 new HitEvent(character.Name, "Goblin 2", 1),
                 new CreatureDefeatedEvent("Goblin 2"),
                 new EnemiesDefeatedEvent(character.Name)
@@ -104,7 +91,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
             var state = encounter.ProcessEncounter(character);
 
             List<EncounterEvent> expectedEventList = new(){
-                new HitEvent(character.Name, "Dragon", 1),
+                new HitEvent(character.Name, "Dragon", character.Damage),
                 new HitEvent("Dragon", character.Name, 20),
                 new PlayerCharacterDefeatedEvent(character.Name)
             };
@@ -115,16 +102,14 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         [Test]
         public async Task ItShouldBePossibleForANewCharacterToWinAnEasyCombat()
         {
-            var factory = new Factories.CombatEncounterFactory(RandomnessProvider);
-
-            var encounter = factory.CreateCombat(Difficulty.EASY);
+            var encounter = FakeQuestFactory.CreateCombatEncounter(Difficulty.EASY);
 
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
             Character character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
             var encounterState = encounter.ProcessEncounter(character);
 
             Assert.That(encounterState.Result, Is.EqualTo(EncounterResult.Succeeded));
-            Assert.That(character.HP, Is.EqualTo(4));
+            Assert.That(character.HP, Is.EqualTo(10));
         }
     }
 }

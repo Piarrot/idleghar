@@ -10,5 +10,10 @@ namespace IdlegharDotnetDomain.Entities
         public int Currency { get; set; } = 0;
         public List<Item> Items { get; set; } = new();
         public List<Reward> UnclaimedRewards { get; private set; } = new();
+
+        public void ClaimReward(Reward reward)
+        {
+            reward.Claim(this);
+        }
     }
 }

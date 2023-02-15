@@ -40,6 +40,9 @@ namespace IdlegharDotnetDomain.Factories
                 quest.Encounters.Add(ef.CreateCombatFromQuestDifficulty(difficulty));
             }
 
+            var rewardFactory = new RewardFactory(RandomnessProvider);
+            quest.Rewards = rewardFactory.CreateQuestRewards(difficulty);
+
             return quest;
         }
 
@@ -49,7 +52,7 @@ namespace IdlegharDotnetDomain.Factories
 
             foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
-                var resolvedQuestCount = RandomnessProvider.ResolveOne(Constants.Quests.QuestCountByDifficulty[questDifficulty]);
+                var resolvedQuestCount = RandomnessProvider.GetRandomQuestCountByDifficulty(questDifficulty);
                 var createdQuests = CreateQuests(questBatch.Id, questDifficulty, resolvedQuestCount);
                 questBatch.Quests.AddRange(createdQuests);
             }

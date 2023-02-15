@@ -12,8 +12,16 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
         {
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             player.Currency = 15000;
-            player.Items.Add(new Weapon("Cool Sword", "A really cool sword to slice things"));
-            player.UnclaimedRewards.Add(new XPReward());
+            player.Items.Add(new Equipment
+            {
+                Name = "Cool Sword",
+                Description = "A really cool sword to slice things",
+                StatChanges = new()
+                {
+                    [Constants.Characters.Stat.DAMAGE] = 5
+                }
+            });
+            player.UnclaimedRewards.Add(new Reward());
             await PlayersProvider.Save(player);
 
             GetCurrentPlayer useCase = new(PlayersProvider);

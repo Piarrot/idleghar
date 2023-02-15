@@ -3,7 +3,7 @@ using IdlegharDotnetDomain.Providers;
 
 namespace IdlegharDotnetDomain.Entities.Random
 {
-    public class RandomValueFromList<T> : RandomValue<T>, IEnumerable<T>
+    public class UniformDistribution<T> : RandomValue<T>, IEnumerable<T>
     {
         private List<T> items = new();
 
