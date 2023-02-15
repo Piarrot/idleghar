@@ -1,3 +1,5 @@
+using IdlegharDotnetDomain.Entities.Items;
+using IdlegharDotnetDomain.Entities.Random;
 using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Constants;
@@ -13,19 +15,25 @@ namespace IdlegharDotnetDomain.Factories
             RandomnessProvider = randomnessProvider;
         }
 
-        public List<Reward> CreateQuestRewards(Difficulty questDifficulty)
+        public Reward CreateQuestRewards(Difficulty questDifficulty)
         {
-            List<Reward> rewards = new();
-            rewards.Add(new XPReward());
+            Reward reward = new();
+            reward.AddXP(20);
 
-            var optionalItemQuality = Constants.Quests.QuestItemRewardChances[questDifficulty].ResolveOne(this.RandomnessProvider);
+            Optional<ItemQuality> optionalItemQuality = this.RandomnessProvider.GetRandomItemQualityQuestRewardFromDifficulty(questDifficulty);
             if (optionalItemQuality.HasValue)
             {
-                var eqFactory = new EquipmentFactory(this.RandomnessProvider);
-                rewards.Add(new EquipmentReward(eqFactory.CreateEquipment(optionalItemQuality.Value)));
+
+                reward.AddItem(CreateEquipmentReward(optionalItemQuality.Value));
             }
 
-            return rewards;
+            return reward;
+        }
+
+        public Equipment CreateEquipmentReward(ItemQuality quality)
+        {
+            var eqFactory = new EquipmentFactory(this.RandomnessProvider);
+            return eqFactory.CreateEquipment(quality);
         }
     }
 }

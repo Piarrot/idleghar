@@ -12,7 +12,7 @@ namespace IdlegharDotnetDomain.Entities
         public Difficulty Difficulty { get; set; }
         public string? BatchId { get; set; }
         public List<Encounter> Encounters { get; set; } = new List<Encounter>();
-        public List<Reward> Rewards { get; set; } = new();
+        public Reward Rewards { get; set; } = new();
 
         public QuestState GetNewState(Character character)
         {

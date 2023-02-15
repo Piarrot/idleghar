@@ -12,15 +12,15 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
 
-            Equipment weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
-            Equipment weapon2 = await FakeItemFactory.CreateAndStoreWeapon(10);
+            Equipment weapon = FakeItemFactory.CreateWeapon(5);
+            Equipment weapon2 = FakeItemFactory.CreateWeapon(10);
 
             player.Items.Add(weapon);
             player.Items.Add(weapon2);
 
             await PlayersProvider.Save(player);
 
-            var useCase = new EquipItemUseCase(PlayersProvider, ItemsProvider);
+            var useCase = new EquipItemUseCase(PlayersProvider);
             await useCase.Handle(new(player, new() { ItemId = weapon.Id }));
 
 
@@ -47,11 +47,11 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacterWithQuest();
             Character character = player.Character!;
-            Equipment weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
+            Equipment weapon = FakeItemFactory.CreateWeapon(5);
             player.Items.Add(weapon);
             await PlayersProvider.Save(player);
 
-            var useCase = new EquipItemUseCase(PlayersProvider, ItemsProvider);
+            var useCase = new EquipItemUseCase(PlayersProvider);
 
             var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
@@ -65,14 +65,14 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             Player player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             Character character = player.Character!;
-            Equipment weapon = await FakeItemFactory.CreateAndStoreWeapon(5);
+            Equipment weapon = FakeItemFactory.CreateWeapon(5);
 
-            var useCase = new EquipItemUseCase(PlayersProvider, ItemsProvider);
-            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            var useCase = new EquipItemUseCase(PlayersProvider);
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(new(player, new() { ItemId = weapon.Id }));
             });
-            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.ITEM_NOT_OWNED));
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_ITEM));
         }
     }
 }

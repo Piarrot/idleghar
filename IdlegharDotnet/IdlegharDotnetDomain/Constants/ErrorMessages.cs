@@ -20,5 +20,6 @@ namespace IdlegharDotnetDomain.Constants
         internal static readonly string ITEM_NOT_OWNED = "Item not owned by player, cannot equip";
         internal static readonly string INVALID_ITEM = "Invalid item";
         internal static readonly string INVALID_ITEM_TYPE = "Invalid item type";
+        internal static readonly string? INVALID_REWARD = "Invalid Reward";
     }
 }

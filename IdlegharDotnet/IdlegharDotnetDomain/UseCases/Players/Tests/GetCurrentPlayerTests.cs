@@ -21,7 +21,7 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
                     [Constants.Characters.Stat.DAMAGE] = 5
                 }
             });
-            player.UnclaimedRewards.Add(new XPReward());
+            player.UnclaimedRewards.Add(new Reward());
             await PlayersProvider.Save(player);
 
             GetCurrentPlayer useCase = new(PlayersProvider);

@@ -81,5 +81,10 @@ namespace IdlegharDotnetDomain.Entities
         {
             return this.Inventory.EquipItem(equipment);
         }
+
+        internal void AddXP(int xp)
+        {
+            this.XP += xp;
+        }
     }
 }

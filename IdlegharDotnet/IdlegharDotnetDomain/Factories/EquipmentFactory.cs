@@ -17,7 +17,7 @@ namespace IdlegharDotnetDomain.Factories
 
         public Equipment CreateEquipment(ItemQuality itemQuality)
         {
-            var itemType = EquipmentItems.RandomEquipmentType.ResolveOne(this.RandomnessProvider);
+            var itemType = RandomnessProvider.GetRandomEquipmentType();
 
             Equipment eq = this.CreateEquipment(itemQuality, itemType);
 
@@ -36,14 +36,14 @@ namespace IdlegharDotnetDomain.Factories
 
         public EquipmentStats GetEquipmentStats(ItemQuality quality)
         {
-            var remainingStatChange = EquipmentItems.RandomAbilityIncrease[quality].ResolveOne(this.RandomnessProvider);
+            int remainingStatChange = RandomnessProvider.GetRandomItemAbilityIncreaseByItemQuality(quality);
 
             EquipmentStats stats = new();
 
             while (remainingStatChange > 0)
             {
                 int value = this.RandomnessProvider.GetRandomInt(1, remainingStatChange);
-                stats.Add(Characters.RandomStat.ResolveOne(this.RandomnessProvider), value);
+                stats.Add(this.RandomnessProvider.GetRandomStat(), value);
                 remainingStatChange -= value;
             }
 

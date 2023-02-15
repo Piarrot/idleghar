@@ -13,11 +13,10 @@ namespace IdlegharDotnetDomain.Tests
         protected MockCryptoProvider CryptoProvider = new MockCryptoProvider();
         protected MockAuthProvider AuthProvider = new MockAuthProvider();
         protected MockEmailsProvider EmailsProvider = new MockEmailsProvider();
-        protected Mock<IRandomnessProvider> RandomnessProviderMock = new();
+        protected Mock<MockRandomnessProvider> RandomnessProviderMock = new();
         protected MockQuestsProvider QuestsProvider = new MockQuestsProvider();
         protected MockTimeProvider TimeProvider = new MockTimeProvider();
         protected MockCharactersProvider CharactersProvider = new();
-        protected MockItemsProvider ItemsProvider = new();
 
 
         protected FakePlayerFactory FakePlayerFactory;
@@ -25,8 +24,8 @@ namespace IdlegharDotnetDomain.Tests
         protected FakeQuestFactory FakeQuestFactory;
         protected FakeItemFactory FakeItemFactory;
 
-        protected Expression<Func<IRandomnessProvider, int>> MockRandomIntLambda = (r) => r.GetRandomInt(It.IsAny<int>(), It.IsAny<int>());
-        protected Expression<Func<IRandomnessProvider, double>> MockRandomDoubleLambda = (r) => r.GetRandomDouble(It.IsAny<double>(), It.IsAny<double>());
+        protected Expression<Func<MockRandomnessProvider, int>> MockRandomIntLambda = (r) => r.GetRandomInt(It.IsAny<int>(), It.IsAny<int>());
+        protected Expression<Func<MockRandomnessProvider, double>> MockRandomDoubleLambda = (r) => r.GetRandomDouble(It.IsAny<double>(), It.IsAny<double>());
 
         public BaseTests()
         {
@@ -45,12 +44,14 @@ namespace IdlegharDotnetDomain.Tests
 
         protected void InitFakers()
         {
+            RandomnessProviderMock.CallBase = true;
             RandomnessProviderMock.Setup(MockRandomIntLambda).Returns(1);
             RandomnessProviderMock.Setup(MockRandomDoubleLambda).Returns(0.1);
+
             FakeQuestFactory = new FakeQuestFactory(RandomnessProviderMock.Object, QuestsProvider, TimeProvider);
             FakeCharacterFactory = new FakeCharacterFactory(CharactersProvider, FakeQuestFactory);
             FakePlayerFactory = new FakePlayerFactory(CryptoProvider, PlayersProvider, FakeCharacterFactory);
-            FakeItemFactory = new(ItemsProvider);
+            FakeItemFactory = new();
         }
     }
 }

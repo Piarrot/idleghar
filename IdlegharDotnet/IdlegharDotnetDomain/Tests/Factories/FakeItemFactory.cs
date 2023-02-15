@@ -6,14 +6,8 @@ namespace IdlegharDotnetDomain.Tests.Factories
 {
     public class FakeItemFactory
     {
-        public IItemsProvider itemsProvider;
 
-        public FakeItemFactory(IItemsProvider itemProvider)
-        {
-            this.itemsProvider = itemProvider;
-        }
-
-        public async Task<Equipment> CreateAndStoreWeapon(int damage)
+        public Equipment CreateWeapon(int damage)
         {
             var weapon = new Equipment()
             {
@@ -24,7 +18,6 @@ namespace IdlegharDotnetDomain.Tests.Factories
                 },
                 Name = Faker.Lorem.Sentence()
             };
-            await itemsProvider.Save(weapon);
             return weapon;
         }
     }

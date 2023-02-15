@@ -6,14 +6,6 @@ namespace IdlegharDotnetDomain.Tests
 {
     public static class TestUtils
     {
-        public static UniformDistribution<Difficulty> RandomDifficulty = new(){
-                Difficulty.EASY,
-                Difficulty.NORMAL,
-                Difficulty.HARD,
-                Difficulty.LEGENDARY
-            };
-
-
         /***
         *** Fast, Cheap and dirty way of cloning an object, for testing purposes
         *** ¡¡¡ DO NOT USE IN PRODUCTION !!!

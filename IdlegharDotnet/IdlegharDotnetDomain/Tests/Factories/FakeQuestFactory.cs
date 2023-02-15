@@ -45,7 +45,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public Quest CreateQuest()
         {
             var qf = new QuestFactory(RandomnessProvider, TimeProvider);
-            return qf.CreateQuest(Guid.NewGuid().ToString(), TestUtils.RandomDifficulty.ResolveOne(RandomnessProvider));
+            return qf.CreateQuest(Guid.NewGuid().ToString(), RandomnessProvider.GetRandomDifficulty());
         }
 
         public Quest CreateQuest(Difficulty difficulty)

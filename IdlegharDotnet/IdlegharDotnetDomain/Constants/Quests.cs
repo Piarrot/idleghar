@@ -5,6 +5,13 @@ namespace IdlegharDotnetDomain.Constants
 {
     public class Quests
     {
+        public static UniformDistribution<Difficulty> RandomDifficulty = new(){
+                Difficulty.EASY,
+                Difficulty.NORMAL,
+                Difficulty.HARD,
+                Difficulty.LEGENDARY
+            };
+
         public static readonly int EncountersPerQuest = 7;
 
         // Specs for quests random count: 

@@ -1,4 +1,3 @@
-using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Constants;
 using NUnit.Framework;

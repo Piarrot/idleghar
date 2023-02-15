@@ -52,7 +52,7 @@ namespace IdlegharDotnetDomain.Factories
 
             foreach (Difficulty questDifficulty in Enum.GetValues(typeof(Difficulty)))
             {
-                var resolvedQuestCount = Constants.Quests.QuestCountByDifficulty[questDifficulty].ResolveOne(RandomnessProvider);
+                var resolvedQuestCount = RandomnessProvider.GetRandomQuestCountByDifficulty(questDifficulty);
                 var createdQuests = CreateQuests(questBatch.Id, questDifficulty, resolvedQuestCount);
                 questBatch.Quests.AddRange(createdQuests);
             }
