@@ -26,7 +26,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
             var factory = new QuestFactory(RandomnessProviderMock.Object, TimeProvider);
             var quest = factory.CreateQuest(Guid.NewGuid().ToString(), Difficulty.NORMAL);
 
-            Assert.That(quest.Rewards.XP, Is.EqualTo(20));
+            Assert.That(quest.Reward.XP, Is.EqualTo(20));
         }
     }
 }

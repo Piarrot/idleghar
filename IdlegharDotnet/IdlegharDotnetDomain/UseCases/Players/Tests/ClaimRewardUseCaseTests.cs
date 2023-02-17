@@ -64,9 +64,22 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
         }
 
         [Test]
-        public void GivenEnoughXPACharacterShouldLevelUp()
+        public async Task GivenEnoughXPACharacterShouldLevelUp()
         {
-            Assert.Fail();
+            RewardFactory rf = new RewardFactory(RandomnessProviderMock.Object);
+            var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
+            var initialLevel = player.Character!.Level;
+            var reward = rf.CreateQuestRewards(Difficulty.NORMAL);
+            reward.AddXP(1000);
+            player.UnclaimedRewards.Add(reward);
+            await PlayersProvider.Save(player);
+
+            var useCase = new ClaimRewardUseCase(PlayersProvider);
+            await useCase.Handle(new AuthenticatedRequest<ClaimRewardUseCaseRequest>(player, new(reward.Id)));
+
+            var updatedPlayer = await PlayersProvider.FindById(player.Id);
+            var newLevel = updatedPlayer!.Character!.Level;
+            Assert.That(initialLevel, Is.LessThan(newLevel));
         }
     }
 }

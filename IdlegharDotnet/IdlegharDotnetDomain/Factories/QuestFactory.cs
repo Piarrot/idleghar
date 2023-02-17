@@ -41,7 +41,7 @@ namespace IdlegharDotnetDomain.Factories
             }
 
             var rewardFactory = new RewardFactory(RandomnessProvider);
-            quest.Rewards = rewardFactory.CreateQuestRewards(difficulty);
+            quest.Reward = rewardFactory.CreateQuestRewards(difficulty);
 
             return quest;
         }

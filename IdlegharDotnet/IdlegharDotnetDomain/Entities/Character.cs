@@ -82,9 +82,22 @@ namespace IdlegharDotnetDomain.Entities
             return this.Inventory.EquipItem(equipment);
         }
 
+        public int XPToNextLevel
+        {
+            get
+            {
+                return this.Level * 1000;
+            }
+        }
+
         internal void AddXP(int xp)
         {
             this.XP += xp;
+            if (XP >= this.XPToNextLevel)
+            {
+                this.XP -= this.XPToNextLevel;
+                this.Level++;
+            }
         }
     }
 }
