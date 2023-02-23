@@ -1,4 +1,5 @@
 using IdlegharDotnetDomain.Entities.Encounters;
+using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Constants;
 
@@ -35,6 +36,8 @@ namespace IdlegharDotnetDomain.Factories
 
             var desiredHP = this.RandomnessProvider.GetRandomCombatEncounterHPByDifficulty(combatDifficulty);
             combat.Reward.AddXP(Constants.Encounters.CombatXPByEncounterHP(desiredHP));
+            this.MaybeAddItemToReward(combatDifficulty, combat.Reward);
+
             var encounterTotalHP = 0;
             var index = 1;
             while (encounterTotalHP != desiredHP)
@@ -46,6 +49,16 @@ namespace IdlegharDotnetDomain.Factories
             }
 
             return combat;
+        }
+
+        private void MaybeAddItemToReward(Difficulty combatDifficulty, Reward reward)
+        {
+            var quality = this.RandomnessProvider.GetRandomItemQualityEncounterRewardFromDifficulty(combatDifficulty);
+            if (!quality.HasValue) return;
+
+            var itemFactory = new EquipmentFactory(this.RandomnessProvider);
+            var equipment = itemFactory.CreateEquipment(quality.Value);
+            reward.AddItem(equipment);
         }
     }
 }

@@ -24,5 +24,7 @@ namespace IdlegharDotnetDomain.Providers
 
         Difficulty GetRandomDifficulty();
         int GetRandomCombatEncounterHPByDifficulty(Difficulty combatDifficulty);
+
+        Optional<ItemQuality> GetRandomItemQualityEncounterRewardFromDifficulty(Difficulty encounterDifficulty);
     }
 }

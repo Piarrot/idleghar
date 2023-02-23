@@ -26,7 +26,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
 
         public virtual int GetRandomQuestCountByDifficulty(Difficulty questDifficulty)
         {
-            return Quests.QuestCountByDifficulty[questDifficulty].ResolveOne(this);
+            return Quests.CountByDifficulty[questDifficulty].ResolveOne(this);
         }
 
         public virtual int GetRandomItemAbilityIncreaseByItemQuality(ItemQuality quality)
@@ -41,7 +41,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
 
         public virtual Difficulty GetRandomEncounterDifficultyByQuestDifficulty(Difficulty questDifficulty)
         {
-            return Encounters.EncounterDifficultyByQuestDifficulty[questDifficulty].ResolveOne(this);
+            return Encounters.DifficultyByQuestDifficulty[questDifficulty].ResolveOne(this);
         }
 
         public virtual Characters.Stat GetRandomStat()
@@ -51,7 +51,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
 
         public virtual Optional<ItemQuality> GetRandomItemQualityQuestRewardFromDifficulty(Difficulty questDifficulty)
         {
-            return Quests.QuestItemRewardChances[questDifficulty].ResolveOne(this);
+            return Quests.ItemRewardChances[questDifficulty].ResolveOne(this);
         }
 
         public virtual Difficulty GetRandomDifficulty()
@@ -62,6 +62,11 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
         public virtual int GetRandomCombatEncounterHPByDifficulty(Difficulty combatDifficulty)
         {
             return Constants.Encounters.EnemyHPByDifficulty[combatDifficulty].ResolveOne(this);
+        }
+
+        public virtual Optional<ItemQuality> GetRandomItemQualityEncounterRewardFromDifficulty(Difficulty encounterDifficulty)
+        {
+            return Encounters.ItemRewardChances[encounterDifficulty].ResolveOne(this);
         }
     }
 }
