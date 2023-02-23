@@ -21,6 +21,8 @@ namespace IdlegharDotnetDomain.Providers
         Difficulty GetRandomEncounterDifficultyByQuestDifficulty(Difficulty questDifficulty);
 
         Stat GetRandomStat();
+
         Difficulty GetRandomDifficulty();
+        int GetRandomCombatEncounterHPByDifficulty(Difficulty combatDifficulty);
     }
 }

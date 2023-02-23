@@ -45,8 +45,8 @@ namespace IdlegharDotnetDomain.Tests
         protected void InitFakers()
         {
             RandomnessProviderMock.CallBase = true;
-            RandomnessProviderMock.Setup(MockRandomIntLambda).Returns(1);
-            RandomnessProviderMock.Setup(MockRandomDoubleLambda).Returns(0.1);
+            // RandomnessProviderMock.Setup(MockRandomIntLambda).Returns(1);
+            // RandomnessProviderMock.Setup(MockRandomDoubleLambda).Returns(0.1);
 
             FakeQuestFactory = new FakeQuestFactory(RandomnessProviderMock.Object, QuestsProvider, TimeProvider);
             FakeCharacterFactory = new FakeCharacterFactory(CharactersProvider, FakeQuestFactory);

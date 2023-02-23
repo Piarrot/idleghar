@@ -28,11 +28,13 @@ namespace IdlegharDotnetDomain.Factories
             return result;
         }
 
-        internal CombatEncounter CreateCombat(Difficulty combatDifficulty)
+        public CombatEncounter CreateCombat(Difficulty combatDifficulty)
         {
             var combat = new CombatEncounter(combatDifficulty);
 
-            var desiredHP = Constants.Encounters.EnemyHPByDifficulty[combatDifficulty];
+
+            var desiredHP = this.RandomnessProvider.GetRandomCombatEncounterHPByDifficulty(combatDifficulty);
+            combat.Reward.AddXP(Constants.Encounters.CombatXPByEncounterHP(desiredHP));
             var encounterTotalHP = 0;
             var index = 1;
             while (encounterTotalHP != desiredHP)

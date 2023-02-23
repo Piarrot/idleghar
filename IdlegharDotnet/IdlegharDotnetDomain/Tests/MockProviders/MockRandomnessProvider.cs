@@ -58,5 +58,10 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
         {
             return Quests.RandomDifficulty.ResolveOne(this);
         }
+
+        public virtual int GetRandomCombatEncounterHPByDifficulty(Difficulty combatDifficulty)
+        {
+            return Constants.Encounters.EnemyHPByDifficulty[combatDifficulty].ResolveOne(this);
+        }
     }
 }

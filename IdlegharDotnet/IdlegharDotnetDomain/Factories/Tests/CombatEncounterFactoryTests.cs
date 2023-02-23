@@ -15,7 +15,22 @@ namespace IdlegharDotnetDomain.Factories.Tests
             {
                 var encounter = factory.CreateCombat(combatDifficulty);
                 var totalHP = encounter.EnemyCreatures.Sum(c => c.HP);
-                Assert.That(totalHP, Is.EqualTo(Constants.Encounters.EnemyHPByDifficulty[combatDifficulty]));
+                Assert.That(Constants.Encounters.EnemyHPByDifficulty[combatDifficulty].Matches(totalHP), Is.True);
+            }
+        }
+
+        [Test]
+        public void ItShouldGenerateXpAndItemRewardsBasedOnDifficulty()
+        {
+            RandomnessProviderMock.Setup(MockRandomIntLambda).Returns()
+            var factory = new CombatEncounterFactory(RandomnessProviderMock.Object);
+
+            foreach (Difficulty combatDifficulty in Enum.GetValues(typeof(Difficulty)))
+            {
+                var encounter = factory.CreateCombat(combatDifficulty);
+                var xp = encounter.Reward.XP;
+                Assert.That(xp, Is.GreaterThan(0));
+
             }
         }
     }

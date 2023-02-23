@@ -38,6 +38,7 @@ namespace IdlegharDotnetDomain.Entities.Quests
                 if (Completed)
                 {
                     Status = QuestStatus.Succeeded;
+                    this.Character.Owner.UnclaimedRewards.Add(this.Quest.Reward);
                     Character.QuestDone();
                 }
             }

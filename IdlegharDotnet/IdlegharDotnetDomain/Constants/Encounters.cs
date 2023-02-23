@@ -40,12 +40,14 @@ namespace IdlegharDotnetDomain.Constants
                 },
         };
 
-        public static readonly Dictionary<Difficulty, int> EnemyHPByDifficulty = new()
+        public static readonly Dictionary<Difficulty, RandomIntRange> EnemyHPByDifficulty = new()
         {
-            [Difficulty.EASY] = 4,
-            [Difficulty.NORMAL] = 10,
-            [Difficulty.HARD] = 20,
-            [Difficulty.LEGENDARY] = 40,
+            [Difficulty.EASY] = new(4, 8),
+            [Difficulty.NORMAL] = new(10, 18),
+            [Difficulty.HARD] = new(20, 38),
+            [Difficulty.LEGENDARY] = new(40, 150),
         };
+
+        public static readonly Func<int, int> CombatXPByEncounterHP = (hp) => hp * 10;
     }
 }

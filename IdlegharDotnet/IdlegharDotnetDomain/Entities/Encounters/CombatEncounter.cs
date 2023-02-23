@@ -12,7 +12,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters
 
         public List<EnemyCreature> EnemyCreatures { get; set; } = new List<EnemyCreature>();
 
-        public override CombatEncounterState ProcessEncounter(Character character)
+        protected override CombatEncounterState DoProcessEncounter(Character character)
         {
             CombatEncounterState combatState = new CombatEncounterState(this, EnemyCreatures);
             bool characterDefeated = false;

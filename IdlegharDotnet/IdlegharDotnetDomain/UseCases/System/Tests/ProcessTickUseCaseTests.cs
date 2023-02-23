@@ -1,6 +1,8 @@
 using IdlegharDotnetDomain.Entities;
+using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Tests;
 using IdlegharDotnetShared.Constants;
+using Moq;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.UseCases.System.Tests
@@ -30,8 +32,9 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
         }
 
         [Test]
-        public async Task GivenAQuestingCharacterAndMultipleTicksItShouldCompleteTheQuest()
+        public async Task GivenAQuestingCharacterAndMultipleTicksItShouldCompleteTheQuestAndGetTheRewards()
         {
+            RandomnessProviderMock.Setup(MockRandomIntLambda).Returns(1);
             var quest = FakeQuestFactory.CreateQuest(Difficulty.EASY);
             var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
             var questState = questingCharacter.GetQuestStateOrThrow();
@@ -52,12 +55,16 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
                 }
             }
             Assert.That(questingCharacter.QuestHistory[0], Is.EqualTo(questState));
-            // Assert.That(questingCharacter.QuestHistory[0].Completed, Is.True);
+            Assert.That(questingCharacter.QuestHistory[0].Completed, Is.True);
 
-            // var notFailedEncounters = questingCharacter.QuestHistory[0].Previous.FindAll((e) => e.Completed);
-            // var rewards = notFailedEncounters.SelectMany((e) => e.Rewards);
-            // var player = questingCharacter.Player;
-            // Assert.That(player.UnclaimedRewards, Is.EqualTo(rewards));
+            var reward = questingCharacter.QuestHistory[0].Quest.Reward;
+            Assert.That(questingCharacter.Owner.UnclaimedRewards, Does.Contain(reward));
+
+            var encounterRewards = questingCharacter.QuestHistory[0].Previous.Select((eS) => eS.Encounter.Reward);
+            foreach (var encounterReward in encounterRewards)
+            {
+                Assert.That(questingCharacter.Owner.UnclaimedRewards, Does.Contain(encounterReward));
+            }
         }
     }
 }

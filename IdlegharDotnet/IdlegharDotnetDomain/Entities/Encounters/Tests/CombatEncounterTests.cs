@@ -10,6 +10,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         [Test]
         public async Task GivenACharacterItShouldAdvanceTheCombat()
         {
+            RandomnessProviderMock.Setup((r) => r.GetRandomCombatEncounterHPByDifficulty(Difficulty.NORMAL)).Returns(8);
             var encounter = FakeQuestFactory.CreateCombatEncounter(Difficulty.NORMAL);
             Character character = await FakeCharacterFactory.CreateAndStoreCharacter();
             var encounterState = encounter.ProcessEncounter(character);
@@ -40,6 +41,7 @@ namespace IdlegharDotnetDomain.Entities.Encounters.Tests
         [Test]
         public async Task GivenAResolvedCombatTheEncounterCreaturesAreNotTouched()
         {
+            RandomnessProviderMock.Setup((r) => r.GetRandomCombatEncounterHPByDifficulty(Difficulty.EASY)).Returns(2);
             var encounter = FakeQuestFactory.CreateCombatEncounter(Difficulty.EASY);
 
             var quest = FakeQuestFactory.CreateQuest(new List<Encounter>() { encounter });
