@@ -1,6 +1,6 @@
 using IdlegharDotnetDomain.Tests;
-using IdlegharDotnetShared.Constants;
 using IdlegharDotnetShared.Events;
+using IdlegharDotnetShared.SharedConstants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Entities.Encounters.Tests

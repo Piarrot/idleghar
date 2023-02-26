@@ -1,13 +1,14 @@
 using IdlegharDotnetDomain.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities.Items
 {
     [Serializable()]
     public class EquipmentStats
     {
-        Dictionary<Constants.Characters.Stat, int> Stats = new();
+        Dictionary<CharacterStat, int> Stats = new();
 
-        public int this[Constants.Characters.Stat stat]
+        public int this[CharacterStat stat]
         {
             get
             {
@@ -19,14 +20,14 @@ namespace IdlegharDotnetDomain.Entities.Items
             }
         }
 
-        public int GetStat(Constants.Characters.Stat stat)
+        public int GetStat(CharacterStat stat)
         {
             int value = 0;
             Stats.TryGetValue(stat, out value);
             return value;
         }
 
-        public void Add(Characters.Stat stat, int value)
+        public void Add(CharacterStat stat, int value)
         {
             if (Stats.ContainsKey(stat))
             {

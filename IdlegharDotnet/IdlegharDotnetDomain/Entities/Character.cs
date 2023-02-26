@@ -1,5 +1,6 @@
 using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Entities.Quests;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities
 {
@@ -17,6 +18,8 @@ namespace IdlegharDotnetDomain.Entities
         public int MaxHP => Toughness * Constants.Characters.TOUGHNESS_TO_MAX_HP_MULTIPLIER;
 
         public int BaseDamage { get; private set; } = 6;
+
+        public int PointsToLevelUp { get; private set; } = 0;
 
         public int Damage
         {
@@ -90,14 +93,46 @@ namespace IdlegharDotnetDomain.Entities
             }
         }
 
-        internal void AddXP(int xp)
+        public bool IsLevelingUp
+        {
+            get
+            {
+                return PointsToLevelUp > 0;
+            }
+        }
+
+        public void AddXP(int xp)
         {
             this.XP += xp;
             if (XP >= this.XPToNextLevel)
             {
                 this.XP -= this.XPToNextLevel;
                 this.Level++;
+                this.PointsToLevelUp += Constants.Characters.PointsPerLevelUp;
             }
+        }
+
+        public void AddAttrPoints(CharacterStat key, int value)
+        {
+            switch (key)
+            {
+                case CharacterStat.DAMAGE:
+                    {
+                        BaseDamage += value;
+                        break;
+                    }
+                case CharacterStat.TOUGHNESS:
+                    {
+                        Toughness += value;
+                        break;
+                    }
+                default:
+                    {
+                        throw new InvalidOperationException(Constants.ErrorMessages.INVALID_STAT);
+                    }
+            }
+
+            this.PointsToLevelUp -= value;
         }
     }
 }

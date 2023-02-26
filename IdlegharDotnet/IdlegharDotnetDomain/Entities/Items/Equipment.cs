@@ -1,4 +1,4 @@
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities.Items
 {
@@ -7,12 +7,12 @@ namespace IdlegharDotnetDomain.Entities.Items
     {
         public EquipmentType Type { get; set; }
         public EquipmentStats StatChanges { get; set; } = new();
-        public int GetStatIncrease(Constants.Characters.Stat stat)
+        public int GetStatIncrease(CharacterStat stat)
         {
             return StatChanges.GetStat(stat);
         }
 
-        public void AddStat(Constants.Characters.Stat stat, int value)
+        public void AddStat(CharacterStat stat, int value)
         {
             StatChanges.Add(stat, value);
         }

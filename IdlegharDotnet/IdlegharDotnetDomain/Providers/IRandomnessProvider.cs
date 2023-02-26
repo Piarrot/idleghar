@@ -1,6 +1,5 @@
 using IdlegharDotnetDomain.Entities.Random;
-using IdlegharDotnetShared.Constants;
-using static IdlegharDotnetDomain.Constants.Characters;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Providers
 {
@@ -20,7 +19,7 @@ namespace IdlegharDotnetDomain.Providers
 
         Difficulty GetRandomEncounterDifficultyByQuestDifficulty(Difficulty questDifficulty);
 
-        Stat GetRandomStat();
+        CharacterStat GetRandomStat();
 
         Difficulty GetRandomDifficulty();
         int GetRandomCombatEncounterHPByDifficulty(Difficulty combatDifficulty);

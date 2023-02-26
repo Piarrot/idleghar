@@ -1,6 +1,6 @@
 using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Tests;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Factories.Tests

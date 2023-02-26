@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Entities.Quests;
 using IdlegharDotnetDomain.Entities.Rewards;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities
 {

@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities.Random;
 using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Tests.MockProviders
 {
@@ -44,7 +44,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             return Encounters.DifficultyByQuestDifficulty[questDifficulty].ResolveOne(this);
         }
 
-        public virtual Characters.Stat GetRandomStat()
+        public virtual CharacterStat GetRandomStat()
         {
             return Characters.RandomStat.ResolveOne(this);
         }

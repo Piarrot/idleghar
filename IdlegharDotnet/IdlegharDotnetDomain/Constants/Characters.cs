@@ -1,5 +1,5 @@
 using IdlegharDotnetDomain.Entities.Random;
-using static IdlegharDotnetShared.Constants.Characters;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Constants
 {
@@ -7,12 +7,10 @@ namespace IdlegharDotnetDomain.Constants
     {
         public static readonly int TOUGHNESS_TO_MAX_HP_MULTIPLIER = 10;
 
-
-
-        public static UniformDistribution<Stat> RandomStat = new()
+        public static UniformDistribution<CharacterStat> RandomStat = new()
         {
-            Stat.DAMAGE,
-            Stat.TOUGHNESS
+            CharacterStat.DAMAGE,
+            CharacterStat.TOUGHNESS
         };
     }
 }

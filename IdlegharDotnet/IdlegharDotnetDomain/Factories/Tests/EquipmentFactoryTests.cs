@@ -1,5 +1,5 @@
 using IdlegharDotnetDomain.Tests;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.Factories.Tests
@@ -16,7 +16,7 @@ namespace IdlegharDotnetDomain.Factories.Tests
                 .Returns(value);
             var factory = new EquipmentFactory(RandomnessProviderMock.Object);
             var stats = factory.GetEquipmentStats(quality);
-            Assert.That(stats.GetStat(Constants.Characters.Stat.DAMAGE), Is.EqualTo(value));
+            Assert.That(stats.GetStat(CharacterStat.DAMAGE), Is.EqualTo(value));
         }
     }
 }

@@ -1,6 +1,7 @@
 using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Tests;
+using IdlegharDotnetShared.SharedConstants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.UseCases.Players.Tests
@@ -18,7 +19,7 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
                 Description = "A really cool sword to slice things",
                 StatChanges = new()
                 {
-                    [Constants.Characters.Stat.DAMAGE] = 5
+                    [CharacterStat.DAMAGE] = 5
                 }
             });
             player.UnclaimedRewards.Add(new Reward());

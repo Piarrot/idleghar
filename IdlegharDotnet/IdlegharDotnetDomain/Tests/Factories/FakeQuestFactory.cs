@@ -3,7 +3,7 @@ using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Factories;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetDomain.UseCases.Quests;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Tests.Factories
 {

@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Factories;
 using IdlegharDotnetDomain.Tests;
-using IdlegharDotnetShared.Constants;
 using IdlegharDotnetShared.Players;
+using IdlegharDotnetShared.SharedConstants;
 using NUnit.Framework;
 
 namespace IdlegharDotnetDomain.UseCases.Players.Tests

@@ -1,5 +1,5 @@
-using IdlegharDotnetShared.Constants;
 using IdlegharDotnetShared.Events;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetShared.Quests
 {

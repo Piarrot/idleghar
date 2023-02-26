@@ -1,4 +1,4 @@
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities.Items
 {

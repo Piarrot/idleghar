@@ -17,7 +17,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
         public async Task Save(Character character)
         {
             await Task.Yield();
-            var clonedCharacter = (Character)TestUtils.DeepClone(character);
+            var clonedCharacter = (Character)TestUtils.DeepClone(character)!;
             charactersById[character.Id] = clonedCharacter;
             charactersByPlayerId[character.Owner.Id] = clonedCharacter;
         }
@@ -33,7 +33,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             Character? character = null;
             charactersById.TryGetValue(id, out character);
-            return character;
+            return (Character?)TestUtils.DeepClone(character);
         }
 
         public async Task<Character?> FindByPlayerId(string playerId)
@@ -41,7 +41,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             Character? character = null;
             charactersByPlayerId.TryGetValue(playerId, out character);
-            return character;
+            return (Character?)TestUtils.DeepClone(character);
         }
 
         public async Task<Character> GetCharacterFromPlayerOrThrow(string playerId)
@@ -50,7 +50,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             if (character == null)
                 throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_CREATED);
 
-            return character;
+            return (Character)TestUtils.DeepClone(character)!;
         }
     }
 }

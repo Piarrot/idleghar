@@ -1,4 +1,4 @@
-namespace IdlegharDotnetShared.Constants
+namespace IdlegharDotnetShared.SharedConstants
 {
     public enum ItemQuality
     {

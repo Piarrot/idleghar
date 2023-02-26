@@ -1,5 +1,5 @@
 using IdlegharDotnetDomain.Entities.Random;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Constants
 {

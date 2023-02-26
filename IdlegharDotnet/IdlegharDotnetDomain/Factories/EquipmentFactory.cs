@@ -2,7 +2,7 @@
 using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Factories
 {

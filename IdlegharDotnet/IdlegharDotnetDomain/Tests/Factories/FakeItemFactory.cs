@@ -1,6 +1,5 @@
 using IdlegharDotnetDomain.Entities.Items;
-using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Tests.Factories
 {
@@ -14,7 +13,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
                 Type = EquipmentType.Weapon,
                 StatChanges = new()
                 {
-                    [Constants.Characters.Stat.DAMAGE] = damage
+                    [CharacterStat.DAMAGE] = damage
                 },
                 Name = Faker.Lorem.Sentence()
             };

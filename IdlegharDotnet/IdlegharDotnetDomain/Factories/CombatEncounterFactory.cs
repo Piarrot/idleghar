@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Entities.Encounters;
 using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Factories
 {

@@ -1,5 +1,5 @@
 using IdlegharDotnetDomain.Entities.Items;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities
 {
@@ -22,7 +22,7 @@ namespace IdlegharDotnetDomain.Entities
         {
             get
             {
-                return this.EquippedItems.Sum(e => e.GetStatIncrease(Constants.Characters.Stat.DAMAGE));
+                return this.EquippedItems.Sum(e => e.GetStatIncrease(CharacterStat.DAMAGE));
             }
         }
 

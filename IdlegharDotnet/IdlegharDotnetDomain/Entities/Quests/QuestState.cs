@@ -1,5 +1,5 @@
 using IdlegharDotnetDomain.Entities.Encounters;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Entities.Quests
 {

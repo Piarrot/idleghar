@@ -1,6 +1,6 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Providers;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 
 namespace IdlegharDotnetDomain.Factories
 {

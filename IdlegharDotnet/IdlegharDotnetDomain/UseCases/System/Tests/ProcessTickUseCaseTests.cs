@@ -1,7 +1,7 @@
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Rewards;
 using IdlegharDotnetDomain.Tests;
-using IdlegharDotnetShared.Constants;
+using IdlegharDotnetShared.SharedConstants;
 using Moq;
 using NUnit.Framework;
 
