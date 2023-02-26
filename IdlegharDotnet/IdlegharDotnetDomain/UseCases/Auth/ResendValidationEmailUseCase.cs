@@ -39,7 +39,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             await PlayersProvider.Save(player);
             await EmailsProvider.sendEmail(new SendEmailRequest(
                 player.Email,
-                await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
+                EmailTemplateNames.VALIDATION_CODE,
                 new Dictionary<string, string>
                 {
                     ["username"] = player.Username,

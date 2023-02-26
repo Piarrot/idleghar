@@ -1,4 +1,4 @@
 namespace IdlegharDotnetDomain.Entities.Notifications
 {
-    public record class SendEmailRequest(string To, EmailTemplate Template, Dictionary<string, string>? Context);
+    public record class SendEmailRequest(string To, string TemplateName, Dictionary<string, string>? Context);
 }

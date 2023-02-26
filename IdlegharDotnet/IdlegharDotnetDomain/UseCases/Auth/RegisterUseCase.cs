@@ -42,7 +42,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             await PlayersProvider.Save(newPlayer);
             await EmailsProvider.sendEmail(new SendEmailRequest(
                 newPlayer.Email,
-                await EmailsProvider.GetTemplate(EmailTemplateNames.VALIDATION_CODE),
+                EmailTemplateNames.VALIDATION_CODE,
                 new Dictionary<string, string>
                 {
                     ["username"] = newPlayer.Username,
