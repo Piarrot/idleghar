@@ -12,5 +12,6 @@ namespace IdlegharDotnetDomain.Constants
             CharacterStat.DAMAGE,
             CharacterStat.TOUGHNESS
         };
+        internal static int PointsPerLevelUp = 3;
     }
 }
