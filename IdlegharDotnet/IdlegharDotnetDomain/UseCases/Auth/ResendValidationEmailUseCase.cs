@@ -37,7 +37,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             player.EmailValidationCode = code;
 
             await PlayersProvider.Save(player);
-            await EmailsProvider.sendEmail(new SendEmailRequest(
+            await EmailsProvider.SendEmail(new SendEmailRequest(
                 player.Email,
                 EmailTemplateNames.VALIDATION_CODE,
                 new Dictionary<string, string>

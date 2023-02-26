@@ -40,7 +40,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
             };
 
             await PlayersProvider.Save(newPlayer);
-            await EmailsProvider.sendEmail(new SendEmailRequest(
+            await EmailsProvider.SendEmail(new SendEmailRequest(
                 newPlayer.Email,
                 EmailTemplateNames.VALIDATION_CODE,
                 new Dictionary<string, string>

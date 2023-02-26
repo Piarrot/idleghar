@@ -19,7 +19,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             });
         }
 
-        public async Task sendEmail(SendEmailRequest req)
+        public async Task SendEmail(SendEmailRequest req)
         {
             EmailsSent.Add(req);
             await Task.Yield();

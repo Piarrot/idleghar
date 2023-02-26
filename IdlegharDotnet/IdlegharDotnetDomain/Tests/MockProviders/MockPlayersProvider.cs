@@ -15,7 +15,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             Player? result = null;
             playersByEmail.TryGetValue(email, out result);
-            return result;
+            return (Player?)TestUtils.DeepClone(result);
         }
 
         public async Task<Player?> FindById(string id)
@@ -23,7 +23,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             Player? result = null;
             playersById.TryGetValue(id, out result);
-            return result;
+            return (Player?)TestUtils.DeepClone(result);
         }
 
         public async Task<Player?> FindByUsername(string username)
@@ -31,7 +31,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
             await Task.Yield();
             Player? result = null;
             playersByUsername.TryGetValue(username, out result);
-            return result;
+            return (Player?)TestUtils.DeepClone(result);
         }
 
         public async Task<PlayerCreds?> FindCredsFromEmail(string email)
@@ -56,7 +56,7 @@ namespace IdlegharDotnetDomain.Tests.MockProviders
         public async Task Save(Player player)
         {
             await Task.Yield();
-            var clonedPlayer = (Player)TestUtils.DeepClone(player);
+            var clonedPlayer = (Player)TestUtils.DeepClone(player)!;
             playersByEmail[player.Email] = clonedPlayer;
             playersByUsername[player.Username] = clonedPlayer;
             playersById[player.Id] = clonedPlayer;
