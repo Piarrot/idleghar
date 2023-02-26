@@ -1,6 +1,4 @@
 using System.Runtime.Serialization.Formatters.Binary;
-using IdlegharDotnetDomain.Entities.Random;
-using IdlegharDotnetShared.Constants;
 
 namespace IdlegharDotnetDomain.Tests
 {
@@ -10,8 +8,10 @@ namespace IdlegharDotnetDomain.Tests
         *** Fast, Cheap and dirty way of cloning an object, for testing purposes
         *** ¡¡¡ DO NOT USE IN PRODUCTION !!!
         ***/
-        public static object DeepClone(object obj)
+        public static object? DeepClone(object? obj)
         {
+            if (obj == null) return null;
+
             object? objResult = null;
 
 #pragma warning disable SYSLIB0011
