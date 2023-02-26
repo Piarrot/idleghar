@@ -50,5 +50,20 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
             Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.EMAIL_IN_USE));
             Assert.That(EmailsProvider.CountEmailsSentTo(testInput.Email), Is.EqualTo(0));
         }
+
+        [Test]
+        public async Task FailsToRegisterWithAnInvalidEmail()
+        {
+            var testInput = new RegisterUseCaseRequest("notAValidEmail", "user1234", "CoolUser69");
+
+            var useCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
+
+            var ex = Assert.ThrowsAsync<ArgumentException>(async delegate ()
+            {
+                await useCase.Handle(testInput);
+            });
+            Assert.That(ex!.Message, Is.EqualTo(Constants.ErrorMessages.INVALID_EMAIL));
+            Assert.That(EmailsProvider.CountEmailsSentTo(testInput.Email), Is.EqualTo(0));
+        }
     }
 }
