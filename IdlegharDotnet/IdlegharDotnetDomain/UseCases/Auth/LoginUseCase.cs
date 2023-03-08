@@ -25,6 +25,11 @@ namespace IdlegharDotnetDomain.UseCases.Auth
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_CREDENTIALS);
             }
 
+            if (!player.EmailValidated)
+            {
+                throw new InvalidOperationException(Constants.ErrorMessages.EMAIL_NOT_VALIDATED);
+            }
+
             var token = AuthProvider.GenerateToken(player);
             var transformer = new PlayerTransformer();
             return new LoginUseCaseResponse(token, transformer.TransformOne(player));

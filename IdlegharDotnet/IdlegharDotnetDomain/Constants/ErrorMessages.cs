@@ -24,5 +24,6 @@ namespace IdlegharDotnetDomain.Constants
         public static readonly string CHARACTER_IS_NOT_LEVELING_UP = "Character is not leveling up";
         public static readonly string INVALID_STAT_POINTS_AMOUNT = "Invalid amount of character stat points";
         public static readonly string INVALID_STAT = "Invalid character stat";
+        public static readonly string EMAIL_NOT_VALIDATED = "Mail not validated";
     }
 }
