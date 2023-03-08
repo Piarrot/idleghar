@@ -5,10 +5,10 @@ namespace IdlegharDotnetDomain.UseCases.Players
 {
     public class GetCurrentPlayerCredsFromToken
     {
-        IPlayersProvider playersProvider;
+        IStorageProvider playersProvider;
         IAuthProvider authProvider;
 
-        public GetCurrentPlayerCredsFromToken(IPlayersProvider playersProvider, IAuthProvider authProvider)
+        public GetCurrentPlayerCredsFromToken(IStorageProvider playersProvider, IAuthProvider authProvider)
         {
             this.playersProvider = playersProvider;
             this.authProvider = authProvider;
@@ -21,7 +21,7 @@ namespace IdlegharDotnetDomain.UseCases.Players
             {
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_CREDENTIALS);
             }
-            PlayerCreds? playerCreds = await playersProvider.FindCredsFromEmail(email);
+            PlayerCreds? playerCreds = await playersProvider.FindPlayerCredsFromEmail(email);
             if (playerCreds == null)
             {
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_CREDENTIALS);

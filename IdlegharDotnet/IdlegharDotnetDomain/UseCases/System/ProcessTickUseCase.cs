@@ -5,21 +5,21 @@ namespace IdlegharDotnetDomain.UseCases.System
 {
     public class ProcessTickUseCase
     {
-        ICharactersProvider CharactersProviders;
+        IStorageProvider CharactersProviders;
 
-        public ProcessTickUseCase(ICharactersProvider charactersProviders)
+        public ProcessTickUseCase(IStorageProvider charactersProviders)
         {
             this.CharactersProviders = charactersProviders;
         }
 
         public async Task Handle()
         {
-            var characters = await CharactersProviders.FindAllQuesting();
+            var characters = await CharactersProviders.FindAllCharactersQuesting();
             foreach (Character character in characters)
             {
                 var questState = character.GetQuestStateOrThrow();
                 questState.ProcessTick();
-                await CharactersProviders.Save(character);
+                await CharactersProviders.SaveCharacter(character);
             }
 
         }

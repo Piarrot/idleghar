@@ -7,20 +7,20 @@ namespace IdlegharDotnetDomain.UseCases.Auth
 {
     public class ResendValidationEmailUseCase
     {
-        private IPlayersProvider PlayersProvider;
+        private IStorageProvider StorageProvider;
         private IEmailsProvider EmailsProvider;
         private ICryptoProvider CryptoProvider;
 
-        public ResendValidationEmailUseCase(IPlayersProvider playersProvider, IEmailsProvider emailsProvider, ICryptoProvider cryptoProvider)
+        public ResendValidationEmailUseCase(IStorageProvider playersProvider, IEmailsProvider emailsProvider, ICryptoProvider cryptoProvider)
         {
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
             EmailsProvider = emailsProvider;
             CryptoProvider = cryptoProvider;
         }
 
         public async Task Handle(ResendValidationUseCaseRequest req)
         {
-            var player = await PlayersProvider.FindByEmail(req.Email);
+            var player = await StorageProvider.FindPlayerByEmailOrUsername(req.Email);
 
             if (player == null)
             {
@@ -36,7 +36,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
 
             player.EmailValidationCode = code;
 
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
             await EmailsProvider.SendEmail(new SendEmailRequest(
                 player.Email,
                 EmailTemplateNames.VALIDATION_CODE,

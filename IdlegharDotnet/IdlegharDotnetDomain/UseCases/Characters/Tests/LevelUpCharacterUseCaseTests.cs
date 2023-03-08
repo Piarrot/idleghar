@@ -10,7 +10,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task APlayerCannotTriggerACharacterToLevelUpWithNoCharacter()
         {
-            var useCase = new LevelUpCharacterUseCase(CharactersProvider);
+            var useCase = new LevelUpCharacterUseCase(StorageProvider);
             var player = await FakePlayerFactory.CreateAndStorePlayer();
             var e = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
@@ -26,7 +26,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task APlayerCannotTriggerACharacterToLevelUpIfCharacterHasNotEnoughXP()
         {
-            var useCase = new LevelUpCharacterUseCase(CharactersProvider);
+            var useCase = new LevelUpCharacterUseCase(StorageProvider);
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             var e = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
@@ -42,11 +42,11 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task APlayerCannotTriggerACharacterToLevelUpWithMorePointsThanAvailable()
         {
-            var useCase = new LevelUpCharacterUseCase(CharactersProvider);
+            var useCase = new LevelUpCharacterUseCase(StorageProvider);
 
             var character = await FakeCharacterFactory.CreateAndStoreCharacter();
             character.AddXP(1000);
-            await CharactersProvider.Save(character);
+            await StorageProvider.SaveCharacter(character);
 
             var e = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
@@ -62,11 +62,11 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         [Test]
         public async Task APlayerCanTriggerACharacterLevelUpSelectingTheAttributesToImprove()
         {
-            var useCase = new LevelUpCharacterUseCase(CharactersProvider);
+            var useCase = new LevelUpCharacterUseCase(StorageProvider);
 
             var character = await FakeCharacterFactory.CreateAndStoreCharacter();
             character.AddXP(1000);
-            await CharactersProvider.Save(character);
+            await StorageProvider.SaveCharacter(character);
 
             await useCase.Handle(new AuthenticatedRequest<LevelUpCharacterUseCaseRequest>(character.Owner, new(new()
             {
@@ -74,7 +74,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
                 [CharacterStat.DAMAGE] = 1
             })));
 
-            var updatedCharacter = await CharactersProvider.FindById(character.Id);
+            var updatedCharacter = await StorageProvider.FindCharacterById(character.Id);
             Assert.That(updatedCharacter!.Toughness, Is.EqualTo(character.Toughness + 2));
             Assert.That(updatedCharacter!.Damage, Is.EqualTo(character.Damage + 1));
             Assert.That(updatedCharacter!.PointsToLevelUp, Is.EqualTo(0));

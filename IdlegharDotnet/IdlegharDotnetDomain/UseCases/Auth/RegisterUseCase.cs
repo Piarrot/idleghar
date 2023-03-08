@@ -1,27 +1,36 @@
+using System.ComponentModel.DataAnnotations;
+
 using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities;
 using IdlegharDotnetDomain.Entities.Notifications;
 using IdlegharDotnetDomain.Providers;
 using IdlegharDotnetShared.Auth;
 
+
 namespace IdlegharDotnetDomain.UseCases.Auth
 {
     public class RegisterUseCase
     {
-        private IPlayersProvider PlayersProvider;
+        private EmailAddressAttribute emailValidator = new();
+        private IStorageProvider StorageProvider;
         private ICryptoProvider CryptoProvider;
         private IEmailsProvider EmailsProvider;
 
-        public RegisterUseCase(IPlayersProvider playersProvider, ICryptoProvider cryptoProvider, IEmailsProvider emailsProvider)
+        public RegisterUseCase(IStorageProvider playersProvider, ICryptoProvider cryptoProvider, IEmailsProvider emailsProvider)
         {
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
             CryptoProvider = cryptoProvider;
             EmailsProvider = emailsProvider;
         }
 
         public async Task<RegisterUseCaseResponse> Handle(RegisterUseCaseRequest req)
         {
-            var existingPlayer = await PlayersProvider.FindByEmail(req.Email);
+            if (!emailValidator.IsValid(req.Email))
+            {
+                throw new ArgumentException(Constants.ErrorMessages.INVALID_EMAIL);
+            }
+
+            var existingPlayer = await StorageProvider.FindPlayerByEmailOrUsername(req.Email);
 
             if (existingPlayer != null)
             {
@@ -39,7 +48,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth
                 EmailValidationCode = code
             };
 
-            await PlayersProvider.Save(newPlayer);
+            await StorageProvider.SavePlayer(newPlayer);
             await EmailsProvider.SendEmail(new SendEmailRequest(
                 newPlayer.Email,
                 EmailTemplateNames.VALIDATION_CODE,

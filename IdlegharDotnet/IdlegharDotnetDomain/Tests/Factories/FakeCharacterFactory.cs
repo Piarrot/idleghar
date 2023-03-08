@@ -5,12 +5,12 @@ namespace IdlegharDotnetDomain.Tests.Factories
 {
     public class FakeCharacterFactory
     {
-        private FakeQuestFactory FakeQuestFactory;
-        private ICharactersProvider CharactersProvider;
+        public IStorageProvider StorageProvider { get; }
+        public FakeQuestFactory FakeQuestFactory { get; }
 
-        public FakeCharacterFactory(ICharactersProvider charactersProvider, FakeQuestFactory fakeQuestFactory)
+        public FakeCharacterFactory(IStorageProvider playersProvider, FakeQuestFactory fakeQuestFactory)
         {
-            this.CharactersProvider = charactersProvider;
+            StorageProvider = playersProvider;
             FakeQuestFactory = fakeQuestFactory;
         }
 
@@ -25,7 +25,9 @@ namespace IdlegharDotnetDomain.Tests.Factories
                 Name = Faker.Name.FullName(),
             };
 
-            await CharactersProvider.Save(character);
+            player.Character = character;
+
+            await StorageProvider.SavePlayer(character.Owner);
 
             return character;
         }
@@ -34,7 +36,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         {
             Character character = await CreateAndStoreCharacter(player);
             character.StartQuest(quest);
-            await CharactersProvider.Save(character);
+            await StorageProvider.SavePlayer(character.Owner);
             return character;
         }
 

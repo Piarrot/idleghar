@@ -5,21 +5,21 @@ namespace IdlegharDotnetDomain.UseCases.Quests
 {
     public class SelectQuestUseCase
     {
-        private IQuestsProvider QuestsProvider;
-        private ICharactersProvider CharactersProvider;
-        private ITimeProvider TimeProvider;
-
-        public SelectQuestUseCase(IQuestsProvider questsProvider, ITimeProvider timeProvider, ICharactersProvider charactersProvider)
+        public SelectQuestUseCase(IQuestsProvider questsProvider, ITimeProvider timeProvider, IStorageProvider playersProvider)
         {
             QuestsProvider = questsProvider;
             TimeProvider = timeProvider;
-            CharactersProvider = charactersProvider;
+            StorageProvider = playersProvider;
         }
+
+        public IQuestsProvider QuestsProvider { get; }
+        public ITimeProvider TimeProvider { get; }
+        public IStorageProvider StorageProvider { get; }
 
         public async Task Handle(AuthenticatedRequest<SelectQuestUseCaseRequest> authRequest)
         {
-            var currentCharacter = await CharactersProvider.GetCharacterFromPlayerOrThrow(authRequest.CurrentPlayerCreds.Id);
-            currentCharacter.ThrowIfQuesting();
+            var character = await StorageProvider.GetCharacterByPlayerIdOrThrow(authRequest.CurrentPlayerCreds.Id);
+            character.ThrowIfQuesting();
 
             var quest = await QuestsProvider.FindById(authRequest.Request.QuestId);
 
@@ -28,8 +28,8 @@ namespace IdlegharDotnetDomain.UseCases.Quests
                 throw new InvalidOperationException(Constants.ErrorMessages.INVALID_QUEST);
             }
 
-            currentCharacter.StartQuest(quest);
-            await CharactersProvider.Save(currentCharacter);
+            character.StartQuest(quest);
+            await StorageProvider.SaveCharacter(character);
         }
     }
 }

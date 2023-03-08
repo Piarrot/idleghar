@@ -5,17 +5,16 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 {
     public class LevelUpCharacterUseCase
     {
-        private ICharactersProvider CharactersProvider;
-
-        public LevelUpCharacterUseCase(ICharactersProvider charactersProvider)
+        public LevelUpCharacterUseCase(IStorageProvider playersProvider)
         {
-            this.CharactersProvider = charactersProvider;
+            StorageProvider = playersProvider;
         }
+
+        public IStorageProvider StorageProvider { get; }
 
         public async Task Handle(AuthenticatedRequest<LevelUpCharacterUseCaseRequest> authenticatedRequest)
         {
-            var character = await CharactersProvider.FindByPlayerId(authenticatedRequest.CurrentPlayerCreds.Id);
-            if (character == null) throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_NOT_CREATED);
+            var character = await StorageProvider.GetCharacterByPlayerIdOrThrow(authenticatedRequest.CurrentPlayerCreds.Id);
             if (!character.IsLevelingUp) throw new InvalidOperationException(Constants.ErrorMessages.CHARACTER_IS_NOT_LEVELING_UP);
 
             var req = authenticatedRequest.Request;
@@ -28,7 +27,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters
                 character.AddAttrPoints(attrIncrease.Key, attrIncrease.Value);
             }
 
-            await this.CharactersProvider.Save(character);
+            await this.StorageProvider.SaveCharacter(character);
         }
     }
 }

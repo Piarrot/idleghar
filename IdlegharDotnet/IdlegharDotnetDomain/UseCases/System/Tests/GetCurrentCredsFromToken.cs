@@ -11,7 +11,7 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
         {
             var player = await FakePlayerFactory.CreateAndStorePlayer();
             var token = AuthProvider.GenerateToken(player);
-            var useCase = new GetCurrentPlayerCredsFromToken(PlayersProvider, AuthProvider);
+            var useCase = new GetCurrentPlayerCredsFromToken(StorageProvider, AuthProvider);
             var playerCreds = await useCase.Handle(token);
 
             Assert.That(playerCreds.Id, Is.EqualTo(player.Id));

@@ -6,14 +6,14 @@ namespace IdlegharDotnetDomain.Tests.Factories
     public class FakePlayerFactory
     {
         private ICryptoProvider CryptoProvider;
-        private IPlayersProvider PlayersProvider;
+        private IStorageProvider StorageProvider;
         private FakeCharacterFactory FakeCharacterFactory;
 
 
-        public FakePlayerFactory(ICryptoProvider cryptoProvider, IPlayersProvider playersProvider, FakeCharacterFactory fakeCharacterFactory)
+        public FakePlayerFactory(ICryptoProvider cryptoProvider, IStorageProvider playersProvider, FakeCharacterFactory fakeCharacterFactory)
         {
             CryptoProvider = cryptoProvider;
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
             FakeCharacterFactory = fakeCharacterFactory;
         }
 
@@ -37,14 +37,14 @@ namespace IdlegharDotnetDomain.Tests.Factories
         public async Task<Player> CreateAndStorePlayer(string email, string password, string username, bool emailValidated)
         {
             var player = CreatePlayer(email, password, username, emailValidated);
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
             return player;
         }
 
         public async Task<Player> CreateAndStorePlayer()
         {
             var player = CreatePlayer();
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
             return player;
         }
 
@@ -52,7 +52,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         {
             var player = CreatePlayer();
             player.Character = await FakeCharacterFactory.CreateAndStoreCharacter(player);
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
             return player;
         }
 
@@ -60,7 +60,7 @@ namespace IdlegharDotnetDomain.Tests.Factories
         {
             var player = CreatePlayer();
             player.Character = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(player);
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
             return player;
         }
     }

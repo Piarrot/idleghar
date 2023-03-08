@@ -7,19 +7,19 @@ namespace IdlegharDotnetDomain.UseCases.Players
 {
     public class GetCurrentPlayer
     {
-        IPlayersProvider PlayersProvider;
+        IStorageProvider StorageProvider;
 
-        public GetCurrentPlayer(IPlayersProvider playersProvider)
+        public GetCurrentPlayer(IStorageProvider playersProvider)
         {
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
         }
 
         public async Task<PlayerViewModel> Handle(AuthenticatedRequest req)
         {
             PlayerTransformer transformer = new();
-            Player player = await PlayersProvider.GetByIdOrThrow(req.CurrentPlayerCreds.Id);
+            Player player = await StorageProvider.GetPlayerByIdOrThrow(req.CurrentPlayerCreds.Id);
 
-            return transformer.TransformOne(player!);
+            return transformer.TransformOne(player);
         }
     }
 }

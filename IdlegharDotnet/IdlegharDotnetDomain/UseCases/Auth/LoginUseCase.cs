@@ -7,19 +7,19 @@ namespace IdlegharDotnetDomain.UseCases.Auth
     public class LoginUseCase
     {
         private IAuthProvider AuthProvider { get; set; }
-        private IPlayersProvider PlayersProvider { get; set; }
+        private IStorageProvider StorageProvider { get; set; }
         private ICryptoProvider CryptoProvider { get; set; }
 
-        public LoginUseCase(IAuthProvider authProvider, IPlayersProvider playersProvider, ICryptoProvider cryptoProvider)
+        public LoginUseCase(IAuthProvider authProvider, IStorageProvider playersProvider, ICryptoProvider cryptoProvider)
         {
             AuthProvider = authProvider;
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
             CryptoProvider = cryptoProvider;
         }
 
         public async Task<LoginUseCaseResponse> Handle(LoginUseCaseRequest input)
         {
-            var player = await PlayersProvider.FindByEmail(input.EmailOrUsername) ?? await PlayersProvider.FindByUsername(input.EmailOrUsername);
+            var player = await StorageProvider.FindPlayerByEmailOrUsername(input.EmailOrUsername);
             if (player == null || !CryptoProvider.DoesPasswordMatches(player.Password, input.Password))
             {
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_CREDENTIALS);

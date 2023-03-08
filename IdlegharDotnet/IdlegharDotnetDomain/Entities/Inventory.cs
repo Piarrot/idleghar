@@ -31,16 +31,14 @@ namespace IdlegharDotnetDomain.Entities
             Owner = owner;
         }
 
-        public Equipment? EquipItem(Equipment equipment)
+        public Equipment? EquipItem(Equipment newEquipment)
         {
-            var oldEquipmentIndex = this.EquippedItems.FindIndex(e => equipment.Type == e.Type);
-            Equipment? oldEquipment = null;
-            if (oldEquipmentIndex >= 0)
+            Equipment? oldEquipment = this.EquippedItems.Find(e => newEquipment.Type == e.Type);
+            if (oldEquipment != null)
             {
-                oldEquipment = this.EquippedItems[oldEquipmentIndex];
                 this.EquippedItems.Remove(oldEquipment);
             }
-            this.EquippedItems.Add(equipment);
+            this.EquippedItems.Add(newEquipment);
             return oldEquipment;
         }
     }

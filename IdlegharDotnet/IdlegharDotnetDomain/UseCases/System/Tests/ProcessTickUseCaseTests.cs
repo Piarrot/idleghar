@@ -15,13 +15,13 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
             var questingCharacters = await FakeCharacterFactory.CreateAndStoreMultipleCharactersWithQuests(10);
             var nonQuestingCharacters = await FakeCharacterFactory.CreateAndStoreMultipleCharacters(10);
 
-            var useCase = new ProcessTickUseCase(CharactersProvider);
+            var useCase = new ProcessTickUseCase(StorageProvider);
             await useCase.Handle();
 
-            List<Character> updatedNonQuestingCharacters = await CharactersProvider.FindAllNotQuesting();
+            List<Character> updatedNonQuestingCharacters = await StorageProvider.FindAllCharactersNotQuesting();
             Assert.That(updatedNonQuestingCharacters.Count, Is.GreaterThanOrEqualTo(nonQuestingCharacters.Count));
 
-            List<Character> updatedQuestingCharacters = await CharactersProvider.FindAllQuesting();
+            List<Character> updatedQuestingCharacters = await StorageProvider.FindAllCharactersQuesting();
             Assert.That(updatedQuestingCharacters.Count, Is.LessThanOrEqualTo(questingCharacters.Count));
 
             foreach (var character in updatedQuestingCharacters)
@@ -39,16 +39,16 @@ namespace IdlegharDotnetDomain.UseCases.System.Tests
             var questingCharacter = await FakeCharacterFactory.CreateAndStoreCharacterWithQuest(quest);
             var questState = questingCharacter.GetQuestStateOrThrow();
 
-            var useCase = new ProcessTickUseCase(CharactersProvider);
+            var useCase = new ProcessTickUseCase(StorageProvider);
             await useCase.Handle();
 
-            questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
+            questingCharacter = await StorageProvider.FindCharacterById(questingCharacter.Id);
 
             while (questingCharacter!.IsQuesting)
             {
                 var prevProgress = questingCharacter!.CurrentQuestState!.Progress;
                 await useCase.Handle();
-                questingCharacter = await CharactersProvider.FindById(questingCharacter.Id);
+                questingCharacter = await StorageProvider.FindCharacterById(questingCharacter.Id);
                 if (questingCharacter!.IsQuesting)
                 {
                     Assert.That(prevProgress, Is.LessThan(questingCharacter!.CurrentQuestState!.Progress));

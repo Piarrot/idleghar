@@ -5,16 +5,16 @@ namespace IdlegharDotnetDomain.UseCases.Players
 {
     public class ClaimRewardUseCase
     {
-        IPlayersProvider PlayersProvider;
+        IStorageProvider StorageProvider;
 
-        public ClaimRewardUseCase(IPlayersProvider playersProvider)
+        public ClaimRewardUseCase(IStorageProvider playersProvider)
         {
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
         }
 
         public async Task Handle(AuthenticatedRequest<ClaimRewardUseCaseRequest> request)
         {
-            var player = await this.PlayersProvider.GetByIdOrThrow(request.CurrentPlayerCreds.Id);
+            var player = await this.StorageProvider.GetPlayerByIdOrThrow(request.CurrentPlayerCreds.Id);
             if (player.Character == null)
             {
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_PLAYER);
@@ -26,7 +26,7 @@ namespace IdlegharDotnetDomain.UseCases.Players
                 throw new ArgumentException(Constants.ErrorMessages.INVALID_REWARD);
             }
             player.ClaimReward(reward);
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
         }
     }
 }

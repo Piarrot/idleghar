@@ -37,8 +37,9 @@ namespace IdlegharDotnetDomain.Entities
         public Character(Player player)
         {
             this.HP = this.MaxHP;
-            this.Owner = player;
             this.Inventory = new Inventory(this);
+            this.Owner = player;
+            player.Character = this;
         }
 
         public Quest GetCurrentQuestOrThrow()

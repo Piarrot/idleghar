@@ -12,7 +12,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
 
-            var useCase = new EditCharacterUseCase(CharactersProvider);
+            var useCase = new EditCharacterUseCase(StorageProvider);
 
             var request = new EditCharacterUseCaseRequest("Nice Guy");
 
@@ -26,7 +26,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters.Tests
         {
             var player = await FakePlayerFactory.CreateAndStorePlayer();
 
-            var useCase = new EditCharacterUseCase(CharactersProvider);
+            var useCase = new EditCharacterUseCase(StorageProvider);
 
             var request = new EditCharacterUseCaseRequest("Nice Guy");
 

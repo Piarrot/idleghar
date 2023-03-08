@@ -6,17 +6,17 @@ namespace IdlegharDotnetDomain.UseCases.Characters
 {
     public class EquipItemUseCase
     {
-        IPlayersProvider PlayersProvider;
+        IStorageProvider StorageProvider;
 
-        public EquipItemUseCase(IPlayersProvider playersProvider)
+        public EquipItemUseCase(IStorageProvider playersProvider)
         {
-            PlayersProvider = playersProvider;
+            StorageProvider = playersProvider;
         }
 
         public async Task Handle(AuthenticatedRequest<EquipItemUseCaseRequest> authRequest)
         {
-            var player = await PlayersProvider.FindById(authRequest.CurrentPlayerCreds.Id);
-            var equipment = player!.Items.Find((p) => p.Id == authRequest.Request.ItemId) as Equipment;
+            var player = await StorageProvider.GetPlayerByIdOrThrow(authRequest.CurrentPlayerCreds.Id);
+            var equipment = player.Items.Find((p) => p.Id == authRequest.Request.ItemId) as Equipment;
             if (equipment == null) throw new ArgumentException(Constants.ErrorMessages.INVALID_ITEM);
 
             var character = player!.Character;
@@ -29,6 +29,7 @@ namespace IdlegharDotnetDomain.UseCases.Characters
             {
                 player.Items.Add(oldEquipment);
             }
+            await StorageProvider.SavePlayer(player);
         }
     }
 }

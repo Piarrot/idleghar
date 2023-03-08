@@ -1,3 +1,4 @@
+using IdlegharDotnetDomain.Constants;
 using IdlegharDotnetDomain.Entities.Items;
 using IdlegharDotnetDomain.Entities.Rewards;
 
@@ -14,6 +15,13 @@ namespace IdlegharDotnetDomain.Entities
         public void ClaimReward(Reward reward)
         {
             reward.Claim(this);
+        }
+
+        public Character GetCharacterOrThrow()
+        {
+            if (Character == null)
+                throw new InvalidOperationException(ErrorMessages.CHARACTER_NOT_CREATED);
+            return Character;
         }
     }
 }

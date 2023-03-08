@@ -16,12 +16,12 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             var reward = rf.CreateQuestRewards(Difficulty.NORMAL);
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
             player.UnclaimedRewards.Add(reward);
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
 
-            var useCase = new ClaimRewardUseCase(PlayersProvider);
+            var useCase = new ClaimRewardUseCase(StorageProvider);
             await useCase.Handle(new AuthenticatedRequest<ClaimRewardUseCaseRequest>(player, new(reward.Id)));
 
-            var updatedPlayer = await PlayersProvider.GetByIdOrThrow(player.Id);
+            var updatedPlayer = await StorageProvider.GetPlayerByIdOrThrow(player.Id);
 
             Assert.That(updatedPlayer.Items, Does.Contain(reward.Items[0]));
             Assert.That(updatedPlayer.UnclaimedRewards, Does.Not.Contain(reward));
@@ -35,7 +35,7 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             var reward = rf.CreateEquipmentReward(ItemQuality.Enchanted);
             var player = await FakePlayerFactory.CreateAndStorePlayerAndCharacter();
 
-            var useCase = new ClaimRewardUseCase(PlayersProvider);
+            var useCase = new ClaimRewardUseCase(StorageProvider);
 
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
@@ -52,9 +52,9 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             RewardFactory rf = new RewardFactory(RandomnessProviderMock.Object);
             var reward = rf.CreateQuestRewards(Difficulty.NORMAL);
             var player = await FakePlayerFactory.CreateAndStorePlayer();
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
 
-            var useCase = new ClaimRewardUseCase(PlayersProvider);
+            var useCase = new ClaimRewardUseCase(StorageProvider);
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(new AuthenticatedRequest<ClaimRewardUseCaseRequest>(player, new(reward.Id)));
@@ -72,13 +72,13 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
             var reward = rf.CreateQuestRewards(Difficulty.NORMAL);
             reward.AddXP(1000);
             player.UnclaimedRewards.Add(reward);
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
 
-            var useCase = new ClaimRewardUseCase(PlayersProvider);
+            var useCase = new ClaimRewardUseCase(StorageProvider);
             await useCase.Handle(new AuthenticatedRequest<ClaimRewardUseCaseRequest>(player, new(reward.Id)));
 
-            var updatedPlayer = await PlayersProvider.FindById(player.Id);
-            var newLevel = updatedPlayer!.Character!.Level;
+            var character = await StorageProvider.GetCharacterByPlayerIdOrThrow(player.Id);
+            var newLevel = character.Level;
             Assert.That(initialLevel, Is.LessThan(newLevel));
         }
     }

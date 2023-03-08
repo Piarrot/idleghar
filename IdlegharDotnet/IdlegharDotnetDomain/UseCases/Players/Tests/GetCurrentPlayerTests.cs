@@ -23,9 +23,9 @@ namespace IdlegharDotnetDomain.UseCases.Players.Tests
                 }
             });
             player.UnclaimedRewards.Add(new Reward());
-            await PlayersProvider.Save(player);
+            await StorageProvider.SavePlayer(player);
 
-            GetCurrentPlayer useCase = new(PlayersProvider);
+            GetCurrentPlayer useCase = new(StorageProvider);
             var result = await useCase.Handle(new AuthenticatedRequest(player));
 
             Assert.That(result.Id, Is.EqualTo(player.Id));

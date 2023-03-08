@@ -12,10 +12,10 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         {
             var testInput = new RegisterUseCaseRequest("email@email.com", "user1234", "CoolUser69");
 
-            var useCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
+            var useCase = new RegisterUseCase(StorageProvider, CryptoProvider, EmailsProvider);
 
             await useCase.Handle(testInput);
-            var player = await PlayersProvider.FindByEmail(testInput.Email);
+            var player = await StorageProvider.FindPlayerByEmailOrUsername(testInput.Email);
             Assert.That(player, Is.Not.Null);
             Assert.That(CryptoProvider.DoesPasswordMatches(player!.Password, testInput.Password), Is.True);
             Assert.That(player.EmailValidated, Is.False);
@@ -31,7 +31,7 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         [Test]
         public async Task FailsToRegisterAnEmailAlreadyRegistered()
         {
-            await PlayersProvider.Save(new Player()
+            await StorageProvider.SavePlayer(new Player()
             {
                 Email = "emailAlreadyRegistered@email.com",
                 Password = CryptoProvider.HashPassword("user1234"),
@@ -41,9 +41,9 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
 
             var testInput = new RegisterUseCaseRequest("emailAlreadyRegistered@email.com", "user1234", "CoolUser69");
 
-            var useCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
+            var useCase = new RegisterUseCase(StorageProvider, CryptoProvider, EmailsProvider);
 
-            var ex = Assert.ThrowsAsync<ArgumentException>(async delegate ()
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(testInput);
             });
@@ -52,13 +52,13 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         }
 
         [Test]
-        public async Task FailsToRegisterWithAnInvalidEmail()
+        public void FailsToRegisterWithAnInvalidEmail()
         {
             var testInput = new RegisterUseCaseRequest("notAValidEmail", "user1234", "CoolUser69");
 
-            var useCase = new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider);
+            var useCase = new RegisterUseCase(StorageProvider, CryptoProvider, EmailsProvider);
 
-            var ex = Assert.ThrowsAsync<ArgumentException>(async delegate ()
+            var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await useCase.Handle(testInput);
             });

@@ -12,11 +12,11 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         public async Task GivenAnEmailItShouldResendAValidationEmail()
         {
 
-            var result = await new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider).Handle(
+            var result = await new RegisterUseCase(StorageProvider, CryptoProvider, EmailsProvider).Handle(
                 new RegisterUseCaseRequest(email, "user1234", "cooluser")
             );
 
-            await new ResendValidationEmailUseCase(PlayersProvider, EmailsProvider, CryptoProvider).Handle(
+            await new ResendValidationEmailUseCase(StorageProvider, EmailsProvider, CryptoProvider).Handle(
                 new ResendValidationUseCaseRequest(email)
             );
 
@@ -33,13 +33,13 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         [Test]
         public async Task GivenAnIncorrectEmailItShouldFail()
         {
-            var result = await new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider).Handle(
+            var result = await new RegisterUseCase(StorageProvider, CryptoProvider, EmailsProvider).Handle(
                 new RegisterUseCaseRequest(email, "user1234", "cooluser")
             );
 
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await new ResendValidationEmailUseCase(PlayersProvider, EmailsProvider, CryptoProvider).Handle(
+                await new ResendValidationEmailUseCase(StorageProvider, EmailsProvider, CryptoProvider).Handle(
                     new ResendValidationUseCaseRequest("something.else@email.com")
                 );
             });
@@ -52,17 +52,17 @@ namespace IdlegharDotnetDomain.UseCases.Auth.Tests
         [Test]
         public async Task GivenAnEmailAlreadyValidatedItShouldFail()
         {
-            var result = await new RegisterUseCase(PlayersProvider, CryptoProvider, EmailsProvider).Handle(
+            var result = await new RegisterUseCase(StorageProvider, CryptoProvider, EmailsProvider).Handle(
                 new RegisterUseCaseRequest(email, "user1234", "cooluser")
             );
 
-            var player = await PlayersProvider.FindById(result.Id);
-            player!.EmailValidated = true;
-            await PlayersProvider.Save(player);
+            var player = await StorageProvider.GetPlayerByIdOrThrow(result.Id);
+            player.EmailValidated = true;
+            await StorageProvider.SavePlayer(player);
 
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await new ResendValidationEmailUseCase(PlayersProvider, EmailsProvider, CryptoProvider).Handle(
+                await new ResendValidationEmailUseCase(StorageProvider, EmailsProvider, CryptoProvider).Handle(
                     new ResendValidationUseCaseRequest(email)
                 );
             });
